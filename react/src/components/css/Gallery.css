@@ -1,0 +1,39 @@
+.gallery {
+  position: relative;
+  color: green;
+  height: 46vw;
+  width: 100%;
+  background-image: url(https://www.art-insider.com/wp-content/uploads/2019/09/ocean.jpg);
+  background-size: cover;
+  transition: top 0.3s;
+  margin: 100px 0;
+  z-index: 0;
+}
+
+.buttons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  z-index: 1;
+}
+
+.buttons > img {
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  font-size: x-large;
+  padding: 7px;
+  opacity: 0.2;
+  transition: ease-in 0.125s;
+  background-color: white;
+}
+
+.buttons > img:hover {
+  cursor: pointer;
+  opacity: 1;
+}

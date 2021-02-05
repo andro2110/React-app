@@ -1,0 +1,16 @@
+.uls {
+  display: block;
+}
+
+.Active {
+  background-color: violet;
+}
+
+.Kriteriji {
+  position: relative;
+  float: right;
+}
+
+.active-btn {
+  background-color: red;
+}

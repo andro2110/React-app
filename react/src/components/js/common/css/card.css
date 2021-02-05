@@ -1,0 +1,35 @@
+.Card {
+  height: 40%;
+  width: 50%;
+  margin: 10px auto;
+  border: 1px solid black;
+  display: block;
+}
+
+.Slika {
+  /* background-image: url(https://www.art-insider.com/wp-content/uploads/2019/09/ocean.jpg);
+  background-size: cover; */
+  height: 30vh;
+  /* width: 80%; */
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  display: block;
+  margin: auto;
+}
+
+.Opis {
+  border: 1px solid black;
+  text-align: justify;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.Opis > p {
+  margin: 5px;
+}
