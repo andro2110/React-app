@@ -58,7 +58,6 @@ const con = mysql.createConnection({
 });
 
 const verifyJWT = (req, res, next) => {
-  // console.log(req.body.headers);
   const token = req.body.headers["x-access-token"];
 
   if (!token) {
@@ -88,14 +87,14 @@ app.post("/register", (req, res) => {
 
   bcrypt.hash(geslo, salt, (err, enkrGeslo) => {
     if (err) {
-      console.log(err);
+      res.send(err);
     }
 
     con.query(
       "INSERT INTO uporabnik (Ime, Priimek, Email, Geslo, HisnaSTUlica, PostnaStevilka, Status) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
       (err) => {
-        if (err) console.log(err);
+        if (err) res.send(err);
       }
     );
   });
@@ -187,7 +186,6 @@ app.post("/upload", (req, res) => {
 
   file.mv(`${__dirname}/public/img/${file.name}`, (err) => {
     if (err) {
-      console.error(err);
       return res.status(500).send(err);
     }
   });
@@ -196,7 +194,7 @@ app.post("/upload", (req, res) => {
     "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
     [did, imeSlike, path],
     (err) => {
-      if (err) console.log(err);
+      if (err) res.send(err);
     }
   );
 });
@@ -257,7 +255,7 @@ app.get("/logout", (req, res) => {
 
 app.post("/adminNarocila", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.Status, a.model, a.Stevilka, d.barva 
+    `SELECT n.IDNarocila, n.NacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva 
     FROM Narocilo n, Artikel a, Dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla `,
     (err, narocila) => {
@@ -295,13 +293,13 @@ app.get("/narocila", (req, res) => {
 
 app.get("/blog", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, n.Datum, v.Ime AS vzorec, s.lokacijaSlike
+    `SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, s.lokacijaSlike
       FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
       WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
       nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID`,
     (err, narocila) => {
       if (err) res.send(err);
-      // console.log(narocila);
+
       res.json({ narocila });
     }
   );
@@ -311,7 +309,7 @@ app.post("/vrniDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
 
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, n.Datum, v.Ime AS vzorec, s.lokacijaSlike
+    `SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, s.lokacijaSlike
     FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
     nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
@@ -353,10 +351,11 @@ app.get("/adminBlog", (req, res) => {
 
 app.post("/vTabeloObjav", (req, res) => {
   const { opis, IDNarocila } = req.body;
+  const date = new Date();
 
   con.query(
-    "INSERT INTO narociloNaBlogu (IDNarocila, opis) VALUES (?, ?)",
-    [IDNarocila, opis],
+    "INSERT INTO narociloNaBlogu (IDNarocila, opis, datumObjave) VALUES (?, ?, ?)",
+    [IDNarocila, opis, date],
     (err) => {
       if (err) res.json({ success: false, err: err });
     }
@@ -367,7 +366,7 @@ app.post("/vTabeloObjav", (req, res) => {
     "SELECT ID FROM narociloNaBlogu ORDER BY ID DESC LIMIT 1",
     (err, podatki) => {
       if (err) {
-        res.send(err);
+        res.json({ success: false, err });
       } else {
         const narociloBlogId = podatki[0].ID;
         res.json({ narociloBlogId, success: true });
@@ -393,6 +392,22 @@ app.post("/vSlikeObjav", (req, res) => {
     (err) => {
       if (err) res.json({ err, success: false });
       else res.json({ success: true });
+    }
+  );
+});
+
+app.post("/vrniNarocilaDatum", (req, res) => {
+  const nacin = req.body.tmpNacin;
+
+  con.query(
+    `SELECT n.IDNarocila, a.model, s.lokacijaSlike, a.Stevilka, n.NacinPlacila, n.Status, n.Datum, n.Opis
+    FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
+    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
+    nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
+      ORDER BY n.Datum ${nacin}`,
+    (err, narocila) => {
+      if (err) res.send(err);
+      else res.json({ narocila });
     }
   );
 });

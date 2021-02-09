@@ -7,16 +7,7 @@ import Input from "./js/common/Input";
 
 class Blog extends Component {
   state = {
-    cards: [
-      {
-        id: "",
-        model: "",
-        datum: "",
-        opis: "",
-        vzorec: "",
-        lokacijaSlike: "",
-      },
-    ],
+    cards: [],
     styles: {
       margin: "102px",
     },
@@ -91,6 +82,7 @@ class Blog extends Component {
 
     axios.post("http://localhost:4000/vrniDatum", { tmpNacin }).then((res) => {
       const cards = res.data.narocila;
+      console.log(cards);
 
       this.setState({ cards: cards });
     });
@@ -164,7 +156,7 @@ class Blog extends Component {
               <Card
                 key={i}
                 model={c.model}
-                datum={c.Datum}
+                datum={c.datumObjave}
                 opis={c.opis}
                 vzorec={c.vzorec} //ime je ime vzorca
                 filePath={c.lokacijaSlike}

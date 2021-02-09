@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Input from "./common/Input";
-// import Dropdown from "./common/DropDown";
 import axios from "axios";
 
 class Narocila extends Component {
@@ -156,11 +155,6 @@ class Narocila extends Component {
             value={dodatki.barva}
             onChange={this.handleDodatkiChange}
           />
-          {/* <Dropdown
-            options={vzorci}
-            onChange={this.handlePatternChange}
-            val={vzorec}
-          />*/}
 
           <select
             value={dodatki.vzorec}

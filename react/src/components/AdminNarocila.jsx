@@ -16,8 +16,10 @@ class AdminNarocila extends Component {
       display: "block",
     },
 
-    statusi: ["prejeto", "vdelu", "koncano"],
+    statusi: ["vsi statusi", "prejeto", "vdelu", "koncano"],
     tmpStatus: "",
+    isciDatumNacin: "",
+    selectedStatus: "",
   };
 
   // checkUser() {
@@ -61,6 +63,27 @@ class AdminNarocila extends Component {
       });
   };
 
+  handleSelectedStatusChange = ({ currentTarget: input }) => {
+    this.setState({ selectedStatus: input.value });
+  };
+
+  urediPoDatumu = ({ currentTarget: button }) => {
+    const tmpNacin = button.name;
+    const { isciDatumNacin } = this.state;
+
+    if (isciDatumNacin === tmpNacin) this.setState({ isciDatumNacin: "" });
+    else this.setState({ isciDatumNacin: tmpNacin });
+
+    axios
+      .post("http://localhost:4000/vrniNarocilaDatum", { tmpNacin })
+      .then((res) => {
+        const cards = res.data.narocila;
+        console.log(cards);
+
+        this.setState({ narocila: cards });
+      });
+  };
+
   componentDidMount() {
     axios.post("http://localhost:4000/adminNarocila").then((response) => {
       const narocilo = response.data.narocila;
@@ -69,19 +92,22 @@ class AdminNarocila extends Component {
     });
   }
 
-  klik = ({ currentTarget: input }) => {
-    console.log(input.value);
-  };
-
   render() {
-    const { narocila, styles } = this.state;
+    const { narocila, styles, isciDatumNacin, selectedStatus } = this.state;
+
+    const filtered =
+      selectedStatus && selectedStatus !== "vsi statusi"
+        ? narocila.filter((n) => n.Status === selectedStatus)
+        : narocila;
+
     return (
       <React.Fragment>
         <NavBar heading="Admin" />
         {/*dodaj se props - links (napiss not kere linke uporabi*/}
 
         <div style={styles}>
-          {narocila.map((n, i) => {
+          {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
+          {filtered.map((n, i) => {
             return (
               <div key={i} id={i}>
                 <Narocilo
@@ -90,8 +116,8 @@ class AdminNarocila extends Component {
                   stevilka={n.Stevilka}
                   model={n.model}
                   barva={n.barva}
-                  nacinPlacila={n.nacinPlacila}
-                  opis={n.opis}
+                  nacinPlacila={n.NacinPlacila}
+                  opis={n.Opis}
                   status={n.Status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
@@ -109,21 +135,33 @@ class AdminNarocila extends Component {
             );
           })}
         </div>
+
+        <div className="Kriteriji">
+          <button
+            onClick={this.urediPoDatumu}
+            name="desc"
+            className={isciDatumNacin === "desc" ? "active-btn" : ""}
+          >
+            Najnovejši
+          </button>
+          <button
+            onClick={this.urediPoDatumu}
+            name="asc"
+            className={isciDatumNacin === "asc" ? "active-btn" : ""}
+          >
+            Najstarejši
+          </button>
+
+          <Dropdown
+            options={this.state.statusi}
+            onChange={this.handleSelectedStatusChange}
+            // value={n.Status}
+            style={this.state.test}
+          />
+        </div>
       </React.Fragment>
     );
   }
 }
 
 export default AdminNarocila;
-
-// narocila: [
-//   {
-//     Id: "",
-//     nacinPlacila: "",
-//     opis: "",
-//     status: "",
-//     model: "",
-//     stevilka: "",
-//     barva: "",
-//   },
-// ],

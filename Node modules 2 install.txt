@@ -1,0 +1,1 @@
+npm i express cors mysql bcrypt body-parser cookie-parser express-session jsonwebtoken express-fileupload
