@@ -173,7 +173,7 @@ class Narocila extends Component {
 
           <input
             type="file"
-            name="file"
+            name="file" //name="files[]"
             id="slika"
             onChange={this.fileChange}
             multiple

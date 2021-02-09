@@ -33,12 +33,12 @@ class AdminNarocila extends Component {
   //     });
   // }
 
-  test = ({ currentTarget: input }) => {
+  odpriUpload = ({ currentTarget: input }) => {
     const { narocila } = this.state;
     const narocilo = narocila[input.id];
 
     axios.post("http://localhost:4000/test", { narocilo }).then((res) => {
-      window.location = "/adminBlog";
+      if (narocilo.Status === "koncano") window.location = "/adminBlog";
     });
   };
 
@@ -121,7 +121,7 @@ class AdminNarocila extends Component {
                   status={n.Status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
-                  onClick={this.test}
+                  onClick={this.odpriUpload}
                 />
                 <Dropdown
                   key={i}

@@ -40,7 +40,6 @@ class Blog extends Component {
   loadAllNarocila() {
     axios.get("http://localhost:4000/blog").then((res) => {
       const narocilo = res.data.narocila;
-      console.log(narocilo);
       this.setState({ cards: narocilo });
     });
   }
