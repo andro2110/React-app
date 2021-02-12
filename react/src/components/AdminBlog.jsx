@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Joi from "joi-browser";
 
 class AdminBlog extends Component {
   state = {
@@ -8,6 +9,10 @@ class AdminBlog extends Component {
     opis: "",
     slika: "",
     isSent: "",
+  };
+
+  schema = {
+    opis: Joi.string().required(),
   };
 
   fileChange = (f) => {

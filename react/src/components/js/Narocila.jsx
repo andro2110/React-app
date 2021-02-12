@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Input from "./common/Input";
 import axios from "axios";
+import Joi from "joi-browser";
 
 class Narocila extends Component {
   state = {
@@ -27,6 +28,13 @@ class Narocila extends Component {
     selectedFile: null,
     sentSuccessful: "",
     isSent: false,
+  };
+
+  schema = {
+    model: Joi.string().required(),
+    stevilka: Joi.number().required(),
+    opis: Joi.string().required(),
+    barva: Joi.string().required(),
   };
 
   loadPatterns() {

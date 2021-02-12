@@ -1,6 +1,6 @@
 import React from "react";
 
-const Password = ({ name, label, value, onChange }) => {
+const Password = ({ name, label, value, onChange, error }) => {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -11,6 +11,7 @@ const Password = ({ name, label, value, onChange }) => {
         name={name}
         onChange={onChange}
       />
+      {/* <div>{error[name]}</div> */}
     </div>
   );
 };

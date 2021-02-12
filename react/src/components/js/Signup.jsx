@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Input from "./common/Input";
 import Password from "./common/PasswordField";
 import axios from "axios";
+import Joi from "joi-browser";
 
 class SignUp extends Component {
   state = {
@@ -15,6 +16,16 @@ class SignUp extends Component {
       status: "upor",
       kraj: "",
     },
+  };
+
+  schema = {
+    ime: Joi.string().required(),
+    priimek: Joi.string().required(),
+    email: Joi.string().email().required(),
+    geslo: Joi.string().required(),
+    hisnaSt: Joi.string().required(),
+    postSt: Joi.number().required(),
+    kraj: Joi.string().required(),
   };
 
   handleSubmit = (ev) => {

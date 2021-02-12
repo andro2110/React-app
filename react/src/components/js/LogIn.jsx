@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import Input from "./common/Input";
 import Password from "./common/PasswordField";
 import axios from "axios";
-// import { Redirect } from "react-router-dom";
+import Joi from "joi-browser";
 
-// let loginStatus = "";
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
 
 class Login extends Component {
@@ -17,6 +16,32 @@ class Login extends Component {
     loggedIn: false,
     text: "",
     status: "",
+
+    errors: {
+      email: "",
+      geslo: "",
+    },
+  };
+
+  schema = {
+    email: Joi.string().email().required(),
+    geslo: Joi.string().required(),
+  };
+
+  validate = () => {
+    const { account } = this.state;
+    const { error } = Joi.validate(account, this.schema, {
+      abortEarly: false,
+    });
+
+    if (!error) return false;
+
+    const errors = {};
+
+    for (const item of error.details) errors[item.path[0]] = item.message;
+    this.setState({ errors });
+
+    return errors;
   };
 
   handleSubmit = (ev) => {
@@ -30,29 +55,33 @@ class Login extends Component {
   };
 
   login = () => {
-    const { account } = this.state;
-    axios
-      .post("http://localhost:4000/login", { racun: account })
-      .then((response) => {
-        console.log(response.data.podatki[0]);
-        if (!response.data.auth) {
-          this.setState({
-            loggedIn: false,
-          });
+    const error = this.validate();
 
-          this.setState({
-            text: response.data.message,
-          });
-        } else {
-          this.setState({
-            loggedIn: true,
-            text: "hej maricka",
-          });
-          localStorage.setItem("token", response.data.token);
+    if (!error) {
+      const { account } = this.state;
+      axios
+        .post("http://localhost:4000/login", { racun: account })
+        .then((response) => {
+          console.log(response.data.podatki[0]);
+          if (!response.data.auth) {
+            this.setState({
+              loggedIn: false,
+            });
 
-          this.setState({ status: response.data.podatki[0].Status });
-        }
-      });
+            this.setState({
+              text: response.data.message,
+            });
+          } else {
+            this.setState({
+              loggedIn: true,
+              text: "hej maricka",
+            });
+            localStorage.setItem("token", response.data.token);
+
+            this.setState({ status: response.data.podatki[0].Status });
+          }
+        });
+    }
   };
 
   componentDidMount() {
@@ -90,7 +119,7 @@ class Login extends Component {
   };
 
   render() {
-    const { account } = this.state;
+    const { account, errors } = this.state;
 
     return (
       <div>
@@ -101,12 +130,14 @@ class Login extends Component {
             label="Email: "
             value={account.email}
             onChange={this.handleChange}
+            error={errors}
           />
           <Password
             name="geslo"
             label="Geslo: "
             value={account.geslo}
             onChange={this.handleChange}
+            error={errors}
           />
           <button onClick={this.login}>Login</button>
         </form>
