@@ -71,9 +71,15 @@ class AdminBlog extends Component {
   };
 
   render() {
+    const { narocilo } = this.state;
+    console.log(narocilo);
     return (
       <React.Fragment>
         <h1>admin blog</h1>
+        <div>
+          Model: {narocilo.model}, opis: {narocilo.Opis}
+        </div>
+
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="opis">Opis</label>
           <input

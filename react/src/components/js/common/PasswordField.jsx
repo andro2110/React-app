@@ -11,7 +11,7 @@ const Password = ({ name, label, value, onChange, error }) => {
         name={name}
         onChange={onChange}
       />
-      {/* <div>{error[name]}</div> */}
+      <div>{error}</div>
     </div>
   );
 };

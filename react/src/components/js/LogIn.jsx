@@ -17,10 +17,7 @@ class Login extends Component {
     text: "",
     status: "",
 
-    errors: {
-      email: "",
-      geslo: "",
-    },
+    errors: { email: "", geslo: "" },
   };
 
   schema = {
@@ -44,25 +41,37 @@ class Login extends Component {
     return errors;
   };
 
+  validateProperty = ({ name, value }) => {
+    const obj = { [name]: value };
+    const schema = { [name]: this.schema[name] };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
+  };
+
   handleSubmit = (ev) => {
     ev.preventDefault();
   };
 
   handleChange = ({ currentTarget: input }) => {
+    const errors = { ...this.state.errors };
+    const errMessage = this.validateProperty(input);
+    if (errMessage) errors[input.name] = errMessage;
+    else delete errors[input.name];
+
     const account = { ...this.state.account };
     account[input.name] = input.value;
-    this.setState({ account });
+    this.setState({ account, errors });
   };
 
   login = () => {
     const error = this.validate();
+    this.setState({ errors: error || {} });
 
     if (!error) {
       const { account } = this.state;
       axios
         .post("http://localhost:4000/login", { racun: account })
         .then((response) => {
-          console.log(response.data.podatki[0]);
           if (!response.data.auth) {
             this.setState({
               loggedIn: false,
@@ -130,14 +139,14 @@ class Login extends Component {
             label="Email: "
             value={account.email}
             onChange={this.handleChange}
-            error={errors}
+            error={errors["email"]}
           />
           <Password
             name="geslo"
             label="Geslo: "
             value={account.geslo}
             onChange={this.handleChange}
-            error={errors}
+            error={errors["geslo"]}
           />
           <button onClick={this.login}>Login</button>
         </form>

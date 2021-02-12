@@ -33,23 +33,6 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   const allowedOrgins = [
-//     "http://localhost:3000, 62.84.234.78:3000, 62.84.234.78:4000, http://localhost:4000",
-//   ];
-//   const origin = req.headers.origin;
-//   if (allowedOrgins.includes(origin)) {
-//     res.setHeader("Access-Control-Allow-Origin", origin);
-//   }
-//   res.header("Access-Control-Allow-Methods", "GET, POST");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Content-Type, multipart/form-data"
-//   );
-//   res.header("Access-Control-Allow-Credentials", true);
-//   return next();
-// });
-
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -109,9 +92,9 @@ app.get("/vzorci", (req, res) => {
 
 //FULL NAROCILO QUERY
 app.post("/narocila", (req, res) => {
-  const { model, stevilka } = req.body.artikel;
-  const { nacinPlacila, opis, status } = req.body.narocilo;
-  const { barva, vzorec } = req.body.dodatki;
+  const { model, stevilka, opis, barva } = req.body.narocilo;
+
+  const { nacinPlacila, status, vzorec } = req.body.dodatki;
   const token = req.body.token;
 
   const date = new Date();
