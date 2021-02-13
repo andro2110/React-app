@@ -161,25 +161,30 @@ app.post("/narocila", (req, res) => {
 });
 app.use(fileUpload());
 app.post("/upload", (req, res) => {
-  const file = req.files.file;
+  const files = req.files.file;
   const did = req.body.dodatekId;
+  const stSlik = req.body.stSlik;
 
-  const path = `http://localhost:4000/img/${req.files.file.name}`;
-  const imeSlike = req.files.file.name;
+  for (let i = 0; i < stSlik; i++) {
+    const files = req.files;
+    const file = `file${i}`;
+    const path = `http://localhost:4000/img/${files[file].name}`;
+    const imeSlike = files[file].name;
 
-  file.mv(`${__dirname}/public/img/${file.name}`, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-  });
+    files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+    });
 
-  con.query(
-    "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
-    [did, imeSlike, path],
-    (err) => {
-      if (err) res.send(err);
-    }
-  );
+    con.query(
+      "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
+      [did, imeSlike, path],
+      (err) => {
+        if (err) res.send(err);
+      }
+    );
+  }
 });
 
 app.post("/authUser", verifyJWT, (req, res) => {

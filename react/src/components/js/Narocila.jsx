@@ -39,7 +39,7 @@ class Narocila extends Component {
 
     token: "",
 
-    slika: "",
+    slike: "",
     selectedFile: null,
     sentSuccessful: "",
     isSent: false,
@@ -109,14 +109,13 @@ class Narocila extends Component {
   };
 
   fileChange = (e) => {
-    this.setState({ slika: e.target.files[0] });
+    this.setState({ slike: e.target.files });
   };
 
   posljiNarocilo = () => {
     const { narocilo, token, dodatki } = this.state;
     const error = this.validate();
     this.setState({ errors: error || {} });
-    // console.log(error);
 
     if (!error) {
       axios
@@ -129,12 +128,20 @@ class Narocila extends Component {
           this.setState({ sentSuccessful: res.data.success });
           this.setState({ isSent: true });
           if (res.data.dodatekId) {
-            const { slika } = this.state;
+            const { slike } = this.state;
             const did = res.data.dodatekId;
+
+            let counter = 0;
+            const stSlik = slike.length;
 
             const formData = new FormData();
             formData.append("dodatekId", did);
-            formData.append("file", slika);
+            formData.append("stSlik", stSlik);
+
+            for (const slika of slike) {
+              formData.append(`file${counter}`, slika);
+              counter++;
+            }
 
             axios
               .post("http://localhost:4000/upload", formData, {
@@ -224,7 +231,7 @@ class Narocila extends Component {
 
           <input
             type="file"
-            name="file" //name="files[]"
+            name="files[]" //name="files[]"
             id="slika"
             onChange={this.fileChange}
             multiple
