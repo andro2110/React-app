@@ -11,7 +11,7 @@ const Input = ({ name, label, value, onChange, error }) => {
         id={name}
         name={name}
       />
-      {error !== null ? <div>{error}</div> : null}
+      {error ? <div className="alert alert-danger">{error}</div> : null}
     </div>
   );
 };

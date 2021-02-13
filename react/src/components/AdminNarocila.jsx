@@ -12,14 +12,16 @@ class AdminNarocila extends Component {
       margin: "100px",
     },
 
-    test: {
-      display: "block",
-    },
-
     statusi: ["vsi statusi", "prejeto", "vdelu", "koncano"],
+    narocilaStatusi: ["prejeto", "vdelu", "koncano"],
     tmpStatus: "",
     isciDatumNacin: "",
     selectedStatus: "",
+
+    feedback: {
+      success: null,
+      sporocilo: "",
+    },
   };
 
   // checkUser() {
@@ -54,17 +56,28 @@ class AdminNarocila extends Component {
       })
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data.message);
+          const obj = { ...this.state.feedback };
+          obj["success"] = res.data.success;
+          obj["sporocilo"] = res.data.message;
+          this.setState({ feedback: obj });
+
           narocila[index]["Status"] = val;
           this.setState({ narocila: narocila });
         } else {
-          console.log(res.data.message);
+          const obj = { ...this.state.feedback };
+          obj["success"] = res.data.success;
+          obj["sporocilo"] = res.data.message;
+          this.setState({ feedback: obj });
         }
       });
   };
 
   handleSelectedStatusChange = ({ currentTarget: input }) => {
     this.setState({ selectedStatus: input.value });
+    const obj = { ...this.state.feedback };
+    obj["success"] = null;
+    obj["sporocilo"] = "";
+    this.setState({ feedback: obj });
   };
 
   urediPoDatumu = ({ currentTarget: button }) => {
@@ -78,7 +91,6 @@ class AdminNarocila extends Component {
       .post("http://localhost:4000/vrniNarocilaDatum", { tmpNacin })
       .then((res) => {
         const cards = res.data.narocila;
-        console.log(cards);
 
         this.setState({ narocila: cards });
       });
@@ -93,7 +105,13 @@ class AdminNarocila extends Component {
   }
 
   render() {
-    const { narocila, styles, isciDatumNacin, selectedStatus } = this.state;
+    const {
+      narocila,
+      styles,
+      isciDatumNacin,
+      selectedStatus,
+      feedback,
+    } = this.state;
 
     const filtered =
       selectedStatus && selectedStatus !== "vsi statusi"
@@ -116,24 +134,31 @@ class AdminNarocila extends Component {
                   stevilka={n.Stevilka}
                   model={n.model}
                   barva={n.barva}
-                  nacinPlacila={n.NacinPlacila}
+                  nacinPlacila={n.nacinPlacila}
                   opis={n.Opis}
                   status={n.Status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
                   onClick={this.odpriUpload}
+                  options={this.state.narocilaStatusi}
+                  onStatusChange={this.handleStatusChange}
+                  statusValue={n.Status}
                 />
-                <Dropdown
+                {/* <Dropdown
                   key={i}
-                  options={this.state.statusi}
+                  options={this.state.narocilaStatusi}
                   onChange={this.handleStatusChange}
                   value={n.Status}
                   id={i}
-                  style={this.state.test}
-                />
+                /> */}
               </div>
             );
           })}
+          {feedback.success ? (
+            <p className="alert alert-success">{feedback.sporocilo}</p>
+          ) : !feedback.success && feedback.success !== null ? (
+            <p className="alert alert-danger">{feedback.sporocilo}</p>
+          ) : null}
         </div>
 
         <div className="Kriteriji">
@@ -156,7 +181,6 @@ class AdminNarocila extends Component {
             options={this.state.statusi}
             onChange={this.handleSelectedStatusChange}
             // value={n.Status}
-            style={this.state.test}
           />
         </div>
       </React.Fragment>

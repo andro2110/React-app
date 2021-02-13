@@ -238,7 +238,7 @@ app.get("/logout", (req, res) => {
 
 app.post("/adminNarocila", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, n.NacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva 
+    `SELECT n.IDNarocila, n.nacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva 
     FROM Narocilo n, Artikel a, Dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla `,
     (err, narocila) => {
@@ -296,7 +296,7 @@ app.post("/vrniDatum", (req, res) => {
     FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
     nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
-      ORDER BY n.Datum ${nacin}`,
+      ORDER BY nb.datumObjave ${nacin}`,
     (err, narocila) => {
       if (err) res.send(err);
       else res.json({ narocila });
@@ -381,14 +381,14 @@ app.post("/vSlikeObjav", (req, res) => {
 
 app.post("/vrniNarocilaDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
-
+  // `SELECT n.IDNarocila, n.opis, a.model, v.Ime AS vzorec, s.lokacijaSlike
   con.query(
-    `SELECT n.IDNarocila, a.model, s.lokacijaSlike, a.Stevilka, n.NacinPlacila, n.Status, n.Datum, n.Opis
-    FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
-    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
-    nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
-      ORDER BY n.Datum ${nacin}`,
+    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, s.lokacijaSlike, n.nacinPlacila, d.barva
+    FROM narocilo n, artikel a, vzorci v, slike s, dodatki d
+    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND d.IDDodatka = s.IDDodatka
+    ORDER BY n.datum ${nacin}`,
     (err, narocila) => {
+      // console.log(narocila);
       if (err) res.send(err);
       else res.json({ narocila });
     }

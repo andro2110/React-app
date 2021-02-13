@@ -171,7 +171,11 @@ class Narocila extends Component {
     return (
       <div>
         <h1>Naročila</h1>
-        {token === null ? <p>Za narocanje se potrebujes prijaviti</p> : null}
+        {token === null ? (
+          <p className="alert alert-danger">
+            Za narocanje se potrebujes prijaviti
+          </p>
+        ) : null}
 
         <form onSubmit={this.handleSubmit}>
           <Input
