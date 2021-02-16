@@ -37,3 +37,15 @@
   cursor: pointer;
   opacity: 1;
 }
+
+.imgCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+  font-size: 4em;
+}
+
+.rec-carousel {
+  width: 40%;
+}

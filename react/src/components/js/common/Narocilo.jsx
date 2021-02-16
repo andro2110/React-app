@@ -1,5 +1,6 @@
 import React from "react";
 import Dropdown from "./DropDown";
+import Galerija from "./Galerija";
 
 const Narocilo = ({
   stevilka,
@@ -12,8 +13,9 @@ const Narocilo = ({
   options,
   onStatusChange,
   statusValue,
+  slike,
+  loaded,
 }) => {
-  // console.log(statusValue);
   return (
     <div>
       <p onClick={onClick} id={narociloIndex}>
@@ -27,6 +29,7 @@ const Narocilo = ({
         key={narociloIndex}
         id={narociloIndex}
       />
+      {loaded ? <Galerija slike={slike} /> : null}
     </div>
   );
 };

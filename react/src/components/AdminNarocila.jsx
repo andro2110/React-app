@@ -7,6 +7,7 @@ import Dropdown from "./js/common/DropDown";
 class AdminNarocila extends Component {
   state = {
     narocila: [],
+    slike: [],
 
     styles: {
       margin: "100px",
@@ -22,6 +23,7 @@ class AdminNarocila extends Component {
       success: null,
       sporocilo: "",
     },
+    loaded: false,
   };
 
   // checkUser() {
@@ -96,11 +98,36 @@ class AdminNarocila extends Component {
       });
   };
 
-  componentDidMount() {
-    axios.post("http://localhost:4000/adminNarocila").then((response) => {
-      const narocilo = response.data.narocila;
+  getSlike = () => {
+    const { narocila } = this.state;
+    const { slike } = this.state;
+    // console.log(slike);
 
-      this.setState({ narocila: narocilo });
+    for (const narocilo of narocila) {
+      const tmp = [];
+      for (const slika of slike) {
+        if (narocilo.IDDodatka === slika.IDDodatka) {
+          tmp.push(slika);
+        }
+      }
+      narocilo["slike"] = tmp;
+    }
+    this.setState({ narocila: narocila });
+    this.setState({ loaded: true });
+    // console.log(narocila);
+  };
+
+  componentDidMount() {
+    axios.get("http://localhost:4000/vrniAdminSlike").then((res) => {
+      const slike = res.data.slike;
+      this.setState({ slike });
+    });
+
+    axios.get("http://localhost:4000/adminNarocila").then((response) => {
+      const narocila = response.data.narocila;
+      this.setState({ narocila });
+
+      this.getSlike();
     });
   }
 
@@ -111,6 +138,7 @@ class AdminNarocila extends Component {
       isciDatumNacin,
       selectedStatus,
       feedback,
+      loaded,
     } = this.state;
 
     const filtered =
@@ -124,6 +152,12 @@ class AdminNarocila extends Component {
         {/*dodaj se props - links (napiss not kere linke uporabi*/}
 
         <div style={styles}>
+          {feedback.success ? (
+            <p className="alert alert-success">{feedback.sporocilo}</p>
+          ) : !feedback.success && feedback.success !== null ? (
+            <p className="alert alert-danger">{feedback.sporocilo}</p>
+          ) : null}
+
           {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
           {filtered.map((n, i) => {
             return (
@@ -136,6 +170,7 @@ class AdminNarocila extends Component {
                   barva={n.barva}
                   nacinPlacila={n.nacinPlacila}
                   opis={n.Opis}
+                  slike={n.slike}
                   status={n.Status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
@@ -143,6 +178,7 @@ class AdminNarocila extends Component {
                   options={this.state.narocilaStatusi}
                   onStatusChange={this.handleStatusChange}
                   statusValue={n.Status}
+                  loaded={loaded}
                 />
                 {/* <Dropdown
                   key={i}
@@ -154,11 +190,6 @@ class AdminNarocila extends Component {
               </div>
             );
           })}
-          {feedback.success ? (
-            <p className="alert alert-success">{feedback.sporocilo}</p>
-          ) : !feedback.success && feedback.success !== null ? (
-            <p className="alert alert-danger">{feedback.sporocilo}</p>
-          ) : null}
         </div>
 
         <div className="Kriteriji">

@@ -241,15 +241,27 @@ app.get("/logout", (req, res) => {
     .end();
 });
 
-app.post("/adminNarocila", (req, res) => {
+app.get("/adminNarocila", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, n.nacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva 
+    `SELECT n.IDNarocila, n.nacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva, d.IDDodatka
     FROM Narocilo n, Artikel a, Dodatki d
-    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla `,
+    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla`,
     (err, narocila) => {
-      if (err) res.json({ err: err });
+      if (err) res.json({ success: false, err: err });
 
-      res.json({ narocila });
+      res.json({ success: true, narocila });
+    }
+  );
+});
+
+app.get("/vrniAdminSlike", (req, res) => {
+  con.query(
+    `SELECT s.imeSlike, s.lokacijaSlike, s.IDDodatka
+    FROM Slike s`,
+    (err, slike) => {
+      if (err) res.send(err);
+
+      res.json({ slike });
     }
   );
 });

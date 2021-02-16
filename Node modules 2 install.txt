@@ -1,1 +1,2 @@
-npm i express cors mysql bcrypt body-parser cookie-parser express-session jsonwebtoken express-fileupload
+server: npm i express cors mysql bcrypt body-parser cookie-parser express-session jsonwebtoken express-fileupload
+react: npm i axios joi-browser react-router-dom react-elastic-carousel styled-components
