@@ -271,7 +271,7 @@ app.post("/vrniNarocila", (req, res) => {
   const opis = req.body.iskanOpis.toLowerCase();
 
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, n.Datum, v.Ime AS vzorec, s.lokacijaSlike
+    `SELECT n.IDNarocila, nb.opis, a.model, n.Datum, v.Ime AS vzorec
       FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
       WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
       nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
@@ -293,14 +293,26 @@ app.get("/narocila", (req, res) => {
 
 app.get("/blog", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, s.lokacijaSlike
-      FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
-      WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
-      nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID`,
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis
+    FROM Narocilo n, narocilonablogu nb, Artikel a
+    WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla`,
     (err, narocila) => {
       if (err) res.send(err);
 
       res.json({ narocila });
+    }
+  );
+});
+
+app.get("/vrniBlogSlike", (req, res) => {
+  con.query(
+    `SELECT s.imeSlike, s.lokacijaSlike, s.narociloBlogID AS narociloId
+    FROM blogSlike s, narociloNaBlogu nb
+    WHERE s.narociloBlogID = nb.ID`,
+    (err, slike) => {
+      if (err) console.log(err);
+
+      res.json({ slike });
     }
   );
 });

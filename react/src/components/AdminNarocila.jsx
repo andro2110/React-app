@@ -99,8 +99,7 @@ class AdminNarocila extends Component {
   };
 
   getSlike = () => {
-    const { narocila } = this.state;
-    const { slike } = this.state;
+    const { narocila, slike } = this.state;
     // console.log(slike);
 
     for (const narocilo of narocila) {

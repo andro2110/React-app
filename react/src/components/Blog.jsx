@@ -11,12 +11,15 @@ class Blog extends Component {
     styles: {
       margin: "102px",
     },
+    slike: [],
 
     vzorci: [],
     iskanModel: "",
     iskanOpis: "",
     isciDatumNacin: "",
     selectedPattern: "Vsi vzorci",
+
+    loaded: false,
   };
 
   handleSearchModel = ({ currentTarget: input }) => {
@@ -41,11 +44,39 @@ class Blog extends Component {
     axios.get("http://localhost:4000/blog").then((res) => {
       const narocilo = res.data.narocila;
       this.setState({ cards: narocilo });
+      console.log(narocilo.length);
+
+      this.poveziSlike();
     });
   }
+  // SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, nb.ID AS narociloBlogId
+
+  loadSlike = () => {
+    axios.get("http://localhost:4000/vrniBlogSlike").then((res) => {
+      const slike = res.data.slike;
+
+      this.setState({ slike });
+    });
+  };
+
+  poveziSlike = () => {
+    const { cards, slike } = this.state;
+
+    for (const narocilo of cards) {
+      const tmp = [];
+      for (const slika of slike) {
+        if (slika.narociloId === narocilo.narociloBlogId) tmp.push(slika);
+      }
+      narocilo["slike"] = tmp;
+    }
+
+    this.setState({ cards });
+    this.setState({ loaded: true });
+  };
 
   componentDidMount() {
     this.loadPatterns();
+    this.loadSlike();
     this.loadAllNarocila();
   }
 
@@ -158,7 +189,8 @@ class Blog extends Component {
                 datum={c.datumObjave}
                 opis={c.opis}
                 vzorec={c.vzorec} //ime je ime vzorca
-                filePath={c.lokacijaSlike}
+                slike={c.slike}
+                loaded={this.state.loaded}
               />
             );
           })}
