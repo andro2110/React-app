@@ -7,7 +7,7 @@ class AdminBlog extends Component {
     narocilo: "",
 
     opis: "",
-    slika: "",
+    slike: "",
     isSent: "",
   };
 
@@ -16,7 +16,7 @@ class AdminBlog extends Component {
   };
 
   fileChange = (f) => {
-    this.setState({ slika: f.target.files[0] });
+    this.setState({ slike: f.target.files });
   };
 
   handleOpisChange = ({ currentTarget: input }) => {
@@ -33,12 +33,20 @@ class AdminBlog extends Component {
       })
       .then((res) => {
         if (res.data.success) {
-          const { slika } = this.state;
+          const { slike } = this.state;
           const nid = res.data.narociloBlogId;
+
+          const stSlik = slike.length;
+          let counter = 0;
 
           const formData = new FormData();
           formData.append("narociloId", nid);
-          formData.append("slika", slika);
+          formData.append("stSlik", stSlik);
+
+          for (const slika of slike) {
+            formData.append(`file${counter}`, slika);
+            counter++;
+          }
 
           axios
             .post("http://localhost:4000/vSlikeObjav", formData, {
@@ -47,7 +55,8 @@ class AdminBlog extends Component {
               },
             })
             .then((res) => {
-              if (res.data.success) window.location = "/adminNarocila";
+              // if (res.data.success) window.location = "/adminNarocila";
+              console.log(res.data);
             });
         }
       });
@@ -92,9 +101,10 @@ class AdminBlog extends Component {
 
           <input
             type="file"
-            name="slika"
+            name="files[]"
             id="slika"
             onChange={this.fileChange}
+            multiple
           />
 
           <button onClick={this.objavi}>Objavi</button>

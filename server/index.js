@@ -17,6 +17,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(fileUpload());
 app.use(express.static("public"));
 app.use(express.json());
 app.use(cookieParser());
@@ -159,9 +161,8 @@ app.post("/narocila", (req, res) => {
     }
   );
 });
-app.use(fileUpload());
+
 app.post("/upload", (req, res) => {
-  const files = req.files.file;
   const did = req.body.dodatekId;
   const stSlik = req.body.stSlik;
 
@@ -298,6 +299,7 @@ app.get("/blog", (req, res) => {
     WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla`,
     (err, narocila) => {
       if (err) res.send(err);
+      console.log(narocila);
 
       res.json({ narocila });
     }
@@ -388,24 +390,29 @@ app.post("/vTabeloObjav", (req, res) => {
 });
 
 app.post("/vSlikeObjav", (req, res) => {
-  const file = req.files.slika;
-  const nid = req.body.narociloId;
+  const nId = req.body.narociloId;
+  const stSlik = req.body.stSlik;
+  const files = req.files;
 
-  const path = `http://localhost:4000/blogImg/${file.name}`;
-  const imeSlike = file.name;
+  for (let i = 0; i < stSlik; i++) {
+    const file = `file${i}`;
+    const path = `http://localhost:4000/blogImg/${files[file].name}`;
+    const imeSlike = files[file].name;
 
-  file.mv(`${__dirname}/public/blogImg/${file.name}`, (err) => {
-    if (err) res.send(err);
-  });
+    files[file].mv(`${__dirname}/public/blogImg/${files[file].name}`, (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+    });
 
-  con.query(
-    "INSERT INTO blogSlike (imeSlike, lokacijaSlike, narociloBlogID) VALUES (?, ?, ?)",
-    [imeSlike, path, nid],
-    (err) => {
-      if (err) res.json({ err, success: false });
-      else res.json({ success: true });
-    }
-  );
+    con.query(
+      "INSERT INTO blogSlike (narociloBlogID, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
+      [nId, imeSlike, path],
+      (err) => {
+        if (err) res.send(err);
+      }
+    );
+  }
 });
 
 app.post("/vrniNarocilaDatum", (req, res) => {

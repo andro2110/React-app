@@ -44,8 +44,8 @@ class Blog extends Component {
     axios.get("http://localhost:4000/blog").then((res) => {
       const narocilo = res.data.narocila;
       this.setState({ cards: narocilo });
-      console.log(narocilo.length);
 
+      console.log(narocilo);
       this.poveziSlike();
     });
   }
