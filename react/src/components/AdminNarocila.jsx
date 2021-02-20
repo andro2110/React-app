@@ -112,14 +112,16 @@ class AdminNarocila extends Component {
       narocilo["slike"] = tmp;
     }
     this.setState({ narocila: narocila });
-    this.setState({ loaded: true });
+    // this.setState({ loaded: true });
     // console.log(narocila);
   };
 
   componentDidMount() {
     axios.get("http://localhost:4000/vrniAdminSlike").then((res) => {
       const slike = res.data.slike;
+      console.log(slike);
       this.setState({ slike });
+      this.setState({ loaded: true });
     });
 
     axios.get("http://localhost:4000/adminNarocila").then((response) => {

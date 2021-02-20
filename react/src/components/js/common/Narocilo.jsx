@@ -16,6 +16,7 @@ const Narocilo = ({
   slike,
   loaded,
 }) => {
+  console.log(slike);
   return (
     <div>
       <p onClick={onClick} id={narociloIndex}>
@@ -29,7 +30,7 @@ const Narocilo = ({
         key={narociloIndex}
         id={narociloIndex}
       />
-      {loaded ? <Galerija slike={slike} /> : null}
+      {loaded ? <Galerija slike={slike} loaded={loaded} /> : null}
     </div>
   );
 };
