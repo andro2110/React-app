@@ -16,7 +16,6 @@ const Narocilo = ({
   slike,
   loaded,
 }) => {
-  console.log(slike);
   return (
     <div>
       <p onClick={onClick} id={narociloIndex}>

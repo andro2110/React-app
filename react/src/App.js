@@ -9,12 +9,15 @@ import AdminNarocila from "./components/AdminNarocila";
 import Blog from "./components/Blog";
 import Testing from "./components/Testing";
 import AdminBlog from "./components/AdminBlog";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
   state = {};
   render() {
     return (
       <React.Fragment>
+        <ToastContainer />
         <Switch>
           <Route path="/narocila" component={Narocila} />
           <Route path="/signup" component={SignUp} />

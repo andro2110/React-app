@@ -210,6 +210,7 @@ class Blog extends Component {
                     loaded={loaded}
                   />
                 );
+              return null;
             })}
         </div>
       </React.Fragment>

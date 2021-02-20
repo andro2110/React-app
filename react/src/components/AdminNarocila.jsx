@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import NavBar from "./js/NavBar";
 import Narocilo from "./js/common/Narocilo";
 import Dropdown from "./js/common/DropDown";
+import { toast } from "react-toastify";
 
 class AdminNarocila extends Component {
   state = {
@@ -65,11 +66,15 @@ class AdminNarocila extends Component {
 
           narocila[index]["Status"] = val;
           this.setState({ narocila: narocila });
+
+          toast.success(res.data.message);
         } else {
           const obj = { ...this.state.feedback };
           obj["success"] = res.data.success;
           obj["sporocilo"] = res.data.message;
           this.setState({ feedback: obj });
+
+          toast.error(res.data.message);
         }
       });
   };
@@ -100,7 +105,6 @@ class AdminNarocila extends Component {
 
   getSlike = () => {
     const { narocila, slike } = this.state;
-    // console.log(slike);
 
     for (const narocilo of narocila) {
       const tmp = [];
@@ -112,8 +116,6 @@ class AdminNarocila extends Component {
       narocilo["slike"] = tmp;
     }
     this.setState({ narocila: narocila });
-    // this.setState({ loaded: true });
-    // console.log(narocila);
   };
 
   componentDidMount() {
@@ -153,11 +155,11 @@ class AdminNarocila extends Component {
         {/*dodaj se props - links (napiss not kere linke uporabi*/}
 
         <div style={styles}>
-          {feedback.success ? (
+          {/* {feedback.success ? (
             <p className="alert alert-success">{feedback.sporocilo}</p>
           ) : !feedback.success && feedback.success !== null ? (
             <p className="alert alert-danger">{feedback.sporocilo}</p>
-          ) : null}
+          ) : null} */}
 
           {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
           {filtered.map((n, i) => {
@@ -181,13 +183,6 @@ class AdminNarocila extends Component {
                   statusValue={n.Status}
                   loaded={loaded}
                 />
-                {/* <Dropdown
-                  key={i}
-                  options={this.state.narocilaStatusi}
-                  onChange={this.handleStatusChange}
-                  value={n.Status}
-                  id={i}
-                /> */}
               </div>
             );
           })}
