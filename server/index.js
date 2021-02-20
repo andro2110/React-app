@@ -272,14 +272,13 @@ app.post("/vrniNarocila", (req, res) => {
   const opis = req.body.iskanOpis.toLowerCase();
 
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, n.Datum, v.Ime AS vzorec
-      FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
-      WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
-      nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
+    `SELECT a.model, d.barva, v.Ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId
+      FROM narocilo n, artikel a, dodatki d, vzorci v, narociloNaBlogu nb
+      WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
       AND LOWER(a.model) LIKE '%${model}%' AND LOWER(nb.opis) LIKE '%${opis}%'`,
     (err, narocila) => {
       if (err) res.send(err);
-      else res.json({ narocila });
+      res.json({ narocila });
     }
   );
 });
@@ -294,12 +293,11 @@ app.get("/narocila", (req, res) => {
 
 app.get("/blog", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis
-    FROM Narocilo n, narocilonablogu nb, Artikel a
-    WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla`,
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, v.Ime AS vzorec
+    FROM Narocilo n, narocilonablogu nb, Artikel a, dodatki d, vzorci v
+    WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca`,
     (err, narocila) => {
       if (err) res.send(err);
-      console.log(narocila);
 
       res.json({ narocila });
     }
@@ -312,7 +310,7 @@ app.get("/vrniBlogSlike", (req, res) => {
     FROM blogSlike s, narociloNaBlogu nb
     WHERE s.narociloBlogID = nb.ID`,
     (err, slike) => {
-      if (err) console.log(err);
+      if (err) res.send(err);
 
       res.json({ slike });
     }
@@ -323,14 +321,13 @@ app.post("/vrniDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
 
   con.query(
-    `SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, s.lokacijaSlike
-    FROM Narocilo n, Artikel a, Dodatki d, Vzorci v, blogSlike s, narociloNaBlogu nb
-    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND v.IDVzorca = d.IDVzorca AND 
-    nb.IDNarocila = n.IDNarocila AND nb.ID = s.narociloBlogID
-      ORDER BY nb.datumObjave ${nacin}`,
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis
+    FROM Narocilo n, Artikel a, narociloNaBlogu nb
+    WHERE n.IDArtikla = a.IDArtikla AND nb.IDNarocila = n.IDNarocila
+    ORDER BY nb.datumObjave ${nacin}`,
     (err, narocila) => {
       if (err) res.send(err);
-      else res.json({ narocila });
+      res.json({ narocila });
     }
   );
 });
@@ -419,7 +416,7 @@ app.post("/vrniNarocilaDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
   // `SELECT n.IDNarocila, n.opis, a.model, v.Ime AS vzorec, s.lokacijaSlike
   con.query(
-    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, s.lokacijaSlike, n.nacinPlacila, d.barva
+    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, s.lokacijaSlike, n.nacinPlacila
     FROM narocilo n, artikel a, vzorci v, slike s, dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND d.IDDodatka = s.IDDodatka
     ORDER BY n.datum ${nacin}`,

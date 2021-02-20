@@ -17,7 +17,7 @@ class Blog extends Component {
     iskanModel: "",
     iskanOpis: "",
     isciDatumNacin: "",
-    selectedPattern: "Vsi vzorci",
+    selectedPattern: { IDVzorca: 5, Ime: "vsi vzorci" },
 
     loaded: false,
   };
@@ -34,7 +34,7 @@ class Blog extends Component {
     //dobi vzorce iz pb
     axios.get("http://localhost:4000/vzorci").then((response) => {
       const vz = response.data.data;
-      vz.push({ Ime: "Vsi vzorci" });
+      vz.push({ IDVzorca: 5, Ime: "Vsi vzorci" });
 
       this.setState({ vzorci: vz });
     });
@@ -44,18 +44,16 @@ class Blog extends Component {
     axios.get("http://localhost:4000/blog").then((res) => {
       const narocilo = res.data.narocila;
       this.setState({ cards: narocilo });
-
-      console.log(narocilo);
       this.poveziSlike();
     });
   }
-  // SELECT n.IDNarocila, nb.opis, a.model, nb.datumObjave, v.Ime AS vzorec, nb.ID AS narociloBlogId
 
   loadSlike = () => {
     axios.get("http://localhost:4000/vrniBlogSlike").then((res) => {
       const slike = res.data.slike;
 
       this.setState({ slike });
+      this.setState({ loaded: true });
     });
   };
 
@@ -71,7 +69,6 @@ class Blog extends Component {
     }
 
     this.setState({ cards });
-    this.setState({ loaded: true });
   };
 
   componentDidMount() {
@@ -90,31 +87,48 @@ class Blog extends Component {
   };
 
   sendQuery = () => {
-    const { iskanModel, iskanOpis } = this.state;
+    const { iskanModel, iskanOpis, slike } = this.state;
     this.setState({ selectedPattern: "" });
     axios
       .post("http://localhost:4000/vrniNarocila", { iskanModel, iskanOpis })
       .then((res) => {
         const cards = res.data.narocila;
 
-        this.setState({ cards: cards });
+        for (const card of cards) {
+          const tmp = [];
+          for (const slika of slike) {
+            if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+          }
+          card["slike"] = tmp;
+        }
+
+        this.setState({ cards });
         this.setState({ iskanModel: "" });
         this.setState({ iskanOpis: "" });
+        this.setState({ loaded: true });
       });
   };
 
   urediPoDatumu = ({ currentTarget: button }) => {
     const tmpNacin = button.name;
-    const { isciDatumNacin } = this.state;
+    const { isciDatumNacin, slike } = this.state;
 
     if (isciDatumNacin === tmpNacin) this.setState({ isciDatumNacin: "" });
     else this.setState({ isciDatumNacin: tmpNacin });
 
     axios.post("http://localhost:4000/vrniDatum", { tmpNacin }).then((res) => {
       const cards = res.data.narocila;
-      console.log(cards);
 
-      this.setState({ cards: cards });
+      for (const card of cards) {
+        const tmp = [];
+        for (const slika of slike) {
+          if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+        }
+        card["slike"] = tmp;
+      }
+
+      this.setState({ cards });
+      this.setState({ loaded: true });
     });
   };
 
@@ -126,10 +140,11 @@ class Blog extends Component {
       iskanModel,
       iskanOpis,
       isciDatumNacin,
+      loaded,
     } = this.state;
 
     const filtered =
-      selectedPattern && selectedPattern.IDVzorca
+      selectedPattern && selectedPattern.IDVzorca !== 5
         ? cards.filter((p) => p.vzorec === selectedPattern.Ime)
         : cards;
 
@@ -181,19 +196,21 @@ class Blog extends Component {
         <div style={this.state.styles}>
           {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
 
-          {filtered.map((c, i) => {
-            return (
-              <Card
-                key={i}
-                model={c.model}
-                datum={c.datumObjave}
-                opis={c.opis}
-                vzorec={c.vzorec} //ime je ime vzorca
-                slike={c.slike}
-                loaded={this.state.loaded}
-              />
-            );
-          })}
+          {loaded &&
+            filtered.map((c, i) => {
+              if (c.slike !== undefined)
+                return (
+                  <Card
+                    key={i}
+                    model={c.model}
+                    datum={c.datumObjave}
+                    opis={c.opis}
+                    vzorec={c.vzorec}
+                    slike={c.slike}
+                    loaded={loaded}
+                  />
+                );
+            })}
         </div>
       </React.Fragment>
     );

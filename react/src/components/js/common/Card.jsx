@@ -2,13 +2,11 @@ import React from "react";
 import Galerija from "./Galerija";
 import "../../css/card.css";
 
-const Card = ({ model, opis, filePath, slike, loaded }) => {
+const Card = ({ model, opis, slike, loaded }) => {
   return (
     <div className="Card">
       <h1>{model}</h1>
-      {/* <img src={filePath} alt="slika" className="Slika" /> */}
-      {loaded ? <Galerija slike={slike} /> : null}
-
+      <Galerija slike={slike} loaded={loaded} />
       <div className="Opis">
         <p>{opis}</p>
       </div>
