@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Joi from "joi-browser";
+import { toast } from "react-toastify";
 
 class AdminBlog extends Component {
   state = {
@@ -13,6 +14,8 @@ class AdminBlog extends Component {
 
   schema = {
     opis: Joi.string().required(),
+
+    redirect: false,
   };
 
   fileChange = (f) => {
@@ -22,6 +25,10 @@ class AdminBlog extends Component {
   handleOpisChange = ({ currentTarget: input }) => {
     this.setState({ opis: input.value });
   };
+
+  componentWillUnmount() {
+    clearTimeout(this.red);
+  }
 
   objavi = () => {
     const { opis, narocilo } = this.state;
@@ -33,7 +40,7 @@ class AdminBlog extends Component {
       })
       .then((res) => {
         if (res.data.success) {
-          const { slike } = this.state;
+          const { slike, redirect } = this.state;
           const nid = res.data.narociloBlogId;
 
           const stSlik = slike.length;
@@ -55,9 +62,20 @@ class AdminBlog extends Component {
               },
             })
             .then((res) => {
-              // if (res.data.success) window.location = "/adminNarocila";
-              console.log(res.data);
+              if (res.data.success) {
+                this.red = setTimeout(() => {
+                  this.setState({ redirect: true });
+                }, 3000);
+
+                toast.success("Narocilo uspesno poslano", {
+                  position: "top-center",
+                  autoClose: 3000,
+                });
+              } else
+                toast.error(res.data.errMessage, { position: "top-center" });
             });
+        } else {
+          toast.error(res.data.errMessage, { position: "top-center" });
         }
       });
   };
@@ -80,8 +98,9 @@ class AdminBlog extends Component {
   };
 
   render() {
-    const { narocilo } = this.state;
-    console.log(narocilo);
+    const { narocilo, redirect } = this.state;
+    if (redirect) window.location = "/adminNarocila";
+
     return (
       <React.Fragment>
         <h1>admin blog</h1>

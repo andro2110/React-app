@@ -4,6 +4,7 @@ import Card from "./js/common/Card";
 import NavBar from "./js/NavBar";
 import ListGroup from "./js/listGroup";
 import Input from "./js/common/Input";
+import { toast } from "react-toastify";
 
 class Blog extends Component {
   state = {
@@ -42,18 +43,25 @@ class Blog extends Component {
 
   loadAllNarocila() {
     axios.get("http://localhost:4000/blog").then((res) => {
-      const narocilo = res.data.narocila;
-      this.setState({ cards: narocilo });
-      this.poveziSlike();
+      if (!res.data.errMessage) {
+        const narocilo = res.data.narocila;
+        this.setState({ cards: narocilo });
+        this.poveziSlike();
+      } else {
+        toast.error(res.data.errMessage, { position: "top-center" });
+      }
     });
   }
 
   loadSlike = () => {
     axios.get("http://localhost:4000/vrniBlogSlike").then((res) => {
-      const slike = res.data.slike;
-
-      this.setState({ slike });
-      this.setState({ loaded: true });
+      if (!res.data.errMessage) {
+        const slike = res.data.slike;
+        this.setState({ slike });
+        this.setState({ loaded: true });
+      } else {
+        toast.error(res.data.errMessage, { position: "top-center" });
+      }
     });
   };
 
@@ -92,20 +100,24 @@ class Blog extends Component {
     axios
       .post("http://localhost:4000/vrniNarocila", { iskanModel, iskanOpis })
       .then((res) => {
-        const cards = res.data.narocila;
+        if (!res.data.errMessage) {
+          const cards = res.data.narocila;
 
-        for (const card of cards) {
-          const tmp = [];
-          for (const slika of slike) {
-            if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+          for (const card of cards) {
+            const tmp = [];
+            for (const slika of slike) {
+              if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+            }
+            card["slike"] = tmp;
           }
-          card["slike"] = tmp;
-        }
 
-        this.setState({ cards });
-        this.setState({ iskanModel: "" });
-        this.setState({ iskanOpis: "" });
-        this.setState({ loaded: true });
+          this.setState({ cards });
+          this.setState({ iskanModel: "" });
+          this.setState({ iskanOpis: "" });
+          this.setState({ loaded: true });
+        } else {
+          toast.error(res.data.errMessage, { position: "top-center" });
+        }
       });
   };
 
@@ -117,18 +129,22 @@ class Blog extends Component {
     else this.setState({ isciDatumNacin: tmpNacin });
 
     axios.post("http://localhost:4000/vrniDatum", { tmpNacin }).then((res) => {
-      const cards = res.data.narocila;
+      if (!res.data.errMessage) {
+        const cards = res.data.narocila;
 
-      for (const card of cards) {
-        const tmp = [];
-        for (const slika of slike) {
-          if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+        for (const card of cards) {
+          const tmp = [];
+          for (const slika of slike) {
+            if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+          }
+          card["slike"] = tmp;
         }
-        card["slike"] = tmp;
-      }
 
-      this.setState({ cards });
-      this.setState({ loaded: true });
+        this.setState({ cards });
+        this.setState({ loaded: true });
+      } else {
+        toast.error(res.data.errMessage, { position: "top-center" });
+      }
     });
   };
 

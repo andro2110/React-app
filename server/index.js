@@ -89,7 +89,7 @@ app.post("/register", (req, res) => {
 app.get("/vzorci", (req, res) => {
   con.query("SELECT * FROM Vzorci", (err, podatki) => {
     if (err) res.json({ errMessage: "Napaka pri pridobivanju vzorcev." });
-    else return res.json({ data: podatki });
+    else res.json({ data: podatki });
   });
 });
 
@@ -252,8 +252,7 @@ app.get("/adminNarocila", (req, res) => {
           success: false,
           errMessage: "Napaka pri pridobivanju naročil.",
         });
-
-      res.json({ success: true, narocila });
+      else res.json({ success: true, narocila });
     }
   );
 });
@@ -264,8 +263,7 @@ app.get("/vrniAdminSlike", (req, res) => {
     FROM Slike s`,
     (err, slike) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju slik." });
-
-      res.json({ slike });
+      else res.json({ slike });
     }
   );
 });
@@ -282,7 +280,7 @@ app.post("/vrniNarocila", (req, res) => {
       AND LOWER(a.model) LIKE '%${model}%' AND LOWER(nb.opis) LIKE '%${opis}%'`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
-      res.json({ narocila });
+      else res.json({ narocila });
     }
   );
 });
@@ -302,8 +300,7 @@ app.get("/blog", (req, res) => {
     WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
-
-      res.json({ narocila, errMessage: "" });
+      else res.json({ narocila, errMessage: "" });
     }
   );
 });
@@ -314,9 +311,8 @@ app.get("/vrniBlogSlike", (req, res) => {
     FROM blogSlike s, narociloNaBlogu nb
     WHERE s.narociloBlogID = nb.ID`,
     (err, slike) => {
-      if (err) res.send(err);
-
-      res.json({ slike });
+      if (err) res.json({ errMessage: "Napaka pri pridobivanju slik." });
+      else res.json({ slike });
     }
   );
 });
@@ -331,7 +327,7 @@ app.post("/vrniDatum", (req, res) => {
     ORDER BY nb.datumObjave ${nacin}`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
-      res.json({ narocila });
+      else res.json({ narocila });
     }
   );
 });
@@ -402,7 +398,7 @@ app.post("/vSlikeObjav", (req, res) => {
 
     files[file].mv(`${__dirname}/public/blogImg/${files[file].name}`, (err) => {
       if (err) {
-        return res.json({ errMessage: "Napaka pri pošiljanju slik." });
+        res.json({ errMessage: "Napaka pri pošiljanju slik." });
       }
     });
 
@@ -411,6 +407,7 @@ app.post("/vSlikeObjav", (req, res) => {
       [nId, imeSlike, path],
       (err) => {
         if (err) res.json({ errMessage: "Napaka pri pošiljanju slik." });
+        else res.json({ success: true });
       }
     );
   }

@@ -67,14 +67,14 @@ class AdminNarocila extends Component {
           narocila[index]["Status"] = val;
           this.setState({ narocila: narocila });
 
-          toast.success(res.data.message);
+          toast.success(res.data.message, { position: "top-center" });
         } else {
           const obj = { ...this.state.feedback };
           obj["success"] = res.data.success;
           obj["sporocilo"] = res.data.message;
           this.setState({ feedback: obj });
 
-          toast.error(res.data.message);
+          toast.error(res.data.message, { position: "top-center" });
         }
       });
   };
@@ -121,7 +121,6 @@ class AdminNarocila extends Component {
   componentDidMount() {
     axios.get("http://localhost:4000/vrniAdminSlike").then((res) => {
       const slike = res.data.slike;
-      console.log(slike);
       this.setState({ slike });
       this.setState({ loaded: true });
     });
@@ -140,7 +139,6 @@ class AdminNarocila extends Component {
       styles,
       isciDatumNacin,
       selectedStatus,
-      feedback,
       loaded,
     } = this.state;
 
