@@ -183,10 +183,15 @@ app.post("/upload", (req, res) => {
       [did, imeSlike, path],
       (err) => {
         if (err)
-          res.json({ errMessage: "Napaka pri pošiljanju. Poskusi ponovno" });
+          res.json({
+            success: false,
+            errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+          });
       }
     );
   }
+
+  res.json({ success: true });
 });
 
 app.post("/authUser", verifyJWT, (req, res) => {
@@ -416,13 +421,13 @@ app.post("/vSlikeObjav", (req, res) => {
 app.post("/vrniNarocilaDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
   con.query(
-    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, s.lokacijaSlike, n.nacinPlacila
-    FROM narocilo n, artikel a, vzorci v, slike s, dodatki d
-    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND d.IDDodatka = s.IDDodatka
+    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, n.nacinPlacila, d.IDDodatka
+    FROM narocilo n, artikel a, vzorci v, dodatki d
+    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca
     ORDER BY n.datum ${nacin}`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
-      else res.json({ narocila });
+      else res.json({ narocila, errMessage: "" });
     }
   );
 });

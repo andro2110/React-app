@@ -3,33 +3,28 @@ import Dropdown from "./DropDown";
 import Galerija from "./Galerija";
 
 const Narocilo = ({
-  stevilka,
-  barva,
-  model,
-  nacinPlacila,
-  opis,
+  narocilo,
   narociloIndex,
   onClick,
   options,
   onStatusChange,
-  statusValue,
-  slike,
   loaded,
 }) => {
   return (
     <div>
       <p onClick={onClick} id={narociloIndex}>
-        Model: {model}, Stevilka: {stevilka}, Barva: {barva}, Nacin placila:
-        {nacinPlacila}, Opis: {opis}, Status:
+        Model: {narocilo.model}, Stevilka: {narocilo.Stevilka}, Barva:{" "}
+        {narocilo.barva}, Nacin placila:
+        {narocilo.nacinPlacila}, Opis: {narocilo.Opis}, Status:
       </p>
       <Dropdown
         options={options}
         onChange={onStatusChange}
-        value={statusValue}
+        value={narocilo.Status}
         key={narociloIndex}
         id={narociloIndex}
       />
-      {loaded ? <Galerija slike={slike} loaded={loaded} /> : null}
+      {loaded ? <Galerija slike={narocilo.slike} loaded={loaded} /> : null}
     </div>
   );
 };

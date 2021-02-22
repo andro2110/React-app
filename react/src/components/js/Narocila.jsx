@@ -2,24 +2,10 @@ import React, { Component } from "react";
 import Input from "./common/Input";
 import axios from "axios";
 import Joi from "joi-browser";
+import { toast } from "react-toastify";
 
 class Narocila extends Component {
   state = {
-    // artikel: {
-    //   model: "",
-    //   stevilka: "",
-    // },
-    // narocilo: {
-    //   nacinPlacila: "Ob prejemu",
-    //   opis: "",
-    //   status: "prejeto",
-    // },
-
-    // dodatki: {
-    //   barva: "",
-    //   vzorec: "4",
-    // },
-
     narocilo: {
       model: "",
       stevilka: "",
@@ -45,11 +31,12 @@ class Narocila extends Component {
     isSent: false,
 
     errors: {},
+    redirect: false,
   };
 
   schema = {
     model: Joi.string().required(),
-    stevilka: Joi.number().required(),
+    stevilka: Joi.number().max(50).min(10).required(),
     opis: Joi.string().required(),
     barva: Joi.string().required(),
   };
@@ -68,6 +55,10 @@ class Narocila extends Component {
     this.setState({ token: t });
 
     this.loadPatterns();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.red);
   }
 
   handleSubmit = (ev) => {
@@ -125,8 +116,6 @@ class Narocila extends Component {
           dodatki,
         }) //poslje podatke na server
         .then((res) => {
-          this.setState({ sentSuccessful: res.data.success });
-          this.setState({ isSent: true });
           if (res.data.dodatekId) {
             const { slike } = this.state;
             const did = res.data.dodatekId;
@@ -143,16 +132,40 @@ class Narocila extends Component {
               counter++;
             }
 
+            //poslje slike v pb
             axios
               .post("http://localhost:4000/upload", formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
               })
-              .then((response) => {
-                const { filePath } = response.data;
+              .then((res) => {
+                const { filePath } = res.data;
                 this.setState({ imgSrc: filePath });
+
+                if (res.data.success) {
+                  this.setState({ sentSuccessful: res.data.success });
+                  this.setState({ isSent: true });
+
+                  this.red = setTimeout(() => {
+                    this.setState({ redirect: true });
+                  }, 5000);
+
+                  toast.success(
+                    "Naročilo uspešno poslano. Čez 3 sekunde boste preusmerjeni na domačo stran.",
+                    {
+                      position: "top-center",
+                    }
+                  );
+                } else
+                  toast.error(res.data.errMessage, {
+                    position: "top-center",
+                  });
               });
+          } else {
+            toast.error(res.data.errMessage, {
+              position: "top-center",
+            });
           }
         });
     }
@@ -173,7 +186,10 @@ class Narocila extends Component {
       isSent,
       errors,
       dodatki,
+      redirect,
     } = this.state;
+
+    // if (redirect) window.location = "/";
 
     return (
       <div>

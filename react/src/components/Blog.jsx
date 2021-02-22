@@ -18,7 +18,7 @@ class Blog extends Component {
     iskanModel: "",
     iskanOpis: "",
     isciDatumNacin: "",
-    selectedPattern: { IDVzorca: 5, Ime: "vsi vzorci" },
+    selectedPattern: { IDVzorca: 5, Ime: "vsa narocila" },
 
     loaded: false,
   };
@@ -35,7 +35,7 @@ class Blog extends Component {
     //dobi vzorce iz pb
     axios.get("http://localhost:4000/vzorci").then((response) => {
       const vz = response.data.data;
-      vz.push({ IDVzorca: 5, Ime: "Vsi vzorci" });
+      vz.push({ IDVzorca: 5, Ime: "Vsa naročila" });
 
       this.setState({ vzorci: vz });
     });

@@ -40,7 +40,7 @@ class AdminBlog extends Component {
       })
       .then((res) => {
         if (res.data.success) {
-          const { slike, redirect } = this.state;
+          const { slike } = this.state;
           const nid = res.data.narociloBlogId;
 
           const stSlik = slike.length;

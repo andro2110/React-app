@@ -14,7 +14,7 @@ class AdminNarocila extends Component {
       margin: "100px",
     },
 
-    statusi: ["vsi statusi", "prejeto", "vdelu", "koncano"],
+    statusi: ["Vsa naročila", "prejeto", "vdelu", "koncano"],
     narocilaStatusi: ["prejeto", "vdelu", "koncano"],
     tmpStatus: "",
     isciDatumNacin: "",
@@ -89,7 +89,7 @@ class AdminNarocila extends Component {
 
   urediPoDatumu = ({ currentTarget: button }) => {
     const tmpNacin = button.name;
-    const { isciDatumNacin } = this.state;
+    const { isciDatumNacin, slike } = this.state;
 
     if (isciDatumNacin === tmpNacin) this.setState({ isciDatumNacin: "" });
     else this.setState({ isciDatumNacin: tmpNacin });
@@ -97,9 +97,19 @@ class AdminNarocila extends Component {
     axios
       .post("http://localhost:4000/vrniNarocilaDatum", { tmpNacin })
       .then((res) => {
-        const cards = res.data.narocila;
+        if (!res.data.errMessage) {
+          const cards = res.data.narocila;
 
-        this.setState({ narocila: cards });
+          for (const card of cards) {
+            const tmp = [];
+            for (const slika of slike) {
+              if (slika.IDDodatka === card.IDDodatka) tmp.push(slika);
+            }
+            card["slike"] = tmp;
+          }
+
+          this.setState({ narocila: cards });
+        }
       });
   };
 
@@ -116,13 +126,13 @@ class AdminNarocila extends Component {
       narocilo["slike"] = tmp;
     }
     this.setState({ narocila: narocila });
+    this.setState({ loaded: true });
   };
 
   componentDidMount() {
     axios.get("http://localhost:4000/vrniAdminSlike").then((res) => {
       const slike = res.data.slike;
       this.setState({ slike });
-      this.setState({ loaded: true });
     });
 
     axios.get("http://localhost:4000/adminNarocila").then((response) => {
@@ -143,7 +153,7 @@ class AdminNarocila extends Component {
     } = this.state;
 
     const filtered =
-      selectedStatus && selectedStatus !== "vsi statusi"
+      selectedStatus && selectedStatus !== "Vsa naročila"
         ? narocila.filter((n) => n.Status === selectedStatus)
         : narocila;
 
@@ -165,20 +175,14 @@ class AdminNarocila extends Component {
               <div key={i} id={i}>
                 <Narocilo
                   key={n.Id}
+                  narocilo={n}
                   name="status"
-                  stevilka={n.Stevilka}
-                  model={n.model}
-                  barva={n.barva}
-                  nacinPlacila={n.nacinPlacila}
-                  opis={n.Opis}
-                  slike={n.slike}
                   status={n.Status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
                   onClick={this.odpriUpload}
                   options={this.state.narocilaStatusi}
                   onStatusChange={this.handleStatusChange}
-                  statusValue={n.Status}
                   loaded={loaded}
                 />
               </div>
