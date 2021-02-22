@@ -3,6 +3,8 @@ import Input from "./common/Input";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
+import NavBar from "./NavBar";
+import { regularLinks } from "./common/navbarlinks";
 
 class Narocila extends Component {
   state = {
@@ -149,12 +151,13 @@ class Narocila extends Component {
 
                   this.red = setTimeout(() => {
                     this.setState({ redirect: true });
-                  }, 5000);
+                  }, 3000);
 
                   toast.success(
                     "Naročilo uspešno poslano. Čez 3 sekunde boste preusmerjeni na domačo stran.",
                     {
                       position: "top-center",
+                      autoClose: 3000,
                     }
                   );
                 } else
@@ -178,95 +181,88 @@ class Narocila extends Component {
   };
 
   render() {
-    const {
-      narocilo,
-      vzorci,
-      token,
-      sentSuccessful,
-      isSent,
-      errors,
-      dodatki,
-      redirect,
-    } = this.state;
+    const { narocilo, vzorci, token, errors, dodatki, redirect } = this.state;
 
-    // if (redirect) window.location = "/";
+    if (redirect) window.location = "/";
 
     return (
-      <div>
-        <h1>Naročila</h1>
-        {token === null ? (
-          <p className="alert alert-danger">
-            Za narocanje se potrebujes prijaviti
-          </p>
-        ) : null}
+      <React.Fragment>
+        <NavBar heading="Naroči se" links={regularLinks} />
+        <div>
+          {token === null ? (
+            <p className="alert alert-danger">
+              Za narocanje se potrebujes prijaviti
+            </p>
+          ) : null}
 
-        <form onSubmit={this.handleSubmit}>
-          <Input
-            name="model"
-            label="Model: "
-            value={narocilo.model}
-            onChange={this.handleChange}
-            error={errors["model"]}
-          />
+          <form onSubmit={this.handleSubmit}>
+            <Input
+              name="model"
+              label="Model: "
+              value={narocilo.model}
+              onChange={this.handleChange}
+              error={errors["model"]}
+            />
 
-          <Input
-            name="stevilka"
-            label="Številka: "
-            value={narocilo.stevilka}
-            onChange={this.handleChange}
-            error={errors["stevilka"]}
-          />
-          <Input
-            name="opis"
-            label="Opis: "
-            value={narocilo.opis}
-            onChange={this.handleChange}
-            error={errors["opis"]}
-          />
-          <Input
-            name="barva"
-            label="Barva: "
-            value={narocilo.barva}
-            onChange={this.handleChange}
-            error={errors["opis"]}
-          />
-          <select
-            value={dodatki.vzorec}
-            name="vzorec"
-            id="vzorec"
-            onChange={this.handleDodatkiChange}
-          >
-            {vzorci.map((o) => {
-              return (
-                <option key={o.IDVzorca} value={o.IDVzorca}>
-                  {o.Ime}
-                </option>
-              );
-            })}
-          </select>
+            <Input
+              name="stevilka"
+              label="Številka: "
+              value={narocilo.stevilka}
+              onChange={this.handleChange}
+              error={errors["stevilka"]}
+            />
+            <Input
+              name="opis"
+              label="Opis: "
+              value={narocilo.opis}
+              onChange={this.handleChange}
+              error={errors["opis"]}
+            />
+            <Input
+              name="barva"
+              label="Barva: "
+              value={narocilo.barva}
+              onChange={this.handleChange}
+              error={errors["opis"]}
+            />
+            <select
+              value={dodatki.vzorec}
+              name="vzorec"
+              id="vzorec"
+              onChange={this.handleDodatkiChange}
+            >
+              {vzorci.map((o) => {
+                return (
+                  <option key={o.IDVzorca} value={o.IDVzorca}>
+                    {o.Ime}
+                  </option>
+                );
+              })}
+            </select>
 
-          <input
-            type="file"
-            name="files[]" //name="files[]"
-            id="slika"
-            onChange={this.fileChange}
-            multiple
-            allow=".jpeg, .png, .jpg"
-          />
+            <input
+              type="file"
+              name="files[]" //name="files[]"
+              id="slika"
+              onChange={this.fileChange}
+              multiple
+              allow=".jpeg, .png, .jpg"
+            />
 
-          <br />
-          <button onClick={this.posljiNarocilo}>Submit</button>
-        </form>
+            <br />
+            <button onClick={this.posljiNarocilo}>Submit</button>
+          </form>
 
-        <p>{this.state.imgSrc}</p>
-        {isSent ? (
+          {/* <p>{this.state.imgSrc}</p> */}
+          {/* {isSent ? (
           sentSuccessful ? (
             <p>Uspesno poslano</p>
           ) : (
             <p>Napaka pri posiljanju</p>
           )
-        ) : null}
-      </div>
+        ) : null} */}
+        </div>
+      </React.Fragment>
     );
   }
 }

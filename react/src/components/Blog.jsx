@@ -5,6 +5,7 @@ import NavBar from "./js/NavBar";
 import ListGroup from "./js/listGroup";
 import Input from "./js/common/Input";
 import { toast } from "react-toastify";
+import { regularLinks } from "./js/common/navbarlinks";
 
 class Blog extends Component {
   state = {
@@ -166,7 +167,7 @@ class Blog extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Blog" />
+        <NavBar heading="Blog" links={regularLinks} />
 
         <div className="Kriteriji">
           <ListGroup

@@ -164,31 +164,33 @@ app.post("/upload", (req, res) => {
   const did = req.body.dodatekId;
   const stSlik = req.body.stSlik;
 
-  for (let i = 0; i < stSlik; i++) {
-    const files = req.files;
-    const file = `file${i}`;
-    const path = `http://localhost:4000/img/${files[file].name}`;
-    const imeSlike = files[file].name;
+  if (stSlik > 0) {
+    for (let i = 0; i < stSlik; i++) {
+      const files = req.files;
+      const file = `file${i}`;
+      const path = `http://localhost:4000/img/${files[file].name}`;
+      const imeSlike = files[file].name;
 
-    files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
-      if (err) {
-        return res.json({
-          errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
-        });
-      }
-    });
-
-    con.query(
-      "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
-      [did, imeSlike, path],
-      (err) => {
-        if (err)
-          res.json({
-            success: false,
+      files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
+        if (err) {
+          return res.json({
             errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
           });
-      }
-    );
+        }
+      });
+
+      con.query(
+        "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
+        [did, imeSlike, path],
+        (err) => {
+          if (err)
+            res.json({
+              success: false,
+              errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+            });
+        }
+      );
+    }
   }
 
   res.json({ success: true });

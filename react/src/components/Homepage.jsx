@@ -3,6 +3,7 @@ import Navbar from "./js/NavBar";
 import Gallery from "./js/Gallery";
 import KdoSem from "./js/KdoSem";
 import Footer from "./js/Footer";
+import { regularLinks } from "./js/common/navbarlinks";
 import axios from "axios";
 
 class Neki extends Component {
@@ -22,7 +23,7 @@ class Neki extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar heading="MT Custom Sneakers" />
+        <Navbar heading="MT Custom Sneakers" links={regularLinks} />
         <Gallery />
         <KdoSem />
         <Footer />

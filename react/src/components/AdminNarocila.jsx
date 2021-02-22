@@ -4,6 +4,7 @@ import NavBar from "./js/NavBar";
 import Narocilo from "./js/common/Narocilo";
 import Dropdown from "./js/common/DropDown";
 import { toast } from "react-toastify";
+import { adminLinks } from "./js/common/navbarlinks";
 
 class AdminNarocila extends Component {
   state = {
@@ -159,7 +160,7 @@ class AdminNarocila extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Admin" />
+        <NavBar heading="Admin" links={adminLinks} />
         {/*dodaj se props - links (napiss not kere linke uporabi*/}
 
         <div style={styles}>
