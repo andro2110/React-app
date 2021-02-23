@@ -2,16 +2,32 @@ import React from "react";
 
 const Input = ({ name, label, value, onChange, error }) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
+    <div className="m-3">
+      <label htmlFor={name} className="form-label">
+        {label}
+      </label>
       <input
         value={value}
         onChange={onChange}
         type="text"
         id={name}
         name={name}
+        className={
+          !error
+            ? "border border-success form-control"
+            : "border border-danger form-control"
+        }
+        aria-describedby="err"
       />
-      {error ? <div className="alert alert-danger">{error}</div> : null}
+      {error ? (
+        <div
+          id="err"
+          className="alert alert-danger form-text mv-d"
+          role="alert"
+        >
+          {error}
+        </div>
+      ) : null}
     </div>
   );
 };

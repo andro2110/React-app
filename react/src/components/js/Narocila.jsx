@@ -5,6 +5,7 @@ import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
 import { regularLinks } from "./common/navbarlinks";
+import "../css/narocila.css";
 
 class Narocila extends Component {
   state = {
@@ -34,6 +35,10 @@ class Narocila extends Component {
 
     errors: {},
     redirect: false,
+
+    styles: {
+      margin: "500px",
+    },
   };
 
   schema = {
@@ -110,7 +115,14 @@ class Narocila extends Component {
     const error = this.validate();
     this.setState({ errors: error || {} });
 
-    if (!error) {
+    if (!token) {
+      toast.error("Za naročanje se potrebuješ prijaviti", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
+
+    if (!error && token) {
       axios
         .post("http://localhost:4000/narocila", {
           narocilo,
@@ -188,14 +200,14 @@ class Narocila extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Naroči se" links={regularLinks} />
-        <div>
+        <div className="mt-100 narocila-box">
           {token === null ? (
             <p className="alert alert-danger">
               Za narocanje se potrebujes prijaviti
             </p>
           ) : null}
 
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
             <Input
               name="model"
               label="Model: "
@@ -211,6 +223,7 @@ class Narocila extends Component {
               onChange={this.handleChange}
               error={errors["stevilka"]}
             />
+
             <Input
               name="opis"
               label="Opis: "
@@ -218,39 +231,45 @@ class Narocila extends Component {
               onChange={this.handleChange}
               error={errors["opis"]}
             />
+
             <Input
               name="barva"
-              label="Barva: "
+              label="Primarna barva: "
               value={narocilo.barva}
               onChange={this.handleChange}
-              error={errors["opis"]}
+              error={errors["barva"]}
             />
-            <select
-              value={dodatki.vzorec}
-              name="vzorec"
-              id="vzorec"
-              onChange={this.handleDodatkiChange}
-            >
-              {vzorci.map((o) => {
-                return (
-                  <option key={o.IDVzorca} value={o.IDVzorca}>
-                    {o.Ime}
-                  </option>
-                );
-              })}
-            </select>
+            <div className="">
+              <select
+                value={dodatki.vzorec}
+                name="vzorec"
+                id="vzorec"
+                onChange={this.handleDodatkiChange}
+              >
+                {vzorci.map((o) => {
+                  return (
+                    <option key={o.IDVzorca} value={o.IDVzorca}>
+                      {o.Ime}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
-            <input
-              type="file"
-              name="files[]" //name="files[]"
-              id="slika"
-              onChange={this.fileChange}
-              multiple
-              allow=".jpeg, .png, .jpg"
-            />
+            <div className="">
+              <input
+                type="file"
+                name="files[]" //name="files[]"
+                id="slika"
+                onChange={this.fileChange}
+                multiple
+                allow=".jpeg, .png, .jpg"
+              />
+            </div>
 
-            <br />
-            <button onClick={this.posljiNarocilo}>Submit</button>
+            <button onClick={this.posljiNarocilo} id="submit">
+              Pošlji
+            </button>
           </form>
 
           {/* <p>{this.state.imgSrc}</p> */}

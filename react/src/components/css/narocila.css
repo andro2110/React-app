@@ -1,0 +1,53 @@
+.mt-100 {
+  margin: 0 auto;
+  margin-top: 200px;
+}
+
+.narocila-box {
+  width: 80vw;
+}
+
+label {
+  float: left;
+}
+
+input {
+  float: right;
+}
+
+form {
+  position: relative;
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.float-r {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin: 16px;
+}
+
+#submit {
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--purpleLight);
+  color: var(--greyLight);
+  transition: ease-in 125ms;
+  font-size: 1em;
+  width: 15%;
+  margin: 0 auto;
+}
+
+#submit:hover {
+  background-color: var(--blueLight);
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.mv-d {
+  margin-top: 80px !important;
+  padding: 5px !important;
+}
