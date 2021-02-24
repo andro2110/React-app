@@ -1,10 +1,15 @@
-.mt-100 {
+.mt-200 {
   margin: 0 auto;
   margin-top: 200px;
 }
 
-.narocila-box {
-  width: 80vw;
+.mt-100 {
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.form-box {
+  width: 50vw;
 }
 
 label {

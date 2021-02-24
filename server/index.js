@@ -70,20 +70,33 @@ app.post("/register", (req, res) => {
     status,
   } = req.body.novRacun;
 
-  bcrypt.hash(geslo, salt, (err, enkrGeslo) => {
-    if (err) {
-      res.send(err);
-    }
+  con.query(
+    `SELECT u.IDUporabnika FROM uporabnik u WHERE u.Email = '${email}'`,
+    (err, upo) => {
+      if (upo.length > 0) {
+        res.json({ accExists: true });
+      } else {
+        bcrypt.hash(geslo, salt, (err, enkrGeslo) => {
+          if (err) {
+            res.send(err);
+          }
 
-    con.query(
-      "INSERT INTO uporabnik (Ime, Priimek, Email, Geslo, HisnaSTUlica, PostnaStevilka, Status) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
-      (err) => {
-        if (err)
-          res.json({ errMessage: "Napaka pri registraciji. Poskusi ponovno." });
+          con.query(
+            "INSERT INTO uporabnik (Ime, Priimek, Email, Geslo, HisnaSTUlica, PostnaStevilka, Status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
+            (err) => {
+              if (err)
+                res.json({
+                  accExists: false,
+                  errMessage: "Napaka pri registraciji. Poskusi ponovno.",
+                });
+              else res.json({ errMessage: "", accExists: false });
+            }
+          );
+        });
       }
-    );
-  });
+    }
+  );
 });
 
 app.get("/vzorci", (req, res) => {

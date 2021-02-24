@@ -5,7 +5,7 @@ import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
 import { regularLinks } from "./common/navbarlinks";
-import "../css/narocila.css";
+import "../css/forms.css";
 
 class Narocila extends Component {
   state = {
@@ -200,7 +200,7 @@ class Narocila extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Naroči se" links={regularLinks} />
-        <div className="mt-100 narocila-box">
+        <div className="mt-200 form-box">
           {token === null ? (
             <p className="alert alert-danger">
               Za narocanje se potrebujes prijaviti

@@ -3,6 +3,8 @@ import Input from "./common/Input";
 import Password from "./common/PasswordField";
 import axios from "axios";
 import Joi from "joi-browser";
+import NavBar from "./NavBar";
+import { regularLinks } from "./common/navbarlinks";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
 
@@ -16,6 +18,8 @@ class Login extends Component {
     loggedIn: false,
     text: "",
     status: "",
+    zePrijavljen: false,
+    t: false,
 
     errors: { email: "", geslo: "" },
   };
@@ -98,7 +102,7 @@ class Login extends Component {
     axios
       .get("http://localhost:4000/login", { withCredentials: true })
       .then((response) => {
-        if (response.data.loggedIn === true) {
+        if (response.data.loggedIn) {
           this.setState({
             loggedIn: true,
             text: "notri si",
@@ -107,7 +111,7 @@ class Login extends Component {
       });
 
     if (token) {
-      this.setState({ text: "notri si" });
+      this.setState({ text: "notri si", t: true, zePrijavljen: true });
     }
   }
 
@@ -128,34 +132,40 @@ class Login extends Component {
   };
 
   render() {
-    const { account, errors } = this.state;
+    const { account, errors, t } = this.state;
 
     return (
-      <div>
-        <h1>Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <Input
-            name="email"
-            label="Email: "
-            value={account.email}
-            onChange={this.handleChange}
-            error={errors["email"]}
-          />
-          <Password
-            name="geslo"
-            label="Geslo: "
-            value={account.geslo}
-            onChange={this.handleChange}
-            error={errors["geslo"]}
-          />
-          <button onClick={this.login}>Login</button>
-        </form>
-        {this.state.loggedIn && (
-          <button onClick={this.userAuth}>Preveri racun</button>
-        )}
+      <React.Fragment>
+        <NavBar heading="Log in" links={regularLinks} />
 
-        <h1>{this.state.text}</h1>
-      </div>
+        <div className="mt-200 form-box">
+          {t ? <p className="alert alert-danger">Si že prijavljen</p> : null}
+          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
+            <Input
+              name="email"
+              label="Email: "
+              value={account.email}
+              onChange={this.handleChange}
+              error={errors["email"]}
+            />
+            <Password
+              name="geslo"
+              label="Geslo: "
+              value={account.geslo}
+              onChange={this.handleChange}
+              error={errors["geslo"]}
+            />
+            <button onClick={this.login} id="submit">
+              Prijavi se
+            </button>
+          </form>
+          {this.state.loggedIn && !this.state.t && (
+            <button onClick={this.userAuth} id="submit">
+              Potrdi prijavo
+            </button>
+          )}
+        </div>
+      </React.Fragment>
     );
   }
 }
