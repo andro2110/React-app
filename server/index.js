@@ -368,6 +368,7 @@ app.get("/adminBlog", (req, res) => {
 });
 
 app.post("/vTabeloObjav", (req, res) => {
+  //tuki je problem
   const { opis, IDNarocila } = req.body;
   const date = new Date();
 
@@ -414,10 +415,10 @@ app.post("/vSlikeObjav", (req, res) => {
       [nId, imeSlike, path],
       (err) => {
         if (err) res.json({ errMessage: "Napaka pri pošiljanju slik." });
-        else res.json({ success: true });
       }
     );
   }
+  res.json({ success: true });
 });
 
 app.post("/vrniNarocilaDatum", (req, res) => {
