@@ -56,7 +56,35 @@ const adminLinks = [
   },
 ];
 
+const loggedInLinks = [
+  {
+    link: "/",
+    linkName: "Domov",
+  },
+  {
+    link: "/blog",
+    linkName: "Blog",
+  },
+  {
+    link: "/narocila",
+    linkName: "Naročila",
+  },
+  {
+    link: "#kdoSem",
+    linkName: "Kdo sem?",
+  },
+  {
+    link: "/signUp",
+    linkName: "Ustvari račun",
+  },
+  {
+    link: "/logout",
+    linkName: "Odjavi se",
+  },
+];
+
 module.exports = {
   adminLinks,
   regularLinks,
+  loggedInLinks,
 };

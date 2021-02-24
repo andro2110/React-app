@@ -7,10 +7,17 @@ import { regularLinks } from "./js/common/navbarlinks";
 import axios from "axios";
 
 class Neki extends Component {
-  state = {};
+  state = {
+    t: false,
+  };
 
   componentDidMount() {
     const token = localStorage.getItem("token");
+
+    if (token) {
+      this.setState({ t: true });
+    }
+
     axios
       .post("http://localhost:4000/adminNarocila", { token })
       .then((response) => {
@@ -23,7 +30,7 @@ class Neki extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar heading="MT Custom Sneakers" links={regularLinks} />
+        <Navbar heading="MT Custom Sneakers" loggedIn={this.state.t} />
         <Gallery />
         <KdoSem />
         <Footer />

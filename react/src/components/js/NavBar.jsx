@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../img/LogoBlack.svg";
 import userIcon from "../img/usericon2.svg";
+import { regularLinks, loggedInLinks } from "./common/navbarlinks";
+import RenderLinks from "./common/RenderLinks";
 import "../css/NavBar.css";
 
-const NavBar = ({ heading, links }) => {
+const NavBar = ({ heading, loggedIn }) => {
   return (
     <nav className="navbar navbar-light bg-light fixed-top navbar-expand-lg">
       <div className="container-fluid">
@@ -28,15 +30,11 @@ const NavBar = ({ heading, links }) => {
           id="toggleNavbar"
         >
           <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
-            {links.map((l, i) => {
-              return (
-                <li key={i} className="nav-item">
-                  <a href={l.link} className="nav-link">
-                    {l.linkName}
-                  </a>
-                </li>
-              );
-            })}
+            {loggedIn ? (
+              <RenderLinks links={loggedInLinks} />
+            ) : (
+              <RenderLinks links={regularLinks} />
+            )}
           </ul>
         </div>
         <img src={userIcon} alt="userIcon" height="30" />
