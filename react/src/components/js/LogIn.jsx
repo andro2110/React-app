@@ -5,6 +5,7 @@ import axios from "axios";
 import Joi from "joi-browser";
 import NavBar from "./NavBar";
 import { regularLinks } from "./common/navbarlinks";
+import { toast } from "react-toastify";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
 
@@ -20,8 +21,10 @@ class Login extends Component {
     status: "",
     zePrijavljen: false,
     t: false,
+    redirect: false,
 
     errors: { email: "", geslo: "" },
+    logInErr: "",
   };
 
   schema = {
@@ -82,12 +85,12 @@ class Login extends Component {
             });
 
             this.setState({
-              text: response.data.message,
+              logInErr: response.data.errMessage,
             });
-          } else {
+          } else if (response.data.auth) {
             this.setState({
               loggedIn: true,
-              text: "hej maricka",
+              t: true,
             });
             localStorage.setItem("token", response.data.token);
 
@@ -105,14 +108,17 @@ class Login extends Component {
         if (response.data.loggedIn) {
           this.setState({
             loggedIn: true,
-            text: "notri si",
           });
         }
       });
 
     if (token) {
-      this.setState({ text: "notri si", t: true, zePrijavljen: true });
+      this.setState({ t: true, zePrijavljen: true });
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.red);
   }
 
   userAuth = () => {
@@ -126,20 +132,29 @@ class Login extends Component {
           text: response.data.message,
         });
 
+        this.red = setTimeout(() => {
+          this.setState({ redirect: true });
+        });
+
         if (status === "upor") window.location = "/";
         else if (status === "admin") window.location = "/adminNarocila";
       });
   };
 
   render() {
-    const { account, errors, t } = this.state;
+    const { account, errors, t, redirect, logInErr } = this.state;
+
+    if (redirect) window.location = "/";
 
     return (
       <React.Fragment>
         <NavBar heading="Log in" links={regularLinks} />
 
         <div className="mt-200 form-box">
-          {t ? <p className="alert alert-danger">Si že prijavljen</p> : null}
+          {t && this.state.zePrijavljen ? (
+            <p className="alert alert-danger">Si že prijavljen</p>
+          ) : null}
+          {logInErr ? <p className="aler alert-danger">{logInErr}</p> : null}
           <form onSubmit={this.handleSubmit} className="d-flex flex-column">
             <Input
               name="email"
@@ -159,7 +174,7 @@ class Login extends Component {
               Prijavi se
             </button>
           </form>
-          {this.state.loggedIn && !this.state.t && (
+          {this.state.loggedIn && this.state.t && (
             <button onClick={this.userAuth} id="submit">
               Potrdi prijavo
             </button>

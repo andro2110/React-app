@@ -27,6 +27,7 @@ class Narocila extends Component {
     vzorci: [], //not se shranjo vzorci iz pb
 
     token: "",
+    t: "",
 
     slike: "",
     selectedFile: null,
@@ -59,7 +60,7 @@ class Narocila extends Component {
 
   componentDidMount() {
     const t = localStorage.getItem("token");
-    this.setState({ token: t });
+    this.setState({ token: t, t: true });
 
     this.loadPatterns();
   }
@@ -199,7 +200,7 @@ class Narocila extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Naroči se" links={regularLinks} />
+        <NavBar heading="Naroči se" loggedIn={this.state.t} />
         <div className="mt-200 form-box">
           {token === null ? (
             <p className="alert alert-danger">

@@ -210,7 +210,7 @@ app.post("/upload", (req, res) => {
 });
 
 app.post("/authUser", verifyJWT, (req, res) => {
-  res.json({ message: "Racun je avtenticirann" });
+  res.json({ message: "Prijava uspešna!" });
 });
 
 app.get("/login", (req, res) => {
@@ -241,11 +241,11 @@ app.post("/login", (req, res) => {
 
             res.json({ auth: true, token: token, podatki });
           } else {
-            res.json({ auth: false, message: "Napacna kombinacija" });
+            res.json({ auth: false, errMessage: "Napačno geslo/email." });
           }
         });
       } else {
-        res.json({ auth: false, message: "Racun ne obstaja" });
+        res.json({ auth: false, errMessage: "Račun ne obstaja!" });
       }
     }
   );

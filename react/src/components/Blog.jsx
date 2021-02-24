@@ -22,6 +22,7 @@ class Blog extends Component {
     selectedPattern: { IDVzorca: 5, Ime: "vsa narocila" },
 
     loaded: false,
+    t: "",
   };
 
   handleSearchModel = ({ currentTarget: input }) => {
@@ -81,6 +82,11 @@ class Blog extends Component {
   };
 
   componentDidMount() {
+    const t = localStorage.getItem("token");
+    if (t) {
+      this.setState({ t: true });
+    }
+
     this.loadPatterns();
     this.loadSlike();
     this.loadAllNarocila();
@@ -167,7 +173,7 @@ class Blog extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Blog" links={regularLinks} />
+        <NavBar heading="Blog" loggedIn={this.state.t} />
 
         <div className="Kriteriji">
           <ListGroup
