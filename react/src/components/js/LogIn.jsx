@@ -5,7 +5,7 @@ import axios from "axios";
 import Joi from "joi-browser";
 import NavBar from "./NavBar";
 import { regularLinks } from "./common/navbarlinks";
-import { toast } from "react-toastify";
+import "../css/bgPics.css";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
 
@@ -144,41 +144,48 @@ class Login extends Component {
   render() {
     const { account, errors, t, redirect, logInErr } = this.state;
 
-    if (redirect) window.location = "/";
+    if (redirect && account.status === "admin")
+      window.location = "/adminNarocila";
+    else if (redirect) window.location = "/";
 
     return (
       <React.Fragment>
         <NavBar heading="Log in" links={regularLinks} />
 
-        <div className="mt-200 form-box">
-          {t && this.state.zePrijavljen ? (
-            <p className="alert alert-danger">Si že prijavljen</p>
-          ) : null}
-          {logInErr ? <p className="aler alert-danger">{logInErr}</p> : null}
-          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
-            <Input
-              name="email"
-              label="Email: "
-              value={account.email}
-              onChange={this.handleChange}
-              error={errors["email"]}
-            />
-            <Password
-              name="geslo"
-              label="Geslo: "
-              value={account.geslo}
-              onChange={this.handleChange}
-              error={errors["geslo"]}
-            />
-            <button onClick={this.login} id="submit">
-              Prijavi se
-            </button>
-          </form>
-          {this.state.loggedIn && this.state.t && (
-            <button onClick={this.userAuth} id="submit">
-              Potrdi prijavo
-            </button>
-          )}
+        <div className="login-bgPic">
+          <div className="mt-5 form-box login-top">
+            {t && this.state.zePrijavljen ? (
+              <p className="alert alert-danger">Si že prijavljen</p>
+            ) : null}
+            {logInErr ? <p className="aler alert-danger">{logInErr}</p> : null}
+            <form
+              onSubmit={this.handleSubmit}
+              className="d-flex flex-column pt-5"
+            >
+              <Input
+                name="email"
+                label="Email: "
+                value={account.email}
+                onChange={this.handleChange}
+                error={errors["email"]}
+              />
+              <Password
+                name="geslo"
+                label="Geslo: "
+                value={account.geslo}
+                onChange={this.handleChange}
+                error={errors["geslo"]}
+              />
+              <button onClick={this.login} id="submit">
+                Prijavi se
+              </button>
+            </form>
+            {this.state.loggedIn && this.state.t && (
+              <button onClick={this.userAuth} id="submit">
+                Potrdi prijavo
+              </button>
+            )}
+          </div>
         </div>
       </React.Fragment>
     );

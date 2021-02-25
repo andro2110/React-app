@@ -14,7 +14,7 @@ const salt = 10;
 
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -38,10 +38,10 @@ app.use(
 );
 
 const con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PSWD,
-  database: process.env.DB_DB,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "baza",
 });
 
 const verifyJWT = (req, res, next) => {

@@ -9,7 +9,21 @@
 }
 
 .form-box {
+  position: absolute;
   width: 50vw;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
+  left: 25vw;
+}
+
+.login-top {
+  top: 25%;
+  height: 40%;
+}
+
+.t-13 {
+  top: 13%;
+  height: 41rem;
 }
 
 label {

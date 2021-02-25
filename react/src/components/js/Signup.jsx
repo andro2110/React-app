@@ -101,74 +101,75 @@ class SignUp extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Ustvari račun" links={regularLinks} />
-        <div className="mt-200 form-box">
-          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
-            <Input
-              name="ime"
-              label="Ime: "
-              value={account.ime}
-              onChange={this.handleChange}
-              error={errors["ime"]}
-            />
-            <Input
-              name="priimek"
-              label="Priimek: "
-              value={account.priimek}
-              onChange={this.handleChange}
-              error={errors["priimek"]}
-            />
-            <Input
-              name="email"
-              label="E - mail: "
-              value={account.email}
-              onChange={this.handleChange}
-              error={errors["email"]}
-            />
-            <Password
-              name="geslo"
-              label="Geslo:"
-              value={account.geslo}
-              onChange={this.handleChange}
-              error={errors["geslo"]}
-            />
-
-            <Input
-              name="hisnaSt"
-              label="Ulica in hišna št.: "
-              value={account.hisnaSt}
-              onChange={this.handleChange}
-              error={errors["hisnaSt"]}
-            />
-
-            <div className="m-3">
-              <label htmlFor="postSt" className="form-label">
-                Poštna številka:
-              </label>
-              <input
-                name="postSt"
-                value={account.postSt}
-                id="postSt"
-                type="number"
+        <div className="signup-bgPic">
+          <div className="form-box t-13">
+            <form onSubmit={this.handleSubmit} className="d-flex flex-column">
+              <Input
+                name="ime"
+                label="Ime: "
+                value={account.ime}
                 onChange={this.handleChange}
-                aria-describedby="err"
-                className={
-                  !errors["postSt"]
-                    ? "border border-success form-control"
-                    : "border border-danger form-control"
-                }
+                error={errors["ime"]}
               />
-              {errors["postSt"] ? (
-                <div
-                  id="err"
-                  className="alert alert-danger form-text mv-d"
-                  role="alert"
-                >
-                  {errors["postSt"]}
-                </div>
-              ) : null}
-            </div>
+              <Input
+                name="priimek"
+                label="Priimek: "
+                value={account.priimek}
+                onChange={this.handleChange}
+                error={errors["priimek"]}
+              />
+              <Input
+                name="email"
+                label="E - mail: "
+                value={account.email}
+                onChange={this.handleChange}
+                error={errors["email"]}
+              />
+              <Password
+                name="geslo"
+                label="Geslo:"
+                value={account.geslo}
+                onChange={this.handleChange}
+                error={errors["geslo"]}
+              />
 
-            {/* <Input
+              <Input
+                name="hisnaSt"
+                label="Ulica in hišna št.: "
+                value={account.hisnaSt}
+                onChange={this.handleChange}
+                error={errors["hisnaSt"]}
+              />
+
+              <div className="m-3">
+                <label htmlFor="postSt" className="form-label">
+                  Poštna številka:
+                </label>
+                <input
+                  name="postSt"
+                  value={account.postSt}
+                  id="postSt"
+                  type="number"
+                  onChange={this.handleChange}
+                  aria-describedby="err"
+                  className={
+                    !errors["postSt"]
+                      ? "border border-success form-control"
+                      : "border border-danger form-control"
+                  }
+                />
+                {errors["postSt"] ? (
+                  <div
+                    id="err"
+                    className="alert alert-danger form-text mv-d"
+                    role="alert"
+                  >
+                    {errors["postSt"]}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* <Input
             name="kraj"
             value={account.kraj}
             id="kraj"
@@ -176,10 +177,11 @@ class SignUp extends Component {
             onChange={this.handleChange}
             error={errors["kraj"]}
           /> */}
-            <button onClick={this.register} id="submit">
-              Sign up
-            </button>
-          </form>
+              <button onClick={this.register} id="submit">
+                Sign up
+              </button>
+            </form>
+          </div>
         </div>
       </React.Fragment>
     );
