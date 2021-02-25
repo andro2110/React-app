@@ -19,7 +19,7 @@ class Blog extends Component {
     iskanModel: "",
     iskanOpis: "",
     isciDatumNacin: "",
-    selectedPattern: { IDVzorca: 5, Ime: "vsa narocila" },
+    selectedPattern: { IDVzorca: 5, ime: "vsa narocila" },
 
     loaded: false,
     t: "",
@@ -37,7 +37,7 @@ class Blog extends Component {
     //dobi vzorce iz pb
     axios.get("http://localhost:4000/vzorci").then((response) => {
       const vz = response.data.data;
-      vz.push({ IDVzorca: 5, Ime: "Vsa naročila" });
+      vz.push({ IDVzorca: 5, ime: "Vsa naročila" });
 
       this.setState({ vzorci: vz });
     });
@@ -168,7 +168,7 @@ class Blog extends Component {
 
     const filtered =
       selectedPattern && selectedPattern.IDVzorca !== 5
-        ? cards.filter((p) => p.vzorec === selectedPattern.Ime)
+        ? cards.filter((p) => p.vzorec === selectedPattern.ime)
         : cards;
 
     return (

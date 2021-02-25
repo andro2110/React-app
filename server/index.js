@@ -8,11 +8,13 @@ const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const fileUpload = require("express-fileupload");
 const app = express();
+require("dotenv").config();
+
 const salt = 10;
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [process.env.CORS_ORIGIN],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -26,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     key: "userID",
-    secret: "test",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -36,10 +38,10 @@ app.use(
 );
 
 const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "baza",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSWD,
+  database: process.env.DB_DB,
 });
 
 const verifyJWT = (req, res, next) => {
@@ -48,7 +50,7 @@ const verifyJWT = (req, res, next) => {
   if (!token) {
     res.send("potrebujem zeton");
   } else {
-    jwt.verify(token, "sladkaSol", (err, decoded) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
       if (err) {
         res.json({ auth: false, message: "Napaka pri avtentikaciji" });
       } else {
@@ -71,7 +73,7 @@ app.post("/register", (req, res) => {
   } = req.body.novRacun;
 
   con.query(
-    `SELECT u.IDUporabnika FROM uporabnik u WHERE u.Email = '${email}'`,
+    `SELECT u.IDUporabnika FROM uporabnik u WHERE u.email = '${email}'`,
     (err, upo) => {
       if (upo.length > 0) {
         res.json({ accExists: true });
@@ -82,7 +84,7 @@ app.post("/register", (req, res) => {
           }
 
           con.query(
-            "INSERT INTO uporabnik (Ime, Priimek, Email, Geslo, HisnaSTUlica, PostnaStevilka, Status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO uporabnik (ime, priimek, email, geslo, hisnaSTUlica, postnaStevilka, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
             (err) => {
               if (err)
@@ -136,7 +138,7 @@ app.post("/narocila", (req, res) => {
       const artikelId = podatki[0].IDArtikla;
       con.query(
         //vstavi podatke v narocila
-        "INSERT INTO narocilo (IDUporabnika, IDArtikla, Datum, nacinPlacila, opis, Status) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO narocilo (IDUporabnika, IDArtikla, datum, nacinPlacila, opis, status) VALUES (?, ?, ?, ?, ?, ?)",
         [userId, artikelId, date, nacinPlacila, opis, status],
         (err) => {
           if (err)
@@ -225,7 +227,7 @@ app.post("/login", (req, res) => {
   const { email, geslo } = req.body.racun;
 
   con.query(
-    "SELECT * FROM uporabnik WHERE Email = ?",
+    "SELECT * FROM uporabnik WHERE email = ?",
     email,
     (err, podatki) => {
       if (err) res.json({ errMessage: "Napaka pri prijavi. Poskusi ponovno" });
@@ -234,7 +236,7 @@ app.post("/login", (req, res) => {
         bcrypt.compare(geslo, podatki[0].Geslo, (error, response) => {
           if (response) {
             const id = podatki[0].IDUporabnika;
-            const token = jwt.sign({ id }, "sladkaSol", {
+            const token = jwt.sign({ id }, process.env.TOKEN_SECRET, {
               expiresIn: 300, //spremeni na dejanski cas sessiona preden te log outa
             });
             req.session.user = podatki;
@@ -263,7 +265,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/adminNarocila", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, n.nacinPlacila, n.Opis, n.Status, a.model, a.Stevilka, d.barva, d.IDDodatka
+    `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
     FROM Narocilo n, Artikel a, Dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla`,
     (err, narocila) => {
@@ -294,7 +296,7 @@ app.post("/vrniNarocila", (req, res) => {
   const opis = req.body.iskanOpis.toLowerCase();
 
   con.query(
-    `SELECT a.model, d.barva, v.Ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId
+    `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId
       FROM narocilo n, artikel a, dodatki d, vzorci v, narociloNaBlogu nb
       WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
       AND LOWER(a.model) LIKE '%${model}%' AND LOWER(nb.opis) LIKE '%${opis}%'`,
@@ -315,7 +317,7 @@ app.get("/narocila", (req, res) => {
 
 app.get("/blog", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, v.Ime AS vzorec
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, v.ime AS vzorec
     FROM Narocilo n, narocilonablogu nb, Artikel a, dodatki d, vzorci v
     WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca`,
     (err, narocila) => {
@@ -437,7 +439,7 @@ app.post("/vSlikeObjav", (req, res) => {
 app.post("/vrniNarocilaDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
   con.query(
-    `SELECT n.IDNarocila, a.Stevilka, n.Opis, n.Status, a.model, v.Ime AS vzorec, n.nacinPlacila, d.IDDodatka
+    `SELECT n.IDNarocila, a.stevilka, n.opis, n.status, a.model, v.ime AS vzorec, n.nacinPlacila, d.IDDodatka
     FROM narocilo n, artikel a, vzorci v, dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca
     ORDER BY n.datum ${nacin}`,

@@ -12,7 +12,7 @@ const ListGroup = (props) => {
           key={i}
           className={item === selectedPattern ? "Active" : ""}
         >
-          {item.Ime}
+          {item.ime}
         </li>
       ))}
     </ul>

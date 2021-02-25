@@ -250,7 +250,7 @@ class Narocila extends Component {
                 {vzorci.map((o) => {
                   return (
                     <option key={o.IDVzorca} value={o.IDVzorca}>
-                      {o.Ime}
+                      {o.ime}
                     </option>
                   );
                 })}
