@@ -10,11 +10,7 @@ const Password = ({ name, label, value, onChange, error }) => {
         id={name}
         name={name}
         onChange={onChange}
-        className={
-          !error
-            ? "border border-success form-control"
-            : "border border-danger form-control"
-        }
+        className="form-control"
         aria-describedby="err"
       />
       {error ? (

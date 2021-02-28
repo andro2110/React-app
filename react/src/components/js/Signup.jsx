@@ -102,8 +102,11 @@ class SignUp extends Component {
       <React.Fragment>
         <NavBar heading="Ustvari račun" links={regularLinks} />
         <div className="signup-bgPic">
-          <div className="form-box t-13">
-            <form onSubmit={this.handleSubmit} className="d-flex flex-column">
+          <div className="form-box">
+            <form
+              onSubmit={this.handleSubmit}
+              className="d-flex flex-column pb-3"
+            >
               <Input
                 name="ime"
                 label="Ime: "
@@ -152,11 +155,7 @@ class SignUp extends Component {
                   type="number"
                   onChange={this.handleChange}
                   aria-describedby="err"
-                  className={
-                    !errors["postSt"]
-                      ? "border border-success form-control"
-                      : "border border-danger form-control"
-                  }
+                  className="form-control"
                 />
                 {errors["postSt"] ? (
                   <div

@@ -29,13 +29,11 @@ const NavBar = ({ heading, loggedIn }) => {
           className="collapse navbar-collapse d-flex flex-row-reverse"
           id="toggleNavbar"
         >
-          <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
-            {loggedIn ? (
-              <RenderLinks links={loggedInLinks} />
-            ) : (
-              <RenderLinks links={regularLinks} />
-            )}
-          </ul>
+          {loggedIn ? (
+            <RenderLinks links={loggedInLinks} />
+          ) : (
+            <RenderLinks links={regularLinks} />
+          )}
         </div>
         <img src={userIcon} alt="userIcon" height="30" />
       </div>

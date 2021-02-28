@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import NavBar from "./NavBar";
 import { regularLinks } from "./common/navbarlinks";
 import "../css/forms.css";
+import "../css/bgPics.css";
 
 class Narocila extends Component {
   state = {
@@ -60,7 +61,7 @@ class Narocila extends Component {
 
   componentDidMount() {
     const t = localStorage.getItem("token");
-    this.setState({ token: t, t: true });
+    this.setState({ token: t, t });
 
     this.loadPatterns();
   }
@@ -201,86 +202,102 @@ class Narocila extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Naroči se" loggedIn={this.state.t} />
-        <div className="mt-200 form-box">
-          {token === null ? (
-            <p className="alert alert-danger">
-              Za narocanje se potrebujes prijaviti
-            </p>
-          ) : null}
+        <div className="narocilo-bgPic">
+          <div className="form-box">
+            {token === null ? (
+              <p className="alert alert-danger m-3">
+                Za narocanje se potrebujes prijaviti
+              </p>
+            ) : null}
 
-          <form onSubmit={this.handleSubmit} className="d-flex flex-column">
-            <Input
-              name="model"
-              label="Model: "
-              value={narocilo.model}
-              onChange={this.handleChange}
-              error={errors["model"]}
-            />
+            <form
+              onSubmit={this.handleSubmit}
+              className="d-flex flex-column pb-3"
+            >
+              <Input
+                name="model"
+                label="Model: "
+                value={narocilo.model}
+                onChange={this.handleChange}
+                error={errors["model"]}
+              />
 
-            <Input
-              name="stevilka"
-              label="Številka: "
-              value={narocilo.stevilka}
-              onChange={this.handleChange}
-              error={errors["stevilka"]}
-            />
+              <Input
+                name="stevilka"
+                label="Številka: "
+                value={narocilo.stevilka}
+                onChange={this.handleChange}
+                error={errors["stevilka"]}
+              />
 
-            <Input
+              <div className="m-3">
+                <label htmlFor="opis">Opis: </label>
+                <textarea
+                  name="opis"
+                  id="opis"
+                  className="form-control"
+                  onChange={this.handleChange}
+                  value={narocilo.opis}
+                ></textarea>
+                {errors["opis"] ? (
+                  <div
+                    id="err"
+                    className="alert alert-danger form-text mv-d"
+                    role="alert"
+                  >
+                    {errors["opis"]}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* <Input
               name="opis"
               label="Opis: "
               value={narocilo.opis}
               onChange={this.handleChange}
               error={errors["opis"]}
-            />
+            /> */}
 
-            <Input
-              name="barva"
-              label="Primarna barva: "
-              value={narocilo.barva}
-              onChange={this.handleChange}
-              error={errors["barva"]}
-            />
-            <div className="">
-              <select
-                value={dodatki.vzorec}
-                name="vzorec"
-                id="vzorec"
-                onChange={this.handleDodatkiChange}
-              >
-                {vzorci.map((o) => {
-                  return (
-                    <option key={o.IDVzorca} value={o.IDVzorca}>
-                      {o.ime}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            <div className="">
-              <input
-                type="file"
-                name="files[]" //name="files[]"
-                id="slika"
-                onChange={this.fileChange}
-                multiple
-                allow=".jpeg, .png, .jpg"
+              <Input
+                name="barva"
+                label="Primarna barva: "
+                value={narocilo.barva}
+                onChange={this.handleChange}
+                error={errors["barva"]}
               />
-            </div>
+              <div className="m-3">
+                <select
+                  value={dodatki.vzorec}
+                  name="vzorec"
+                  id="vzorec"
+                  onChange={this.handleDodatkiChange}
+                >
+                  {vzorci.map((o) => {
+                    return (
+                      <option key={o.IDVzorca} value={o.IDVzorca}>
+                        {o.ime}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
-            <button onClick={this.posljiNarocilo} id="submit">
-              Pošlji
-            </button>
-          </form>
+              <div className="m-3">
+                <input
+                  type="file"
+                  name="files[]" //name="files[]"
+                  id="slika"
+                  onChange={this.fileChange}
+                  multiple
+                  allow=".jpeg, .png, .jpg"
+                />
+              </div>
 
-          {/* <p>{this.state.imgSrc}</p> */}
-          {/* {isSent ? (
-          sentSuccessful ? (
-            <p>Uspesno poslano</p>
-          ) : (
-            <p>Napaka pri posiljanju</p>
-          )
-        ) : null} */}
+              <button onClick={this.posljiNarocilo} id="submit">
+                Pošlji
+              </button>
+            </form>
+          </div>
         </div>
       </React.Fragment>
     );

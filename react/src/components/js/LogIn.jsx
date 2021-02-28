@@ -153,14 +153,14 @@ class Login extends Component {
         <NavBar heading="Log in" links={regularLinks} />
 
         <div className="login-bgPic">
-          <div className="mt-5 form-box login-top">
+          <div className="form-box">
             {t && this.state.zePrijavljen ? (
               <p className="alert alert-danger">Si že prijavljen</p>
             ) : null}
             {logInErr ? <p className="aler alert-danger">{logInErr}</p> : null}
             <form
               onSubmit={this.handleSubmit}
-              className="d-flex flex-column pt-5"
+              className=" d-flex flex-column pb-3"
             >
               <Input
                 name="email"

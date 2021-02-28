@@ -12,11 +12,7 @@ const Input = ({ name, label, value, onChange, error }) => {
         type="text"
         id={name}
         name={name}
-        className={
-          !error
-            ? "border border-success form-control"
-            : "border border-danger form-control"
-        }
+        className="form-control"
         aria-describedby="err"
       />
       {error ? (

@@ -1,43 +1,8 @@
-.mt-200 {
-  margin: 0 auto;
-  margin-top: 200px;
-}
-
-.mt-100 {
-  margin: 0 auto;
-  margin-top: 100px;
-}
-
 .form-box {
-  position: absolute;
-  width: 50vw;
+  position: relative;
+  width: 45vw;
   background-color: rgba(255, 255, 255, 0.92);
   border-radius: 10px;
-  left: 25vw;
-}
-
-.login-top {
-  top: 25%;
-  height: 40%;
-}
-
-.t-13 {
-  top: 13%;
-  height: 41rem;
-}
-
-label {
-  float: left;
-}
-
-input {
-  float: right;
-}
-
-form {
-  position: relative;
-  width: 100%;
-  display: block;
   margin: auto;
 }
 
@@ -56,17 +21,12 @@ form {
   color: var(--greyLight);
   transition: ease-in 125ms;
   font-size: 1em;
-  width: 15%;
   margin: 0 auto;
+  padding: 5px;
 }
 
 #submit:hover {
   background-color: var(--blueLight);
   cursor: pointer;
   transform: scale(1.2);
-}
-
-.mv-d {
-  margin-top: 80px !important;
-  padding: 5px !important;
 }
