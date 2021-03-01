@@ -15,6 +15,10 @@
   text-transform: uppercase;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 h1 {
   text-align: center;
 }
@@ -30,4 +34,8 @@ h1 {
 
 .opis::first-letter {
   text-transform: uppercase;
+}
+
+.pointer:hover {
+  cursor: pointer;
 }

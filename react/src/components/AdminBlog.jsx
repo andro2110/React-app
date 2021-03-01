@@ -111,7 +111,7 @@ class AdminBlog extends Component {
       <React.Fragment>
         <h1>admin blog</h1>
         <div>
-          Model: {narocilo.model}, opis: {narocilo.Opis}
+          Model: {narocilo.model}, opis: {narocilo.opis}
         </div>
 
         <form onSubmit={this.handleSubmit}>

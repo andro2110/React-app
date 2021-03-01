@@ -265,7 +265,7 @@ app.get("/logout", (req, res) => {
 
 app.get("/adminNarocila", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
+    `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
     FROM Narocilo n, Artikel a, Dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla`,
     (err, narocila) => {

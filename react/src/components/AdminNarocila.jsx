@@ -5,6 +5,7 @@ import Narocilo from "./js/common/Narocilo";
 import Dropdown from "./js/common/DropDown";
 import { toast } from "react-toastify";
 import { adminLinks } from "./js/common/navbarlinks";
+import { ReactDOM } from "react-dom";
 
 class AdminNarocila extends Component {
   state = {
@@ -12,7 +13,7 @@ class AdminNarocila extends Component {
     slike: [],
 
     styles: {
-      margin: "100px",
+      margin: "135px",
     },
 
     statusi: ["Vsa naročila", "prejeto", "vdelu", "koncano"],
@@ -39,6 +40,14 @@ class AdminNarocila extends Component {
   //     });
   // }
 
+  makePointer = (t) => {
+    // t.target.style.cursor = "pointer";
+    console.log(t.target.style.cursor);
+  };
+  removePointer = ({ currentTarget: t }) => {
+    // t.target.style.cursor = "";
+  };
+
   odpriUpload = ({ currentTarget: input }) => {
     const { narocila } = this.state;
     const narocilo = narocila[input.id];
@@ -46,7 +55,7 @@ class AdminNarocila extends Component {
     axios
       .post(`${process.env.REACT_APP_SERVER_ADDRESS}/test`, { narocilo })
       .then((res) => {
-        if (narocilo.Status === "koncano") window.location = "/adminBlog";
+        if (narocilo.status === "koncano") window.location = "/adminBlog";
       });
   };
 
@@ -163,7 +172,7 @@ class AdminNarocila extends Component {
 
     const filtered =
       selectedStatus && selectedStatus !== "Vsa naročila"
-        ? narocila.filter((n) => n.Status === selectedStatus)
+        ? narocila.filter((n) => n.status === selectedStatus)
         : narocila;
 
     return (
@@ -181,7 +190,7 @@ class AdminNarocila extends Component {
           {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
           {filtered.map((n, i) => {
             return (
-              <div key={i} id={i}>
+              <div key={i}>
                 <Narocilo
                   key={n.Id}
                   narocilo={n}
