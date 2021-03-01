@@ -78,7 +78,9 @@ class SignUp extends Component {
 
     if (!error) {
       axios
-        .post("http://localhost:4000/register", { novRacun: account })
+        .post(`${process.env.REACT_APP_SERVER_ADDRESS}/register`, {
+          novRacun: account,
+        })
         .then((res) => {
           if (!res.data.errMessage && !res.data.accExists) {
             toast.success("Račun uspešno ustvarjen", {

@@ -34,7 +34,7 @@ class AdminBlog extends Component {
     const { opis, narocilo } = this.state;
 
     axios
-      .post("http://localhost:4000/vTabeloObjav", {
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/vTabeloObjav`, {
         opis,
         IDNarocila: narocilo.IDNarocila,
       })
@@ -56,11 +56,15 @@ class AdminBlog extends Component {
           }
 
           axios
-            .post("http://localhost:4000/vSlikeObjav", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
+            .post(
+              `${process.env.REACT_APP_SERVER_ADDRESS}/vSlikeObjav`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
             .then((res) => {
               if (res.data.success) {
                 this.red = setTimeout(() => {
@@ -81,17 +85,19 @@ class AdminBlog extends Component {
   };
 
   test = () => {
-    axios.get("http://localhost:4000/test").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/test`).then((res) => {
       console.log(res);
     });
     window.location = "/";
   };
 
   componentDidMount() {
-    axios.get("http://localhost:4000/adminBlog").then((res) => {
-      const n = res.data.narocilo;
-      this.setState({ narocilo: n });
-    });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/adminBlog`)
+      .then((res) => {
+        const n = res.data.narocilo;
+        this.setState({ narocilo: n });
+      });
   }
   handleSubmit = (ev) => {
     ev.preventDefault();

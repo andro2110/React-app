@@ -5,9 +5,11 @@ class Logout extends Component {
   componentDidMount() {
     localStorage.removeItem("token");
 
-    axios.get("http://localhost:4000/logout").then((response) => {
-      console.log(response);
-    });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/logout`)
+      .then((response) => {
+        console.log(response);
+      });
 
     window.location = "/";
   }

@@ -14,7 +14,7 @@ const salt = 10;
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [process.env.CORS_ORIGIN], //http://ip.ip.ip.ip:3000
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    key: "userID",
+    key: process.env.SESSION_KEY,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -38,10 +38,10 @@ app.use(
 );
 
 const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "baza",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSWD,
+  database: process.env.DB_DB,
 });
 
 const verifyJWT = (req, res, next) => {
@@ -183,7 +183,7 @@ app.post("/upload", (req, res) => {
     for (let i = 0; i < stSlik; i++) {
       const files = req.files;
       const file = `file${i}`;
-      const path = `http://localhost:4000/img/${files[file].name}`;
+      const path = `${process.env.SERVER_ADDRESS}/img/${files[file].name}`;
       const imeSlike = files[file].name;
 
       files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
@@ -416,7 +416,7 @@ app.post("/vSlikeObjav", (req, res) => {
 
   for (let i = 0; i < stSlik; i++) {
     const file = `file${i}`;
-    const path = `http://localhost:4000/blogImg/${files[file].name}`;
+    const path = `${process.env.SERVER_ADDRESS}/blogImg/${files[file].name}`;
     const imeSlike = files[file].name;
 
     files[file].mv(`${__dirname}/public/blogImg/${files[file].name}`, (err) => {

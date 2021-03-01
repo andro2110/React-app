@@ -18,7 +18,7 @@ class Neki extends Component {
     }
 
     axios
-      .post("http://localhost:4000/adminNarocila", { token })
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/adminNarocila`, { token })
       .then((response) => {
         // if (!response.data.admin) window.location = "/";
         // console.log(response.data);

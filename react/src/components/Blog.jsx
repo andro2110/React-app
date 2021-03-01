@@ -11,7 +11,7 @@ class Blog extends Component {
   state = {
     cards: [],
     styles: {
-      margin: "102px",
+      margin: "135px",
     },
     slike: [],
 

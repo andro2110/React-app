@@ -77,7 +77,9 @@ class Login extends Component {
     if (!error) {
       const { account } = this.state;
       axios
-        .post("http://localhost:4000/login", { racun: account })
+        .post(`${process.env.REACT_APP_SERVER_ADDRESS}/login`, {
+          racun: account,
+        })
         .then((response) => {
           if (!response.data.auth) {
             this.setState({
@@ -103,7 +105,9 @@ class Login extends Component {
   componentDidMount() {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:4000/login", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/login`, {
+        withCredentials: true,
+      })
       .then((response) => {
         if (response.data.loggedIn) {
           this.setState({
@@ -124,7 +128,7 @@ class Login extends Component {
   userAuth = () => {
     const { status } = this.state;
     axios
-      .post("http://localhost:4000/authUser", {
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/authUser`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       })
       .then((response) => {
@@ -135,18 +139,19 @@ class Login extends Component {
         this.red = setTimeout(() => {
           this.setState({ redirect: true });
         });
-
-        if (status === "upor") window.location = "/";
-        else if (status === "admin") window.location = "/adminNarocila";
       });
+
+    console.log(status);
   };
 
   render() {
     const { account, errors, t, redirect, logInErr } = this.state;
 
-    if (redirect && account.status === "admin")
+    if (redirect && this.state.status === "admin") {
       window.location = "/adminNarocila";
-    else if (redirect) window.location = "/";
+    } else if (redirect) {
+      window.location = "/";
+    }
 
     return (
       <React.Fragment>

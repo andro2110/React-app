@@ -43,9 +43,11 @@ class AdminNarocila extends Component {
     const { narocila } = this.state;
     const narocilo = narocila[input.id];
 
-    axios.post("http://localhost:4000/test", { narocilo }).then((res) => {
-      if (narocilo.Status === "koncano") window.location = "/adminBlog";
-    });
+    axios
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/test`, { narocilo })
+      .then((res) => {
+        if (narocilo.Status === "koncano") window.location = "/adminBlog";
+      });
   };
 
   handleStatusChange = ({ currentTarget: input }) => {
@@ -55,7 +57,7 @@ class AdminNarocila extends Component {
     const narocilo = { val, index: narocila[index].IDNarocila };
 
     axios
-      .post("http://localhost:4000/updateNarocila", {
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/updateNarocila`, {
         narocilo,
       })
       .then((res) => {
@@ -96,7 +98,9 @@ class AdminNarocila extends Component {
     else this.setState({ isciDatumNacin: tmpNacin });
 
     axios
-      .post("http://localhost:4000/vrniNarocilaDatum", { tmpNacin })
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/vrniNarocilaDatum`, {
+        tmpNacin,
+      })
       .then((res) => {
         if (!res.data.errMessage) {
           const cards = res.data.narocila;
@@ -131,17 +135,21 @@ class AdminNarocila extends Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:4000/vrniAdminSlike").then((res) => {
-      const slike = res.data.slike;
-      this.setState({ slike });
-    });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/vrniAdminSlike`)
+      .then((res) => {
+        const slike = res.data.slike;
+        this.setState({ slike });
+      });
 
-    axios.get("http://localhost:4000/adminNarocila").then((response) => {
-      const narocila = response.data.narocila;
-      this.setState({ narocila });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/adminNarocila`)
+      .then((response) => {
+        const narocila = response.data.narocila;
+        this.setState({ narocila });
 
-      this.getSlike();
-    });
+        this.getSlike();
+      });
   }
 
   render() {

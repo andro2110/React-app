@@ -52,11 +52,13 @@ class Narocila extends Component {
 
   loadPatterns() {
     //dobi vzorce iz pb
-    axios.get("http://localhost:4000/vzorci").then((response) => {
-      const vz = response.data.data;
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/vzorci`)
+      .then((response) => {
+        const vz = response.data.data;
 
-      this.setState({ vzorci: vz });
-    });
+        this.setState({ vzorci: vz });
+      });
   }
 
   componentDidMount() {
@@ -126,7 +128,7 @@ class Narocila extends Component {
 
     if (!error && token) {
       axios
-        .post("http://localhost:4000/narocila", {
+        .post(`${process.env.REACT_APP_SERVER_ADDRESS}/narocila`, {
           narocilo,
           token,
           dodatki,
@@ -150,11 +152,15 @@ class Narocila extends Component {
 
             //poslje slike v pb
             axios
-              .post("http://localhost:4000/upload", formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
+              .post(
+                `${process.env.REACT_APP_SERVER_ADDRESS}/upload`,
+                formData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              )
               .then((res) => {
                 const { filePath } = res.data;
                 this.setState({ imgSrc: filePath });

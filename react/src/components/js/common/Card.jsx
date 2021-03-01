@@ -4,11 +4,11 @@ import "../../css/card.css";
 
 const Card = ({ model, opis, slike, loaded }) => {
   return (
-    <div className="Card">
-      <h1>{model}</h1>
-      <Galerija slike={slike} loaded={loaded} />
-      <div className="Opis">
-        <p>{opis}</p>
+    <div className="card text-dark bg-light mb-3 mw">
+      <h1 className="card-header transform-upper">{model}</h1>
+      <div className="card-body">
+        <Galerija slike={slike} loaded={loaded} />
+        <p className="card-text opis">{opis}</p>
       </div>
     </div>
   );
