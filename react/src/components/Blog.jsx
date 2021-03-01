@@ -35,16 +35,18 @@ class Blog extends Component {
 
   loadPatterns() {
     //dobi vzorce iz pb
-    axios.get("http://localhost:4000/vzorci").then((response) => {
-      const vz = response.data.data;
-      vz.push({ IDVzorca: 5, ime: "Vsa naročila" });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/vzorci`)
+      .then((response) => {
+        const vz = response.data.data;
+        vz.push({ IDVzorca: 5, ime: "Vsa naročila" });
 
-      this.setState({ vzorci: vz });
-    });
+        this.setState({ vzorci: vz });
+      });
   }
 
   loadAllNarocila() {
-    axios.get("http://localhost:4000/blog").then((res) => {
+    axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/blog`).then((res) => {
       if (!res.data.errMessage) {
         const narocilo = res.data.narocila;
         this.setState({ cards: narocilo });
@@ -56,15 +58,17 @@ class Blog extends Component {
   }
 
   loadSlike = () => {
-    axios.get("http://localhost:4000/vrniBlogSlike").then((res) => {
-      if (!res.data.errMessage) {
-        const slike = res.data.slike;
-        this.setState({ slike });
-        this.setState({ loaded: true });
-      } else {
-        toast.error(res.data.errMessage, { position: "top-center" });
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/vrniBlogSlike`)
+      .then((res) => {
+        if (!res.data.errMessage) {
+          const slike = res.data.slike;
+          this.setState({ slike });
+          this.setState({ loaded: true });
+        } else {
+          toast.error(res.data.errMessage, { position: "top-center" });
+        }
+      });
   };
 
   poveziSlike = () => {
@@ -105,7 +109,10 @@ class Blog extends Component {
     const { iskanModel, iskanOpis, slike } = this.state;
     this.setState({ selectedPattern: "" });
     axios
-      .post("http://localhost:4000/vrniNarocila", { iskanModel, iskanOpis })
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/vrniNarocila`, {
+        iskanModel,
+        iskanOpis,
+      })
       .then((res) => {
         if (!res.data.errMessage) {
           const cards = res.data.narocila;
@@ -135,24 +142,26 @@ class Blog extends Component {
     if (isciDatumNacin === tmpNacin) this.setState({ isciDatumNacin: "" });
     else this.setState({ isciDatumNacin: tmpNacin });
 
-    axios.post("http://localhost:4000/vrniDatum", { tmpNacin }).then((res) => {
-      if (!res.data.errMessage) {
-        const cards = res.data.narocila;
+    axios
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/vrniDatum`, { tmpNacin })
+      .then((res) => {
+        if (!res.data.errMessage) {
+          const cards = res.data.narocila;
 
-        for (const card of cards) {
-          const tmp = [];
-          for (const slika of slike) {
-            if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+          for (const card of cards) {
+            const tmp = [];
+            for (const slika of slike) {
+              if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+            }
+            card["slike"] = tmp;
           }
-          card["slike"] = tmp;
-        }
 
-        this.setState({ cards });
-        this.setState({ loaded: true });
-      } else {
-        toast.error(res.data.errMessage, { position: "top-center" });
-      }
-    });
+          this.setState({ cards });
+          this.setState({ loaded: true });
+        } else {
+          toast.error(res.data.errMessage, { position: "top-center" });
+        }
+      });
   };
 
   render() {

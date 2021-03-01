@@ -160,9 +160,12 @@ class Login extends Component {
         <div className="login-bgPic">
           <div className="form-box">
             {t && this.state.zePrijavljen ? (
-              <p className="alert alert-danger">Si že prijavljen</p>
+              <p className="alert alert-danger m-3">Si že prijavljen</p>
             ) : null}
-            {logInErr ? <p className="aler alert-danger">{logInErr}</p> : null}
+            {logInErr ? (
+              <p className="alert alert-danger m-3">{logInErr}</p>
+            ) : null}
+
             <form
               onSubmit={this.handleSubmit}
               className=" d-flex flex-column pb-3"
