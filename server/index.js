@@ -296,7 +296,7 @@ app.post("/vrniNarocila", (req, res) => {
   const opis = req.body.iskanOpis.toLowerCase();
 
   con.query(
-    `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId
+    `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId, nb.vsecki
       FROM narocilo n, artikel a, dodatki d, vzorci v, narociloNaBlogu nb
       WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
       AND LOWER(a.model) LIKE '%${model}%' AND LOWER(nb.opis) LIKE '%${opis}%'`,
@@ -317,7 +317,7 @@ app.get("/narocila", (req, res) => {
 
 app.get("/blog", (req, res) => {
   con.query(
-    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, v.ime AS vzorec
+    `SELECT n.IDNarocila, nb.datumObjave, nb.vsecki, a.model, nb.ID AS narociloBlogId, nb.opis, v.ime AS vzorec
     FROM Narocilo n, narocilonablogu nb, Artikel a, dodatki d, vzorci v
     WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca`,
     (err, narocila) => {
@@ -343,7 +343,7 @@ app.post("/vrniDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
 
   con.query(
-    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, nb.vsecki
     FROM Narocilo n, Artikel a, narociloNaBlogu nb
     WHERE n.IDArtikla = a.IDArtikla AND nb.IDNarocila = n.IDNarocila
     ORDER BY nb.datumObjave ${nacin}`,
@@ -446,6 +446,36 @@ app.post("/vrniNarocilaDatum", (req, res) => {
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
       else res.json({ narocila, errMessage: "" });
+    }
+  );
+});
+
+app.post("/likePost", (req, res) => {
+  const { IDNarocila } = req.body;
+  const vsecki = req.body.vsecki + 1;
+
+  con.query(
+    `UPDATE narocilonablogu 
+      SET vsecki = ${vsecki}
+      WHERE IDNarocila = ${IDNarocila}`,
+    (err) => {
+      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+      else res.json({ success: true });
+    }
+  );
+});
+
+app.post("/dislikePost", (req, res) => {
+  const { IDNarocila } = req.body;
+  const vsecki = req.body.vsecki - 1;
+
+  con.query(
+    `UPDATE narocilonablogu
+      SET vsecki = ${vsecki}
+      WHERE IDNarocila = ${IDNarocila}`,
+    (err) => {
+      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+      else res.json({ success: true });
     }
   );
 });

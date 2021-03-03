@@ -15,6 +15,8 @@ class Blog extends Component {
     },
     slike: [],
 
+    likedPosts: [],
+
     vzorci: [],
     iskanModel: "",
     iskanOpis: "",
@@ -164,6 +166,52 @@ class Blog extends Component {
       });
   };
 
+  handleLikes = ({ currentTarget: card }) => {
+    const { cards, likedPosts } = this.state;
+    const cardIndex = card.id;
+    const vsecki = cards[cardIndex].vsecki;
+    const IDNarocila = cards[cardIndex].IDNarocila;
+    const t = localStorage.getItem("token");
+
+    if (t) {
+      if (!likedPosts.includes(IDNarocila)) {
+        //preverja ce tabela vsebuje id
+        axios
+          .post(`${process.env.REACT_APP_SERVER_ADDRESS}/likePost`, {
+            IDNarocila,
+            vsecki,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              cards[cardIndex].vsecki++;
+              likedPosts.push(IDNarocila); //doda idnarocila v lokalno tabelo lajkanih
+
+              this.setState({ cards, likedPosts });
+            }
+          });
+      } else if (vsecki > 0) {
+        axios
+          .post(`${process.env.REACT_APP_SERVER_ADDRESS}/dislikePost`, {
+            IDNarocila,
+            vsecki,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              cards[cardIndex].vsecki--;
+              likedPosts.splice(likedPosts.indexOf(IDNarocila), 1);
+
+              this.setState({ cards, likedPosts });
+            }
+          });
+      }
+    } else {
+      toast.warn("Za všečkanje se potrebuješ prijaviti", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
+  };
+
   render() {
     const {
       cards,
@@ -234,12 +282,11 @@ class Blog extends Component {
                 return (
                   <Card
                     key={i}
-                    model={c.model}
-                    datum={c.datumObjave}
-                    opis={c.opis}
-                    vzorec={c.vzorec}
-                    slike={c.slike}
+                    narocilo={c}
                     loaded={loaded}
+                    onClick={this.handleLikes}
+                    cardIndex={i}
+                    likedPosts={this.state.likedPosts}
                   />
                 );
               return null;
