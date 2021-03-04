@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../img/LogoBlack.svg";
 import userIcon from "../img/usericon2.svg";
 import { regularLinks, loggedInLinks } from "./common/navbarlinks";

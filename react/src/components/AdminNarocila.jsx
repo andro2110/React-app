@@ -5,7 +5,6 @@ import Narocilo from "./js/common/Narocilo";
 import Dropdown from "./js/common/DropDown";
 import { toast } from "react-toastify";
 import { adminLinks } from "./js/common/navbarlinks";
-import { ReactDOM } from "react-dom";
 
 class AdminNarocila extends Component {
   state = {
@@ -76,7 +75,7 @@ class AdminNarocila extends Component {
           obj["sporocilo"] = res.data.message;
           this.setState({ feedback: obj });
 
-          narocila[index]["Status"] = val;
+          narocila[index]["status"] = val;
           this.setState({ narocila: narocila });
 
           toast.success(res.data.message, { position: "top-center" });
@@ -195,7 +194,7 @@ class AdminNarocila extends Component {
                   key={n.Id}
                   narocilo={n}
                   name="status"
-                  status={n.Status}
+                  status={n.status}
                   statuses={this.state.statusi}
                   narociloIndex={i}
                   onClick={this.odpriUpload}
@@ -227,7 +226,7 @@ class AdminNarocila extends Component {
           <Dropdown
             options={this.state.statusi}
             onChange={this.handleSelectedStatusChange}
-            // value={n.Status}
+            // value={status}
           />
         </div>
       </React.Fragment>

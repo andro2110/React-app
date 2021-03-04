@@ -14,7 +14,7 @@ const salt = 10;
 
 app.use(
   cors({
-    origin: [process.env.CORS_ORIGIN], //http://ip.ip.ip.ip:3000
+    origin: ["http://92.37.88.111:3000"], //http://ip.ip.ip.ip:3000
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -87,12 +87,13 @@ app.post("/register", (req, res) => {
             "INSERT INTO uporabnik (ime, priimek, email, geslo, hisnaSTUlica, postnaStevilka, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
             (err) => {
-              if (err)
+              if (err) {
+                console.log(err);
                 res.json({
                   accExists: false,
                   errMessage: "Napaka pri registraciji. Poskusi ponovno.",
                 });
-              else res.json({ errMessage: "", accExists: false });
+              } else res.json({ errMessage: "", accExists: false });
             }
           );
         });
@@ -102,7 +103,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/vzorci", (req, res) => {
-  con.query("SELECT * FROM Vzorci", (err, podatki) => {
+  con.query("SELECT * FROM vzorci", (err, podatki) => {
     if (err) res.json({ errMessage: "Napaka pri pridobivanju vzorcev." });
     else res.json({ data: podatki });
   });
@@ -148,7 +149,7 @@ app.post("/narocila", (req, res) => {
 
       con.query(
         //vstavi podatke v dodatki
-        "INSERT INTO Dodatki (IDArtikla, Idvzorca, barva) VALUES (?, ?, ?)",
+        "INSERT INTO dodatki (IDArtikla, Idvzorca, barva) VALUES (?, ?, ?)",
         [artikelId, vzorec, barva],
         (err) => {
           if (err)
@@ -158,7 +159,7 @@ app.post("/narocila", (req, res) => {
 
       con.query(
         //dobi iddodatka, da lahko poslje sliko v PB (POPRAVI...vec slik more it not)
-        "SELECT IDDodatka FROM Dodatki ORDER BY IDDodatka DESC LIMIT 1",
+        "SELECT IDDodatka FROM dodatki ORDER BY IDDodatka DESC LIMIT 1",
         (err, podatki) => {
           if (err) {
             res.json({
@@ -266,7 +267,7 @@ app.get("/logout", (req, res) => {
 app.get("/adminNarocila", (req, res) => {
   con.query(
     `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
-    FROM Narocilo n, Artikel a, Dodatki d
+    FROM narocilo n, artikel a, dodatki d
     WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla`,
     (err, narocila) => {
       if (err)
@@ -282,7 +283,7 @@ app.get("/adminNarocila", (req, res) => {
 app.get("/vrniAdminSlike", (req, res) => {
   con.query(
     `SELECT s.imeSlike, s.lokacijaSlike, s.IDDodatka
-    FROM Slike s`,
+    FROM slike s`,
     (err, slike) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju slik." });
       else res.json({ slike });
@@ -297,7 +298,7 @@ app.post("/vrniNarocila", (req, res) => {
 
   con.query(
     `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId, nb.vsecki
-      FROM narocilo n, artikel a, dodatki d, vzorci v, narociloNaBlogu nb
+      FROM narocilo n, artikel a, dodatki d, vzorci v, narocilonablogu nb
       WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
       AND LOWER(a.model) LIKE '%${model}%' AND LOWER(nb.opis) LIKE '%${opis}%'`,
     (err, narocila) => {
@@ -308,7 +309,7 @@ app.post("/vrniNarocila", (req, res) => {
 });
 
 app.get("/narocila", (req, res) => {
-  con.query("SELECT * FROM Vzorci", (err, podatki) => {
+  con.query("SELECT * FROM vzorci", (err, podatki) => {
     if (err) res.json({ errMessage: "Napaka pri pridobivnaju vzorcev." });
     else return res.json({ data: podatki });
   });
@@ -318,7 +319,7 @@ app.get("/narocila", (req, res) => {
 app.get("/blog", (req, res) => {
   con.query(
     `SELECT n.IDNarocila, nb.datumObjave, nb.vsecki, a.model, nb.ID AS narociloBlogId, nb.opis, v.ime AS vzorec
-    FROM Narocilo n, narocilonablogu nb, Artikel a, dodatki d, vzorci v
+    FROM narocilo n, narocilonablogu nb, artikel a, dodatki d, vzorci v
     WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
@@ -330,7 +331,7 @@ app.get("/blog", (req, res) => {
 app.get("/vrniBlogSlike", (req, res) => {
   con.query(
     `SELECT s.imeSlike, s.lokacijaSlike, s.narociloBlogID AS narociloId
-    FROM blogSlike s, narociloNaBlogu nb
+    FROM blogSlike s, narocilonablogu nb
     WHERE s.narociloBlogID = nb.ID`,
     (err, slike) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju slik." });
@@ -344,7 +345,7 @@ app.post("/vrniDatum", (req, res) => {
 
   con.query(
     `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, nb.vsecki
-    FROM Narocilo n, Artikel a, narociloNaBlogu nb
+    FROM narocilo n, artikel a, narocilonablogu nb
     WHERE n.IDArtikla = a.IDArtikla AND nb.IDNarocila = n.IDNarocila
     ORDER BY nb.datumObjave ${nacin}`,
     (err, narocila) => {
@@ -358,7 +359,7 @@ app.post("/vrniDatum", (req, res) => {
 app.post("/updateNarocila", (req, res) => {
   const { val, index } = req.body.narocilo;
   con.query(
-    `UPDATE Narocilo SET Status = "${val}" WHERE IDNarocila = ${index}`,
+    `UPDATE narocilo SET status = "${val}" WHERE IDNarocila = ${index}`,
     (err) => {
       if (err)
         res.json({
@@ -383,13 +384,14 @@ app.get("/adminBlog", (req, res) => {
 });
 
 app.post("/vTabeloObjav", (req, res) => {
-  //tuki je problem
   const { opis, IDNarocila } = req.body;
+  console.log(opis);
   const date = new Date();
+  const vsecki = 0;
 
   con.query(
-    "INSERT INTO narociloNaBlogu (IDNarocila, opis, datumObjave) VALUES (?, ?, ?)",
-    [IDNarocila, opis, date],
+    "INSERT INTO narocilonablogu (IDNarocila, opis, datumObjave, vsecki) VALUES (?, ?, ?, ?)",
+    [IDNarocila, opis, date, vsecki],
     (err) => {
       if (err)
         res.json({ success: false, errMessage: "Napaka pri pošiljanju." });
@@ -397,7 +399,7 @@ app.post("/vTabeloObjav", (req, res) => {
   );
 
   con.query(
-    "SELECT ID FROM narociloNaBlogu ORDER BY ID DESC LIMIT 1",
+    "SELECT ID FROM narocilonablogu ORDER BY ID DESC LIMIT 1",
     (err, podatki) => {
       if (err) {
         res.json({ success: false, errMessage: "Napaka pri pošiljanju." });

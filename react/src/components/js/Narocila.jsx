@@ -4,7 +4,7 @@ import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
-import { regularLinks } from "./common/navbarlinks";
+// import { regularLinks } from "./common/navbarlinks";
 import "../css/forms.css";
 import "../css/bgPics.css";
 
