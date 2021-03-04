@@ -115,7 +115,7 @@ class Narocila extends Component {
   };
 
   posljiNarocilo = () => {
-    const { narocilo, token, dodatki } = this.state;
+    const { narocilo, token, dodatki, isSent } = this.state;
     const error = this.validate();
     this.setState({ errors: error || {} });
 
@@ -126,7 +126,8 @@ class Narocila extends Component {
       });
     }
 
-    if (!error && token) {
+    if (!error && token && !isSent) {
+      this.setState({ isSent: true });
       axios
         .post(`${process.env.REACT_APP_SERVER_ADDRESS}/narocila`, {
           narocilo,
@@ -167,7 +168,6 @@ class Narocila extends Component {
 
                 if (res.data.success) {
                   this.setState({ sentSuccessful: res.data.success });
-                  this.setState({ isSent: true });
 
                   this.red = setTimeout(() => {
                     this.setState({ redirect: true });

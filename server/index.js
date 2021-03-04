@@ -14,7 +14,7 @@ const salt = 10;
 
 app.use(
   cors({
-    origin: ["http://92.37.88.111:3000"], //http://ip.ip.ip.ip:3000
+    origin: [`${process.env.CORS_ORIGIN}`], //http://ip.ip.ip.ip:3000
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -88,7 +88,6 @@ app.post("/register", (req, res) => {
             [ime, priimek, email, enkrGeslo, hisnaSt, Number(postSt), status],
             (err) => {
               if (err) {
-                console.log(err);
                 res.json({
                   accExists: false,
                   errMessage: "Napaka pri registraciji. Poskusi ponovno.",
@@ -340,6 +339,20 @@ app.get("/vrniBlogSlike", (req, res) => {
   );
 });
 
+app.post("/getLiked", (req, res) => {
+  const userId = jwt.decode(req.body.token).id;
+
+  con.query(
+    `SELECT IDNarocila FROM likedPosts WHERE IDUporabnika = ?`,
+    [userId],
+    (err, idNarocila) => {
+      if (err)
+        res.json({ success: false, errMessage: "Napaka pri pri všečkanju" });
+      else res.json({ success: true, idNarocila });
+    }
+  );
+});
+
 app.post("/vrniDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
 
@@ -385,7 +398,6 @@ app.get("/adminBlog", (req, res) => {
 
 app.post("/vTabeloObjav", (req, res) => {
   const { opis, IDNarocila } = req.body;
-  console.log(opis);
   const date = new Date();
   const vsecki = 0;
 
@@ -453,13 +465,22 @@ app.post("/vrniNarocilaDatum", (req, res) => {
 });
 
 app.post("/likePost", (req, res) => {
-  const { IDNarocila } = req.body;
+  const { IDNarocila, t, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki + 1;
+  const userId = jwt.decode(t).id;
 
   con.query(
     `UPDATE narocilonablogu 
       SET vsecki = ${vsecki}
       WHERE IDNarocila = ${IDNarocila}`,
+    (err) => {
+      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+    }
+  );
+
+  con.query(
+    `INSERT INTO likedPosts (IDUporabnika, IDNarocila) VALUES (?, ?)`,
+    [userId, idNarocilaBlog],
     (err) => {
       if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
       else res.json({ success: true });
@@ -468,8 +489,9 @@ app.post("/likePost", (req, res) => {
 });
 
 app.post("/dislikePost", (req, res) => {
-  const { IDNarocila } = req.body;
+  const { IDNarocila, t, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki - 1;
+  const userId = jwt.decode(t).id;
 
   con.query(
     `UPDATE narocilonablogu
@@ -477,9 +499,22 @@ app.post("/dislikePost", (req, res) => {
       WHERE IDNarocila = ${IDNarocila}`,
     (err) => {
       if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+    }
+  );
+
+  con.query(
+    `DELETE FROM likedPosts WHERE IDUporabnika = ? AND IDNarocila = ?`,
+    [userId, idNarocilaBlog],
+    (err) => {
+      console.log(err);
+      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
       else res.json({ success: true });
     }
   );
+
+  // con.query(
+  //   ``
+  // )
 });
 
 app.listen(4000, () => {

@@ -11,7 +11,7 @@ const Card = ({ narocilo, loaded, onClick, cardIndex, likedPosts }) => {
         <div className="d-flex">
           <p className="card-text opis">{narocilo.opis}</p>
           <div className="vsecki opis" onClick={onClick} id={cardIndex}>
-            {likedPosts.includes(narocilo.IDNarocila) ? (
+            {likedPosts.includes(narocilo.narociloBlogId) ? (
               <p>{narocilo.vsecki}💔</p>
             ) : (
               <p>{narocilo.vsecki}❤️</p>

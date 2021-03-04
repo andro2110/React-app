@@ -73,6 +73,28 @@ class Blog extends Component {
       });
   };
 
+  getLikedPosts = () => {
+    const { likedPosts } = this.state;
+    const token = localStorage.getItem("token");
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/getLiked`, { token })
+      .then((res) => {
+        if (res.data.success) {
+          const tmp = res.data.idNarocila;
+          console.log(tmp);
+
+          for (const id of tmp) {
+            likedPosts.push(id.IDNarocila);
+          }
+
+          // const ids = Object.values(tmp[0]);
+          // console.log(ids);
+          this.setState({ likedPosts });
+        }
+      });
+  };
+
   poveziSlike = () => {
     const { cards, slike } = this.state;
 
@@ -96,6 +118,7 @@ class Blog extends Component {
     this.loadPatterns();
     this.loadSlike();
     this.loadAllNarocila();
+    this.getLikedPosts();
   }
 
   handleSubmit = (ev) => {
@@ -171,34 +194,41 @@ class Blog extends Component {
     const cardIndex = card.id;
     const vsecki = cards[cardIndex].vsecki;
     const IDNarocila = cards[cardIndex].IDNarocila;
+    const idNarocilaBlog = cards[cardIndex].narociloBlogId;
     const t = localStorage.getItem("token");
+    console.log(idNarocilaBlog);
 
     if (t) {
-      if (!likedPosts.includes(IDNarocila)) {
+      if (!likedPosts.includes(idNarocilaBlog)) {
         //preverja ce tabela vsebuje id
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/likePost`, {
             IDNarocila,
+            idNarocilaBlog,
             vsecki,
+            t,
           })
           .then((res) => {
             if (res.data.success) {
               cards[cardIndex].vsecki++;
-              likedPosts.push(IDNarocila); //doda idnarocila v lokalno tabelo lajkanih
 
-              this.setState({ cards, likedPosts });
+              likedPosts.push(idNarocilaBlog);
+
+              this.setState({ cards });
             }
           });
       } else if (vsecki > 0) {
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/dislikePost`, {
             IDNarocila,
+            idNarocilaBlog,
             vsecki,
+            t,
           })
           .then((res) => {
             if (res.data.success) {
               cards[cardIndex].vsecki--;
-              likedPosts.splice(likedPosts.indexOf(IDNarocila), 1);
+              likedPosts.splice(likedPosts.indexOf(idNarocilaBlog), 1);
 
               this.setState({ cards, likedPosts });
             }
