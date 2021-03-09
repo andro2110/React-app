@@ -82,7 +82,6 @@ class Blog extends Component {
       .then((res) => {
         if (res.data.success) {
           const tmp = res.data.idNarocila;
-          console.log(tmp);
 
           for (const id of tmp) {
             likedPosts.push(id.IDNarocila);
@@ -196,7 +195,6 @@ class Blog extends Component {
     const IDNarocila = cards[cardIndex].IDNarocila;
     const idNarocilaBlog = cards[cardIndex].narociloBlogId;
     const t = localStorage.getItem("token");
-    console.log(idNarocilaBlog);
 
     if (t) {
       if (!likedPosts.includes(idNarocilaBlog)) {

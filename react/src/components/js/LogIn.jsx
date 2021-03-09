@@ -4,7 +4,7 @@ import Password from "./common/PasswordField";
 import axios from "axios";
 import Joi from "joi-browser";
 import NavBar from "./NavBar";
-import { regularLinks } from "./common/navbarlinks";
+import { regularLinks } from "./helpers/navbarlinks";
 import "../css/bgPics.css";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
@@ -95,6 +95,7 @@ class Login extends Component {
               t: true,
             });
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("ime", response.data.podatki[0].Ime);
 
             this.setState({ status: response.data.podatki[0].Status });
           }
@@ -126,7 +127,6 @@ class Login extends Component {
   }
 
   userAuth = () => {
-    const { status } = this.state;
     axios
       .post(`${process.env.REACT_APP_SERVER_ADDRESS}/authUser`, {
         headers: { "x-access-token": localStorage.getItem("token") },
@@ -140,8 +140,6 @@ class Login extends Component {
           this.setState({ redirect: true });
         });
       });
-
-    console.log(status);
   };
 
   render() {

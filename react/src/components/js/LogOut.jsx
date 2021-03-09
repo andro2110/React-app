@@ -4,6 +4,7 @@ import axios from "axios";
 class Logout extends Component {
   componentDidMount() {
     localStorage.removeItem("token");
+    localStorage.removeItem("ime");
 
     axios
       .get(`${process.env.REACT_APP_SERVER_ADDRESS}/logout`)

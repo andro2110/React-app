@@ -5,7 +5,7 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import { regularLinks } from "./common/navbarlinks";
+import { regularLinks } from "./helpers/navbarlinks";
 
 class SignUp extends Component {
   state = {

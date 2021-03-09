@@ -1,7 +1,7 @@
 import React from "react";
 import Dropdown from "./DropDown";
 import Galerija from "./Galerija";
-import { addPointer, removePointer } from "./toggleMouseHelper";
+import { addPointer, removePointer } from "../helpers/toggleMouseHelper";
 
 const Narocilo = ({
   narocilo,

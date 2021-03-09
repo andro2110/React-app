@@ -92,3 +92,7 @@ li:hover {
   border-radius: 7px;
   cursor: pointer;
 }
+
+.pIcon:hover {
+  cursor: pointer;
+}

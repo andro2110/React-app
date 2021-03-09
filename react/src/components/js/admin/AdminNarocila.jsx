@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { Component } from "react";
-import NavBar from "./js/NavBar";
-import Narocilo from "./js/common/Narocilo";
-import Dropdown from "./js/common/DropDown";
+import NavBar from "../NavBar";
+import Narocilo from "../common/Narocilo";
+import Dropdown from "../common/DropDown";
 import { toast } from "react-toastify";
-import { adminLinks } from "./js/common/navbarlinks";
+import { adminLinks } from "../helpers/navbarlinks";
 
 class AdminNarocila extends Component {
   state = {

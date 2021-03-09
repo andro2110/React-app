@@ -340,17 +340,19 @@ app.get("/vrniBlogSlike", (req, res) => {
 });
 
 app.post("/getLiked", (req, res) => {
-  const userId = jwt.decode(req.body.token).id;
+  if (req.body.token) {
+    const userId = jwt.decode(req.body.token).id;
 
-  con.query(
-    `SELECT IDNarocila FROM likedPosts WHERE IDUporabnika = ?`,
-    [userId],
-    (err, idNarocila) => {
-      if (err)
-        res.json({ success: false, errMessage: "Napaka pri pri všečkanju" });
-      else res.json({ success: true, idNarocila });
-    }
-  );
+    con.query(
+      `SELECT IDNarocila FROM likedPosts WHERE IDUporabnika = ?`,
+      [userId],
+      (err, idNarocila) => {
+        if (err)
+          res.json({ success: false, errMessage: "Napaka pri pri všečkanju" });
+        else res.json({ success: true, idNarocila });
+      }
+    );
+  }
 });
 
 app.post("/vrniDatum", (req, res) => {
@@ -467,54 +469,95 @@ app.post("/vrniNarocilaDatum", (req, res) => {
 app.post("/likePost", (req, res) => {
   const { IDNarocila, t, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki + 1;
-  const userId = jwt.decode(t).id;
 
-  con.query(
-    `UPDATE narocilonablogu 
+  if (t) {
+    const userId = jwt.decode(t).id;
+
+    con.query(
+      `UPDATE narocilonablogu 
       SET vsecki = ${vsecki}
       WHERE IDNarocila = ${IDNarocila}`,
-    (err) => {
-      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
-    }
-  );
+      (err) => {
+        if (err)
+          res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+      }
+    );
 
-  con.query(
-    `INSERT INTO likedPosts (IDUporabnika, IDNarocila) VALUES (?, ?)`,
-    [userId, idNarocilaBlog],
-    (err) => {
-      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
-      else res.json({ success: true });
-    }
-  );
+    con.query(
+      `INSERT INTO likedPosts (IDUporabnika, IDNarocila) VALUES (?, ?)`,
+      [userId, idNarocilaBlog],
+      (err) => {
+        if (err)
+          res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+        else res.json({ success: true });
+      }
+    );
+  } else {
+    res.json({ success: false });
+  }
 });
 
 app.post("/dislikePost", (req, res) => {
   const { IDNarocila, t, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki - 1;
-  const userId = jwt.decode(t).id;
 
-  con.query(
-    `UPDATE narocilonablogu
+  if (t) {
+    const userId = jwt.decode(t).id;
+
+    con.query(
+      `UPDATE narocilonablogu
       SET vsecki = ${vsecki}
       WHERE IDNarocila = ${IDNarocila}`,
-    (err) => {
-      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
-    }
-  );
+      (err) => {
+        if (err)
+          res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+      }
+    );
+
+    con.query(
+      `DELETE FROM likedPosts WHERE IDUporabnika = ? AND IDNarocila = ?`,
+      [userId, idNarocilaBlog],
+      (err) => {
+        if (err)
+          res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+        else res.json({ success: true });
+      }
+    );
+  }
+});
+
+app.post("/profile", (req, res) => {
+  const { token } = req.body;
+  const userId = jwt.decode(token).id;
 
   con.query(
-    `DELETE FROM likedPosts WHERE IDUporabnika = ? AND IDNarocila = ?`,
-    [userId, idNarocilaBlog],
-    (err) => {
-      console.log(err);
-      if (err) res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
-      else res.json({ success: true });
+    `SELECT IDUporabnika, ime, priimek  FROM uporabnik WHERE IDUporabnika = ?`,
+    [userId],
+    (err, user) => {
+      if (err)
+        res.json({ success: false, errMessage: "Napaka pri povezovanju" });
+      else res.json({ user });
     }
   );
+});
 
-  // con.query(
-  //   ``
-  // )
+app.post("/getLikedProfile", (req, res) => {
+  const { uid } = req.body;
+
+  con.query(
+    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis 
+    FROM narocilo n, narocilonablogu nb, artikel a, likedPosts lp
+    WHERE nb.IDNarocila = n.IDNarocila AND n.IDArtikla = a.IDArtikla AND lp.IDUporabnika = ? AND lp.IDNarocila = nb.ID`,
+    [uid],
+    (err, narocila) => {
+      if (err)
+        res.json({
+          success: false,
+          errMessage: "Napaka pri pridobivanju všečkanih sporočil",
+        });
+      else res.json({ likedPosts: narocila });
+    }
+  );
 });
 
 app.listen(4000, () => {

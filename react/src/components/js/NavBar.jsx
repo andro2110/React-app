@@ -1,8 +1,9 @@
 import React from "react";
 import logo from "../img/LogoBlack.svg";
 import userIcon from "../img/usericon2.svg";
-import { regularLinks, loggedInLinks } from "./common/navbarlinks";
+import { regularLinks, loggedInLinks } from "./helpers/navbarlinks";
 import RenderLinks from "./common/RenderLinks";
+import { redirectU } from "./helpers/redirectUser";
 import "../css/NavBar.css";
 
 const NavBar = ({ heading, loggedIn }) => {
@@ -35,7 +36,13 @@ const NavBar = ({ heading, loggedIn }) => {
             <RenderLinks links={regularLinks} />
           )}
         </div>
-        <img src={userIcon} alt="userIcon" height="30" />
+        <img
+          src={userIcon}
+          alt="userIcon"
+          height="30"
+          onClick={redirectU}
+          className="pIcon"
+        />
       </div>
     </nav>
   );
