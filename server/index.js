@@ -32,7 +32,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      expires: 60 * 60 * 24, //izbrise se po 24 urah
+      expires: 30 * 24 * 60 * 60 * 1000, //izbrise se po 24 urah
     },
   })
 );
@@ -236,7 +236,7 @@ app.post("/login", (req, res) => {
           if (response) {
             const id = podatki[0].IDUporabnika;
             const token = jwt.sign({ id }, process.env.TOKEN_SECRET, {
-              expiresIn: 300, //spremeni na dejanski cas sessiona preden te log outa
+              expiresIn: 30 * 24 * 60 * 60 * 1000, //spremeni na dejanski cas sessiona preden te log outa
             });
             req.session.user = podatki;
 
@@ -358,9 +358,9 @@ app.post("/vrniDatum", (req, res) => {
   const nacin = req.body.tmpNacin;
 
   con.query(
-    `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis, nb.vsecki
-    FROM narocilo n, artikel a, narocilonablogu nb
-    WHERE n.IDArtikla = a.IDArtikla AND nb.IDNarocila = n.IDNarocila
+    `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId, nb.vsecki
+    FROM narocilo n, artikel a, dodatki d, vzorci v, narocilonablogu nb
+    WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
     ORDER BY nb.datumObjave ${nacin}`,
     (err, narocila) => {
       if (err) res.json({ errMessage: "Napaka pri pridobivanju naročil." });
@@ -466,7 +466,7 @@ app.post("/vrniNarocilaDatum", (req, res) => {
 });
 
 app.post("/likePost", (req, res) => {
-  const { IDNarocila, idNarocilaBlog } = req.body;
+  const { idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki + 1;
   const uid = req.session.user[0].IDUporabnika;
 
@@ -474,10 +474,12 @@ app.post("/likePost", (req, res) => {
     con.query(
       `UPDATE narocilonablogu 
       SET vsecki = ${vsecki}
-      WHERE IDNarocila = ${IDNarocila}`,
+      WHERE ID = ${idNarocilaBlog}`,
       (err) => {
-        if (err)
+        if (err) {
           res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
+          console.log(err);
+        }
       }
     );
 
@@ -485,9 +487,10 @@ app.post("/likePost", (req, res) => {
       `INSERT INTO likedPosts (IDUporabnika, IDNarocila) VALUES (?, ?)`,
       [uid, idNarocilaBlog],
       (err) => {
-        if (err)
+        if (err) {
           res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
-        else res.json({ success: true });
+          console.log(err);
+        } else res.json({ success: true });
       }
     );
   } else {
@@ -496,17 +499,15 @@ app.post("/likePost", (req, res) => {
 });
 
 app.post("/dislikePost", (req, res) => {
-  const { IDNarocila, t, idNarocilaBlog } = req.body;
+  const { idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki - 1;
   const uid = req.session.user[0].IDUporabnika;
 
   if (uid) {
-    const userId = jwt.decode(t).id;
-
     con.query(
       `UPDATE narocilonablogu
       SET vsecki = ${vsecki}
-      WHERE IDNarocila = ${IDNarocila}`,
+      WHERE ID = ${idNarocilaBlog}`,
       (err) => {
         if (err)
           res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
@@ -547,6 +548,40 @@ app.post("/getLikedProfile", (req, res) => {
       else res.json({ likedPosts: narocila });
     }
   );
+});
+
+app.post("/listGroup", (req, res) => {
+  const { pattern } = req.body;
+  if (pattern.IDVzorca !== 5) {
+    con.query(
+      `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId, nb.vsecki
+      FROM narocilo n, artikel a, dodatki d, vzorci v, narocilonablogu nb
+      WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila
+      AND v.IDVzorca = ?`,
+      [pattern.IDVzorca],
+      (err, narocila) => {
+        if (err)
+          res.send({
+            errMessage: "Napaka pri pridobivanju naročil",
+          });
+        else res.json({ narocila });
+      }
+    );
+  } else {
+    con.query(
+      `SELECT a.model, d.barva, v.ime AS vzorec, nb.opis, nb.datumObjave, nb.ID AS narociloBlogId, nb.vsecki
+      FROM narocilo n, artikel a, dodatki d, vzorci v, narocilonablogu nb
+      WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca AND nb.IDNarocila = n.IDNarocila`,
+      [pattern.IDVzorca],
+      (err, narocila) => {
+        if (err)
+          res.send({
+            errMessage: "Napaka pri pridobivanju naročil",
+          });
+        else res.json({ narocila });
+      }
+    );
+  }
 });
 
 app.listen(4000, () => {

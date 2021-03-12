@@ -124,9 +124,31 @@ class Blog extends Component {
     ev.preventDefault();
   };
 
-  handlePatternSelect = (pattern) => {
-    this.loadAllNarocila();
-    this.setState({ selectedPattern: pattern });
+  selectPattern = (pattern) => {
+    const { slike } = this.state;
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/listGroup`, { pattern })
+      .then((res) => {
+        if (!res.data.errMessage) {
+          const cards = res.data.narocila;
+
+          for (const card of cards) {
+            const tmp = [];
+            for (const slika of slike) {
+              if (slika.narociloId === card.narociloBlogId) tmp.push(slika);
+            }
+            card["slike"] = tmp;
+          }
+
+          this.setState({ cards });
+          this.setState({ iskanModel: "" });
+          this.setState({ iskanOpis: "" });
+          this.setState({ loaded: true });
+        } else {
+          toast.error(res.data.errMessage, { position: "top-center" });
+        }
+      });
   };
 
   sendQuery = () => {
@@ -198,6 +220,7 @@ class Blog extends Component {
 
     if (t) {
       if (!likedPosts.includes(idNarocilaBlog)) {
+        console.log(idNarocilaBlog);
         //preverja ce tabela vsebuje id
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/likePost`, {
@@ -209,6 +232,7 @@ class Blog extends Component {
           .then((res) => {
             if (res.data.success) {
               cards[cardIndex].vsecki++;
+              console.log("cind", cardIndex);
 
               likedPosts.push(idNarocilaBlog);
 
@@ -216,6 +240,7 @@ class Blog extends Component {
             }
           });
       } else if (vsecki > 0) {
+        console.log(idNarocilaBlog);
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/dislikePost`, {
             IDNarocila,
@@ -238,6 +263,14 @@ class Blog extends Component {
         autoClose: 3000,
       });
     }
+  };
+
+  setcards = (pattern) => {
+    const { cards } = this.state;
+
+    const filtered = cards.filter((p) => p.vzorec === pattern.ime);
+
+    this.setState({ cards: filtered });
   };
 
   render() {
@@ -264,7 +297,7 @@ class Blog extends Component {
           <ListGroup
             items={vzorci}
             selectedPattern={this.state.selectedPattern}
-            onPatternSelect={this.handlePatternSelect}
+            onPatternSelect={this.selectPattern}
           />
 
           <button
@@ -302,7 +335,7 @@ class Blog extends Component {
         </div>
 
         <div style={this.state.styles}>
-          {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
+          {cards.length === 0 ? <h1>Ni zadetkov</h1> : null}
 
           {loaded &&
             filtered.map((c, i) => {
