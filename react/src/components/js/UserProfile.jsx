@@ -5,9 +5,7 @@ import Post from "./common/Post";
 
 class UserProfile extends Component {
   state = {
-    t: "",
     uporabnik: "",
-    ime: "",
     loaded: false,
 
     likedPosts: [],
@@ -43,15 +41,10 @@ class UserProfile extends Component {
   };
 
   componentDidMount() {
-    const token = localStorage.getItem("token");
-    const ime = localStorage.getItem("ime");
-    this.setState({ t: token });
-    this.setState({ ime });
-
     this.loadSlike();
 
     axios //dobi uporabnika
-      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/profile`, { token })
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/profile`)
       .then((res) => {
         this.setState({ uporabnik: res.data.user[0] });
         const uid = res.data.user[0].IDUporabnika;
@@ -74,7 +67,7 @@ class UserProfile extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Profil" loggedIn={this.state.t} />
-        <h1 style={this.state.styles}>Živjo {this.state.ime}!</h1>
+        <h1 style={this.state.styles}>Živjo {this.state.uporabnik.Ime}!</h1>
         <h2 className="text-center">Tvoja všečkana naročila: </h2>
         <div>
           {likedPosts.length === 0 ? (

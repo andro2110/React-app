@@ -113,10 +113,9 @@ app.post("/narocila", (req, res) => {
   const { model, stevilka, opis, barva } = req.body.narocilo;
 
   const { nacinPlacila, status, vzorec } = req.body.dodatki;
-  const token = req.body.token;
 
   const date = new Date();
-  const userId = jwt.decode(token).id; //dekodira token in shrani id logged in userja
+  const userId = req.session.user[0].IDUporabnika;
 
   con.query(
     //vstavi v artikel
@@ -254,13 +253,13 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  // req.session.destroy();
-  return res //zbrise cookie da se lohk logoutas
-    .cookie("userID", "deleted", {
-      maxAge: 0,
-      expires: "Thu, 01 Jan 1970 00:00:00 GMT",
-    })
-    .end();
+  req.session.destroy(); //zbrise session
+  // return res //zbrise cookie da se lohk logoutas
+  //   .cookie("userID", "deleted", {
+  //     maxAge: 0,
+  //     expires: "Thu, 01 Jan 1970 00:00:00 GMT",
+  //   })
+  //   .end();
 });
 
 app.get("/adminNarocila", (req, res) => {
@@ -467,12 +466,11 @@ app.post("/vrniNarocilaDatum", (req, res) => {
 });
 
 app.post("/likePost", (req, res) => {
-  const { IDNarocila, t, idNarocilaBlog } = req.body;
+  const { IDNarocila, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki + 1;
+  const uid = req.session.user[0].IDUporabnika;
 
-  if (t) {
-    const userId = jwt.decode(t).id;
-
+  if (uid) {
     con.query(
       `UPDATE narocilonablogu 
       SET vsecki = ${vsecki}
@@ -485,7 +483,7 @@ app.post("/likePost", (req, res) => {
 
     con.query(
       `INSERT INTO likedPosts (IDUporabnika, IDNarocila) VALUES (?, ?)`,
-      [userId, idNarocilaBlog],
+      [uid, idNarocilaBlog],
       (err) => {
         if (err)
           res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
@@ -500,8 +498,9 @@ app.post("/likePost", (req, res) => {
 app.post("/dislikePost", (req, res) => {
   const { IDNarocila, t, idNarocilaBlog } = req.body;
   const vsecki = req.body.vsecki - 1;
+  const uid = req.session.user[0].IDUporabnika;
 
-  if (t) {
+  if (uid) {
     const userId = jwt.decode(t).id;
 
     con.query(
@@ -516,7 +515,7 @@ app.post("/dislikePost", (req, res) => {
 
     con.query(
       `DELETE FROM likedPosts WHERE IDUporabnika = ? AND IDNarocila = ?`,
-      [userId, idNarocilaBlog],
+      [uid, idNarocilaBlog],
       (err) => {
         if (err)
           res.json({ succes: false, errMessage: "Napaka pri všečkanju." });
@@ -526,23 +525,13 @@ app.post("/dislikePost", (req, res) => {
   }
 });
 
-app.post("/profile", (req, res) => {
-  const { token } = req.body;
-  const userId = jwt.decode(token).id;
-
-  con.query(
-    `SELECT IDUporabnika, ime, priimek  FROM uporabnik WHERE IDUporabnika = ?`,
-    [userId],
-    (err, user) => {
-      if (err)
-        res.json({ success: false, errMessage: "Napaka pri povezovanju" });
-      else res.json({ user });
-    }
-  );
+app.get("/profile", (req, res) => {
+  res.json({ user: req.session.user });
 });
 
 app.post("/getLikedProfile", (req, res) => {
-  const { uid } = req.body;
+  // const { uid } = req.body;
+  const uid = req.session.user[0].IDUporabnika;
 
   con.query(
     `SELECT n.IDNarocila, nb.datumObjave, a.model, nb.ID AS narociloBlogId, nb.opis 

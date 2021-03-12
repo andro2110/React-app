@@ -131,7 +131,6 @@ class Narocila extends Component {
       axios
         .post(`${process.env.REACT_APP_SERVER_ADDRESS}/narocila`, {
           narocilo,
-          token,
           dodatki,
         }) //poslje podatke na server
         .then((res) => {
