@@ -220,7 +220,6 @@ class Blog extends Component {
 
     if (t) {
       if (!likedPosts.includes(idNarocilaBlog)) {
-        console.log(idNarocilaBlog);
         //preverja ce tabela vsebuje id
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/likePost`, {
@@ -232,7 +231,6 @@ class Blog extends Component {
           .then((res) => {
             if (res.data.success) {
               cards[cardIndex].vsecki++;
-              console.log("cind", cardIndex);
 
               likedPosts.push(idNarocilaBlog);
 
@@ -240,7 +238,6 @@ class Blog extends Component {
             }
           });
       } else if (vsecki > 0) {
-        console.log(idNarocilaBlog);
         axios
           .post(`${process.env.REACT_APP_SERVER_ADDRESS}/dislikePost`, {
             IDNarocila,

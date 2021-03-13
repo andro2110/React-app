@@ -52,7 +52,7 @@ class AdminNarocila extends Component {
     const narocilo = narocila[input.id];
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/test`, { narocilo })
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/redirect`, { narocilo })
       .then((res) => {
         if (narocilo.status === "koncano") window.location = "/adminBlog";
       });
