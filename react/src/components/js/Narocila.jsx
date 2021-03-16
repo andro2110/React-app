@@ -4,6 +4,7 @@ import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
+import Bar from "./common/ProgressBar";
 // import { regularLinks } from "./common/navbarlinks";
 import "../css/forms.css";
 import "../css/bgPics.css";
@@ -34,6 +35,7 @@ class Narocila extends Component {
     selectedFile: null,
     sentSuccessful: "",
     isSent: false,
+    uploadPercentage: 0,
 
     errors: {},
     redirect: false,
@@ -70,6 +72,7 @@ class Narocila extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.red);
+    clearTimeout(this.prog);
   }
 
   handleSubmit = (ev) => {
@@ -159,6 +162,19 @@ class Narocila extends Component {
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
+                  onUploadProgress: (progressEvent) => {
+                    this.setState({
+                      uploadPercentage: parseInt(
+                        Math.round(
+                          (progressEvent.loaded * 100) / progressEvent.total
+                        )
+                      ),
+                    });
+
+                    this.prog = setTimeout(() => {
+                      this.setState({ uploadPercentage: 0 });
+                    }, 5000);
+                  },
                 }
               )
               .then((res) => {
@@ -200,7 +216,15 @@ class Narocila extends Component {
   };
 
   render() {
-    const { narocilo, vzorci, token, errors, dodatki, redirect } = this.state;
+    const {
+      narocilo,
+      vzorci,
+      token,
+      errors,
+      dodatki,
+      redirect,
+      uploadPercentage,
+    } = this.state;
 
     if (redirect) window.location = "/";
 
@@ -209,6 +233,8 @@ class Narocila extends Component {
         <NavBar heading="Naroči se" loggedIn={this.state.t} />
         <div className="narocilo-bgPic">
           <div className="form-box">
+            <Bar percentage={uploadPercentage} />
+
             {token === null ? (
               <p className="alert alert-danger m-3">
                 Za narocanje se potrebujes prijaviti
@@ -294,7 +320,7 @@ class Narocila extends Component {
                   id="slika"
                   onChange={this.fileChange}
                   multiple
-                  allow=".jpeg, .png, .jpg"
+                  accept="image/x-png,image/gif,image/jpeg"
                 />
               </div>
 

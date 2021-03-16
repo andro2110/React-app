@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
+import ProgressBar from "./../common/ProgressBar";
 
 class AdminBlog extends Component {
   state = {
@@ -10,6 +11,8 @@ class AdminBlog extends Component {
     opis: "",
     slike: "",
     isSent: "",
+
+    uploadProgress: 0,
   };
 
   schema = {
@@ -28,6 +31,7 @@ class AdminBlog extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.red);
+    clearTimeout(this.prog);
   }
 
   objavi = () => {
@@ -62,6 +66,19 @@ class AdminBlog extends Component {
               {
                 headers: {
                   "Content-Type": "multipart/form-data",
+                },
+                onUploadProgress: (progressEvent) => {
+                  this.setState({
+                    uploadProgress: parseInt(
+                      Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                      )
+                    ),
+                  });
+
+                  this.prog = setTimeout(() => {
+                    this.setState({ uploadProgress: 0 });
+                  }, 5000);
                 },
               }
             )
@@ -104,36 +121,40 @@ class AdminBlog extends Component {
   };
 
   render() {
-    const { narocilo, redirect } = this.state;
+    const { narocilo, redirect, uploadProgress } = this.state;
     if (redirect) window.location = "/adminNarocila";
 
     return (
       <React.Fragment>
         <h1>admin blog</h1>
         <div>
-          Model: {narocilo.model}, opis: {narocilo.opis}
+          <ProgressBar percentage={uploadProgress} />
+          <div>
+            Model: {narocilo.model}, opis: {narocilo.opis}
+          </div>
+
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor="opis">Opis</label>
+            <input
+              type="text"
+              value={this.state.opis}
+              name="opis"
+              id="opis"
+              onChange={this.handleOpisChange}
+            />
+
+            <input
+              type="file"
+              name="files[]"
+              id="slika"
+              onChange={this.fileChange}
+              multiple
+              accept="image/x-png,image/gif,image/jpeg"
+            />
+
+            <button onClick={this.objavi}>Objavi</button>
+          </form>
         </div>
-
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="opis">Opis</label>
-          <input
-            type="text"
-            value={this.state.opis}
-            name="opis"
-            id="opis"
-            onChange={this.handleOpisChange}
-          />
-
-          <input
-            type="file"
-            name="files[]"
-            id="slika"
-            onChange={this.fileChange}
-            multiple
-          />
-
-          <button onClick={this.objavi}>Objavi</button>
-        </form>
       </React.Fragment>
     );
   }
