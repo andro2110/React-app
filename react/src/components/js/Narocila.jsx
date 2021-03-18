@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Input from "./common/Input";
+import Input from "./common/formComponents/Input";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
-import Bar from "./common/ProgressBar";
+import Bar from "./common/formComponents/ProgressBar";
 // import { regularLinks } from "./common/navbarlinks";
 import "../css/forms.css";
 import "../css/bgPics.css";

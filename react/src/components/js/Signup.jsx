@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Input from "./common/Input";
-import Password from "./common/PasswordField";
+import Input from "./common/formComponents/Input";
+import Password from "./common/formComponents/PasswordField";
 import NavBar from "./NavBar";
 import axios from "axios";
 import Joi from "joi-browser";

@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import ProgressBar from "./../common/ProgressBar";
+import ProgressBar from "../common/formComponents/ProgressBar";
+import NavBar from "./../NavBar";
+import Input from "../common/formComponents/Input";
 
 class AdminBlog extends Component {
   state = {
@@ -126,33 +128,41 @@ class AdminBlog extends Component {
 
     return (
       <React.Fragment>
-        <h1>admin blog</h1>
-        <div>
+        <NavBar heading="Objavi na blog" loggedIn={true} />
+        <div className="m-135 form-box card">
           <ProgressBar percentage={uploadProgress} />
-          <div>
-            Model: {narocilo.model}, opis: {narocilo.opis}
+          <div className="opis">
+            <div className="card-header">
+              <h5>Izbrano naročilo</h5>
+            </div>
+            <p>Model: {narocilo.model}</p>
+            <p>Opis: {narocilo.opis}</p>
           </div>
 
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="opis">Opis</label>
-            <input
-              type="text"
-              value={this.state.opis}
-              name="opis"
-              id="opis"
-              onChange={this.handleOpisChange}
-            />
+            <div className="d-block">
+              <Input
+                name="opis"
+                label="Opis: "
+                value={this.state.opis}
+                onChange={this.handleOpisChange}
+              />
 
-            <input
-              type="file"
-              name="files[]"
-              id="slika"
-              onChange={this.fileChange}
-              multiple
-              accept="image/x-png,image/gif,image/jpeg"
-            />
+              <div className="m-3">
+                <input
+                  type="file"
+                  name="files[]"
+                  id="slika"
+                  onChange={this.fileChange}
+                  multiple
+                  accept="image/x-png,image/gif,image/jpeg"
+                />
+              </div>
 
-            <button onClick={this.objavi}>Objavi</button>
+              <button onClick={this.objavi} id="submit">
+                Objavi
+              </button>
+            </div>
           </form>
         </div>
       </React.Fragment>

@@ -3,7 +3,7 @@ import axios from "axios";
 import Card from "./js/common/Card";
 import NavBar from "./js/NavBar";
 import ListGroup from "./js/listGroup";
-import Input from "./js/common/Input";
+import Input from "./js/common/formComponents/Input";
 import { toast } from "react-toastify";
 // import { regularLinks } from "./js/common/navbarlinks";
 
