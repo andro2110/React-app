@@ -1,3 +1,5 @@
+const userHelper = require("../userServices/getUserHelper");
+
 function updateStatus(app, con) {
   app.post("/updateNarocila", (req, res) => {
     const { val, index } = req.body.narocilo;
@@ -9,7 +11,11 @@ function updateStatus(app, con) {
             success: false,
             message: "Napaka pri posodabljanju statusa",
           });
-        else res.json({ success: true, message: "Status uspesno posodobljen" });
+        else {
+          res.json({ success: true, message: "Status uspesno posodobljen" });
+          // const neki = userHelper.returnUserId(null, con, index);
+          // console.log(neki);
+        }
       }
     );
   });

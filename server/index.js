@@ -5,18 +5,21 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const fileUpload = require("express-fileupload");
+// const nodemailer = require("nodemailer");
 const app = express();
 require("dotenv").config();
 
 const user = require("./services/user");
 const loader = require("./services/vrniVzorce");
-const logServices = require("./services/userServices/logout");
+const logServices = require("./services/userServices/userLog");
+const userServ = require("./services/userServices/getUserHelper");
 const narociloServices = require("./services/narocilaServices/narocila");
 const urejanje = require("./services/adminServices/urejanjeNarocil");
 const adminPublishServices = require("./services/adminServices/objavljanjeBlog");
 const blogInit = require("./services/blogServices/blogInit");
 const likeHandler = require("./services/blogServices/handleLikes");
 const blogQueryHandler = require("./services/blogServices/blogQueries");
+const emailServices = require("./services/mailServices/mails");
 
 app.use(
   cors({
@@ -153,6 +156,18 @@ logServices.checkIfLoggedIn(app);
 logServices.authUser(app);
 logServices.login(app, con);
 logServices.register(app, con);
+
+userServ.returnUserId(app, con);
+
+app.get("/sendEmail", (req, res) => {
+  if (req.session.tmpUser) {
+    const user = req.session.tmpUser;
+    const status = req.session.statusNarocila;
+
+    const emailOptions = emailServices.setEmail(user, status);
+    emailServices.sendMail(emailOptions);
+  }
+});
 
 app.listen(4000, () => {
   console.log("Listening on port 4000");

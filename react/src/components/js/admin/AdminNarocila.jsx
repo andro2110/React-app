@@ -88,6 +88,17 @@ class AdminNarocila extends Component {
           toast.error(res.data.message, { position: "top-center" });
         }
       });
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_ADDRESS}/getUserId`, {
+        narocilo,
+        val,
+      })
+      .then((res) => {
+        if (res.data.errMessage) {
+          toast.error(res.data.message, { position: "top-center" });
+        }
+      });
   };
 
   handleSelectedStatusChange = ({ currentTarget: input }) => {
