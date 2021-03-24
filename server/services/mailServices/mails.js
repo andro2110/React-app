@@ -4,7 +4,7 @@ require("dotenv").config();
 function setEmail(user, status) {
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
-    to: user.Email,
+    to: user.Email, //user.Email
     subject: "Status naročila spremenjen!",
     text: `Pozdravljen/a ${user.Ime}!
 

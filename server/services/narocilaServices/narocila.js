@@ -30,8 +30,8 @@ function posljiNarocilo(app, con) {
         const artikelId = podatki[0].IDArtikla;
         con.query(
           //vstavi podatke v narocila
-          "INSERT INTO narocilo (IDUporabnika, IDArtikla, datum, nacinPlacila, opis, status) VALUES (?, ?, ?, ?, ?, ?)",
-          [userId, artikelId, date, nacinPlacila, opis, status],
+          "INSERT INTO narocilo (IDUporabnika, IDArtikla, datum, nacinPlacila, opis, status) VALUES (?, ?, current_date(), ?, ?, ?)",
+          [userId, artikelId, nacinPlacila, opis, status],
           (err) => {
             if (err)
               res.json({

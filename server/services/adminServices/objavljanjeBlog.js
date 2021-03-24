@@ -13,8 +13,8 @@ function objaviNarocilo(app, con) {
     const vsecki = 0;
 
     con.query(
-      "INSERT INTO narocilonablogu (IDNarocila, opis, datumObjave, vsecki) VALUES (?, ?, ?, ?)",
-      [IDNarocila, opis, date, vsecki],
+      "INSERT INTO narocilonablogu (IDNarocila, opis, datumObjave, vsecki) VALUES (?, ?, current_date(), ?)",
+      [IDNarocila, opis, vsecki],
       (err) => {
         if (err)
           res.json({ success: false, errMessage: "Napaka pri pošiljanju." });

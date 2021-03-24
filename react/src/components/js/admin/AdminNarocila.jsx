@@ -5,6 +5,7 @@ import Narocilo from "../common/Narocilo";
 import Dropdown from "../common/DropDown";
 import { toast } from "react-toastify";
 import { adminLinks } from "../helpers/navbarlinks";
+import "../../css/Blog.css";
 
 class AdminNarocila extends Component {
   state = {
@@ -190,6 +191,29 @@ class AdminNarocila extends Component {
         <NavBar heading="Admin" links={adminLinks} />
         {/*dodaj se props - links (napiss not kere linke uporabi*/}
 
+        <div className="Kriteriji">
+          <button
+            onClick={this.urediPoDatumu}
+            name="desc"
+            className={isciDatumNacin === "desc" ? "active-btn" : ""}
+          >
+            Najnovejši
+          </button>
+          <button
+            onClick={this.urediPoDatumu}
+            name="asc"
+            className={isciDatumNacin === "asc" ? "active-btn" : ""}
+          >
+            Najstarejši
+          </button>
+
+          <Dropdown
+            options={this.state.statusi}
+            onChange={this.handleSelectedStatusChange}
+            // value={status}
+          />
+        </div>
+
         <div style={styles}>
           {/* {feedback.success ? (
             <p className="alert alert-success">{feedback.sporocilo}</p>
@@ -216,29 +240,6 @@ class AdminNarocila extends Component {
               </div>
             );
           })}
-        </div>
-
-        <div className="Kriteriji">
-          <button
-            onClick={this.urediPoDatumu}
-            name="desc"
-            className={isciDatumNacin === "desc" ? "active-btn" : ""}
-          >
-            Najnovejši
-          </button>
-          <button
-            onClick={this.urediPoDatumu}
-            name="asc"
-            className={isciDatumNacin === "asc" ? "active-btn" : ""}
-          >
-            Najstarejši
-          </button>
-
-          <Dropdown
-            options={this.state.statusi}
-            onChange={this.handleSelectedStatusChange}
-            // value={status}
-          />
         </div>
       </React.Fragment>
     );

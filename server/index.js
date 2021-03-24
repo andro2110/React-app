@@ -166,6 +166,7 @@ app.get("/sendEmail", (req, res) => {
 
     const emailOptions = emailServices.setEmail(user, status);
     emailServices.sendMail(emailOptions);
+    res.redirect("/");
   }
 });
 
