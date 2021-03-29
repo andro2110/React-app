@@ -4,7 +4,6 @@ import Password from "./common/formComponents/PasswordField";
 import axios from "axios";
 import Joi from "joi-browser";
 import NavBar from "./NavBar";
-import { regularLinks } from "./helpers/navbarlinks";
 import "../css/bgPics.css";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
@@ -153,7 +152,7 @@ class Login extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Log in" links={regularLinks} />
+        <NavBar heading="Log in" admin={this.state.status} />
 
         <div className="login-bgPic">
           <div className="form-box">

@@ -5,7 +5,6 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import { regularLinks } from "./helpers/navbarlinks";
 
 class SignUp extends Component {
   state = {
@@ -97,12 +96,17 @@ class SignUp extends Component {
     }
   };
 
+  componentDidMount() {
+    this.setState({}); //nevem zakaj rabm to sam drgac se linki ne spremenijo
+  }
+
   render() {
     const { account, errors } = this.state;
 
     return (
       <React.Fragment>
-        <NavBar heading="Ustvari račun" links={regularLinks} />
+        <NavBar heading="Ustvari račun" />
+
         <div className="signup-bgPic">
           <div className="form-box">
             <form

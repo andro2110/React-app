@@ -150,6 +150,7 @@ likeHandler.dislikePost(app, con);
 
 user.sendUser(app);
 user.getLikedPosts(app, con);
+user.checkIfAdmin(app, con);
 
 logServices.logout(app);
 logServices.checkIfLoggedIn(app);

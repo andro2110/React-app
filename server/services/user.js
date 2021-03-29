@@ -25,4 +25,22 @@ function getLikedPosts(app, con) {
   });
 }
 
-module.exports = { sendUser, getLikedPosts };
+function checkIfAdmin(app, con) {
+  app.get("/checkAdmin", (req, res) => {
+    if (req.session.user !== undefined) {
+      const uid = req.session.user[0].IDUporabnika;
+      con.query(
+        `SELECT status FROM uporabnik WHERE IDUporabnika = ?`,
+        [uid],
+        (err, pod) => {
+          if (err) console.log(err);
+          else {
+            res.json({ status: pod[0] });
+          }
+        }
+      );
+    }
+  });
+}
+
+module.exports = { sendUser, getLikedPosts, checkIfAdmin };

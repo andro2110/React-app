@@ -230,7 +230,7 @@ class Narocila extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Naroči se" loggedIn={this.state.t} />
+        <NavBar heading="Naroči se" />
         <div className="narocilo-bgPic">
           <div className="form-box">
             <Bar percentage={uploadPercentage} />

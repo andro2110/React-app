@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../img/LogoBlack.svg";
 import userIcon from "../img/usericon2.svg";
-import { regularLinks, loggedInLinks } from "./helpers/navbarlinks";
+import {
+  loggedOutLinks,
+  adminLinks,
+  loggedInLinks,
+} from "./helpers/navbarlinks";
 import RenderLinks from "./common/RenderLinks";
+import axios from "axios";
 import { redirectU } from "./helpers/redirectUser";
 import "../css/NavBar.css";
 
-const NavBar = ({ heading, loggedIn }) => {
+const NavBar = ({ heading }) => {
+  const [status, setStatus] = useState("");
+  const [navLinks, setNavLinks] = useState([loggedOutLinks]);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_ADDRESS}/checkAdmin`)
+      .then((res) => {
+        if (res.data.status) {
+          setStatus(res.data.status.status);
+        }
+      });
+
+    switch (status) {
+      case "admin":
+        setNavLinks(adminLinks);
+        break;
+
+      case "upor":
+        setNavLinks(loggedInLinks);
+        break;
+
+      default:
+        setNavLinks(loggedOutLinks);
+        break;
+    }
+  });
+
   return (
     <nav className="navbar navbar-light bg-light fixed-top navbar-expand-lg">
       <div className="container-fluid">
@@ -30,11 +62,7 @@ const NavBar = ({ heading, loggedIn }) => {
           className="collapse navbar-collapse d-flex flex-row-reverse"
           id="toggleNavbar"
         >
-          {loggedIn ? (
-            <RenderLinks links={loggedInLinks} />
-          ) : (
-            <RenderLinks links={regularLinks} />
-          )}
+          <RenderLinks links={navLinks} />
         </div>
         <img
           src={userIcon}

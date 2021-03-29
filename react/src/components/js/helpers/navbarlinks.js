@@ -1,4 +1,4 @@
-const regularLinks = [
+const loggedOutLinks = [
   {
     link: "/",
     linkName: "Domov",
@@ -20,39 +20,8 @@ const regularLinks = [
     linkName: "Ustvari račun",
   },
   {
-    link: "/logout",
-    linkName: "Odjavi se",
-  },
-  {
     link: "/login",
     linkName: "Prijavi se",
-  },
-];
-
-const adminLinks = [
-  {
-    link: "/",
-    linkName: "Domov",
-  },
-  {
-    link: "/blog",
-    linkName: "Blog",
-  },
-  {
-    link: "/narocila",
-    linkName: "Naročila",
-  },
-  {
-    link: "#kdoSem",
-    linkName: "Kdo sem?",
-  },
-  {
-    link: "/logout",
-    linkName: "Odjavi se",
-  },
-  {
-    link: "/adminNarocila",
-    linkName: "Moja naročila",
   },
 ];
 
@@ -74,8 +43,31 @@ const loggedInLinks = [
     linkName: "Kdo sem?",
   },
   {
-    link: "/signUp",
-    linkName: "Ustvari račun",
+    link: "/logout",
+    linkName: "Odjava",
+  },
+];
+
+const adminLinks = [
+  {
+    link: "/",
+    linkName: "Domov",
+  },
+  {
+    link: "/blog",
+    linkName: "Blog",
+  },
+  {
+    link: "/narocila",
+    linkName: "Naročila",
+  },
+  {
+    link: "#kdoSem",
+    linkName: "Kdo sem?",
+  },
+  {
+    link: "/adminNarocila",
+    linkName: "Prejeta naročila",
   },
   {
     link: "/logout",
@@ -85,6 +77,6 @@ const loggedInLinks = [
 
 module.exports = {
   adminLinks,
-  regularLinks,
+  loggedOutLinks,
   loggedInLinks,
 };

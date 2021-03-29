@@ -288,7 +288,7 @@ class Blog extends Component {
 
     return (
       <React.Fragment>
-        <NavBar heading="Blog" loggedIn={this.state.t} />
+        <NavBar heading="Blog" />
 
         <div className="Kriteriji">
           <ListGroup
