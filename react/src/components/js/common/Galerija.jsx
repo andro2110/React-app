@@ -1,5 +1,6 @@
 import Carousel from "react-elastic-carousel";
 import Imgcard from "./ImageCard";
+import "../../css/carousel.css";
 
 const Galerija = ({ slike, loaded }) => {
   if (loaded && slike.length > 0) {

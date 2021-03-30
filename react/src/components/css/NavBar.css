@@ -7,10 +7,11 @@
 }
 
 :root {
-  --blueDark: #0960bd;
-  --blueLight: #75c2f6;
-  --blueLighter: #d4e5ff;
-  --purpleLight: #b58eff;
+  --blueDark: #9dccff;
+  --blueLight: #d3bff6;
+  --blueLighter: #f2f7fdec;
+  --purpleLight: #c0a3fa;
+  --purpleLighter: #e5d6ff;
   --greyLight: #eeeeee;
   --greyLight1: #dedede;
 }
@@ -36,24 +37,11 @@ nav {
 
 .logo {
   display: inline-flex;
-  margin: 20px;
+  margin: 2.1rem;
 }
 
 .svg {
-  height: 50px;
-}
-
-.logotip > p {
-  font-weight: 700;
-  font-size: 25px;
-  font-style: bold;
-  color: black;
-  display: block;
-  margin-top: 45px;
-}
-
-.logotip {
-  display: flex;
+  height: 3rem;
 }
 
 ul {
@@ -64,35 +52,38 @@ ul {
   margin-right: 20px;
 }
 
-li {
-  margin: 10px;
-  transition: ease 125ms;
-  color: var(--blueLight);
-}
-
-li:hover {
-  cursor: pointer;
-  color: var(--purpleLight);
-}
-
-.logoList {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px;
-}
-
-.logoList > img {
-  height: 30px;
-  display: block;
-  margin: auto;
-}
-
-.logoList > img:hover {
-  background-color: var(--blueLighter);
-  border-radius: 7px;
-  cursor: pointer;
+.pIcon {
+  margin-top: 1.3rem;
 }
 
 .pIcon:hover {
   cursor: pointer;
+  border-radius: 5px;
+  background-color: var(--purpleLighter);
+  padding: 2px;
+}
+
+nav {
+  background-color: var(--blueLighter) !important;
+  height: 7rem;
+}
+
+.nav-link {
+  margin: 10px;
+  margin-top: 3.1rem;
+  transition: ease 125ms;
+  color: var(--blueDark);
+}
+
+.nav-link:hover {
+  cursor: pointer;
+  color: #c0a3fa;
+}
+
+.naslov {
+  color: black;
+  text-transform: uppercase;
+  /* margin-top: 20px; */
+  margin-top: 2.3rem;
+  font-size: 2.1em;
 }

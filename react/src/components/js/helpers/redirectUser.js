@@ -1,5 +1,5 @@
 function redirectU() {
-  window.location = "/profile";
+  if (localStorage.getItem("token")) window.location = "/profile";
 }
 
 module.exports = {

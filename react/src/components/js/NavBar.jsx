@@ -40,12 +40,12 @@ const NavBar = ({ heading }) => {
   });
 
   return (
-    <nav className="navbar navbar-light bg-light fixed-top navbar-expand-lg">
+    <nav className="navbar fixed-top navbar-expand-lg">
       <div className="container-fluid">
         <a href="/" className="navbar-brand">
           <img src={logo} className="svg logo" alt="logo" />
-          {heading}
         </a>
+        <h1 className="naslov">{heading}</h1>
         <button
           className="navbar-toggler"
           type="button"

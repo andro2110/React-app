@@ -1,3 +1,8 @@
+:root {
+  --greyLight: #e7e6e1;
+  --blueBackg: #f5faff;
+}
+
 .uls {
   display: block;
 }
@@ -29,4 +34,8 @@
   padding: 5px;
   background-color: #fff;
   border: 2px solid rgba(248, 184, 184, 0.15);
+}
+
+body {
+  background-color: var(--blueBackg) !important;
 }

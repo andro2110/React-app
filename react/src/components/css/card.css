@@ -1,3 +1,9 @@
+:root {
+  --greyLight: #e7e6e1;
+  --blueShaded: #e8f3ff;
+  --blueLight: #dfefff;
+}
+
 .Card {
   height: 40%;
   width: 50%;
@@ -49,4 +55,12 @@ h1 {
 
 .vsecki:hover {
   cursor: pointer;
+}
+
+.card-body {
+  background-color: var(--blueShaded);
+}
+
+.card-header {
+  background-color: var(--blueLight) !important;
 }

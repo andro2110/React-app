@@ -5,6 +5,7 @@ import NavBar from "./js/NavBar";
 import ListGroup from "./js/listGroup";
 import Input from "./js/common/formComponents/Input";
 import { toast } from "react-toastify";
+import "./css/Blog.css";
 // import { regularLinks } from "./js/common/navbarlinks";
 
 class Blog extends Component {

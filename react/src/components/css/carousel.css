@@ -1,0 +1,11 @@
+:root {
+  --purpleDark: #7579e7;
+  --purpleLight: #9ab3f5;
+  --blueDarker: #a3d8f4;
+  --blueLight: #b9fffc;
+}
+
+.rec-arrow {
+  background-color: var(--purpleLight);
+  color: var(--purpleDark);
+}
