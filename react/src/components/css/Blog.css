@@ -16,6 +16,11 @@
   right: 0;
 }
 
+.addPattern {
+  position: absolute;
+  left: 0;
+}
+
 .active-btn {
   background-color: red;
 }

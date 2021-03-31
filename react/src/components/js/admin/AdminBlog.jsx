@@ -15,12 +15,11 @@ class AdminBlog extends Component {
     isSent: "",
 
     uploadProgress: 0,
+    redirect: false,
   };
 
   schema = {
     opis: Joi.string().required(),
-
-    redirect: false,
   };
 
   fileChange = (f) => {

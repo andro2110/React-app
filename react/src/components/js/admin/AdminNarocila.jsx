@@ -5,6 +5,7 @@ import Narocilo from "../common/Narocilo";
 import Dropdown from "../common/DropDown";
 import { toast } from "react-toastify";
 import { adminLinks } from "../helpers/navbarlinks";
+import AddPattern from "./DodajVzorec";
 import "../../css/Blog.css";
 
 class AdminNarocila extends Component {
@@ -189,7 +190,10 @@ class AdminNarocila extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Admin" links={adminLinks} />
-        {/*dodaj se props - links (napiss not kere linke uporabi*/}
+
+        <div className="addPattern">
+          <AddPattern />
+        </div>
 
         <div className="Kriteriji">
           <button

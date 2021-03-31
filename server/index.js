@@ -20,6 +20,7 @@ const blogInit = require("./services/blogServices/blogInit");
 const likeHandler = require("./services/blogServices/handleLikes");
 const blogQueryHandler = require("./services/blogServices/blogQueries");
 const emailServices = require("./services/mailServices/mails");
+const patternHandler = require("./services/adminServices/addPattern");
 
 app.use(
   cors({
@@ -113,6 +114,8 @@ adminPublishServices.objaviNarocilo(app, con);
 adminPublishServices.sendNarocilo(app);
 adminPublishServices.vrniNarocilaPoDatumu(app, con);
 adminPublishServices.redirectToObjave(app);
+
+patternHandler.addPattern(app, con);
 
 app.post("/vSlikeObjav", (req, res) => {
   //sklepam da ne bo delal
