@@ -103,13 +103,6 @@ class AdminBlog extends Component {
       });
   };
 
-  test = () => {
-    axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/test`).then((res) => {
-      console.log(res);
-    });
-    window.location = "/";
-  };
-
   componentDidMount() {
     axios
       .get(`${process.env.REACT_APP_SERVER_ADDRESS}/adminBlog`)
@@ -164,6 +157,12 @@ class AdminBlog extends Component {
               </button>
             </div>
           </form>
+        </div>
+
+        <div className="m-135 form-box card">
+          <p>Priimek: {narocilo.priimek}</p>
+          <p>Hisna stevilka in ulica: {narocilo.hisnaSTUlica}</p>
+          <p>Postna stevilka: {narocilo.PostnaStevilka}</p>
         </div>
       </React.Fragment>
     );

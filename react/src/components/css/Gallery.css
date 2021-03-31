@@ -6,7 +6,7 @@
   background-image: url(https://www.art-insider.com/wp-content/uploads/2019/09/ocean.jpg);
   background-size: cover;
   transition: top 0.3s;
-  margin: 100px 0;
+  /* margin: 100px 0; */
   z-index: 0;
 }
 
@@ -48,4 +48,8 @@
 
 .rec-carousel {
   width: 40%;
+}
+
+.wrapper {
+  margin-top: 7rem;
 }

@@ -8,10 +8,12 @@ class Gallery extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="gallery"> </div>
-        <div className="buttons">
-          <img src={leftArrow} alt="leftArrow" />
-          <img src={rightArrow} alt="rightArrow" />
+        <div className="wrapper">
+          <div className="gallery"> </div>
+          <div className="buttons">
+            <img src={leftArrow} alt="leftArrow" />
+            <img src={rightArrow} alt="rightArrow" />
+          </div>
         </div>
       </React.Fragment>
     );

@@ -24,16 +24,16 @@ function updateStatus(app, con) {
 function loadNarocila(app, con) {
   app.get("/adminNarocila", (req, res) => {
     con.query(
-      `SELECT n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
-          FROM narocilo n, artikel a, dodatki d
-          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla`,
+      `SELECT u.priimek, u.hisnaSTUlica, u.PostnaStevilka, n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
+          FROM narocilo n, artikel a, dodatki d, uporabnik u
+          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND u.IDUporabnika = n.IDUporabnika`,
       (err, narocila) => {
-        if (err)
+        if (err) {
           res.json({
             success: false,
             errMessage: "Napaka pri pridobivanju naročil.",
           });
-        else res.json({ success: true, narocila });
+        } else res.json({ success: true, narocila });
       }
     );
   });
