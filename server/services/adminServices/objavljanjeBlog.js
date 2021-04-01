@@ -39,8 +39,8 @@ function vrniNarocilaPoDatumu(app, con) {
   app.post("/vrniNarocilaDatum", (req, res) => {
     const nacin = req.body.tmpNacin;
     con.query(
-      `SELECT n.IDNarocila, n.datum, a.stevilka, n.opis, n.status, a.model, v.ime AS vzorec, n.nacinPlacila, d.IDDodatka
-          FROM narocilo n, artikel a, vzorci v, dodatki d
+      `SELECT u.priimek, u.hisnaSTUlica, u.PostnaStevilka, n.IDNarocila, n.datum, a.stevilka, n.opis, n.status, a.model, v.ime AS vzorec, n.nacinPlacila, d.IDDodatka
+          FROM narocilo n, artikel a, vzorci v, dodatki d, uporabnik u
           WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND d.IDVzorca = v.IDVzorca
           ORDER BY n.datum ${nacin}`,
       (err, narocila) => {
