@@ -41,6 +41,18 @@
   border: 2px solid rgba(248, 184, 184, 0.15);
 }
 
+.list-group-item:hover {
+  cursor: pointer;
+}
+
+.vzorec {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
 body {
   background-color: var(--blueBackg) !important;
 }

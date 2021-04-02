@@ -8,9 +8,9 @@ const Card = ({ narocilo, loaded, onClick, cardIndex, likedPosts }) => {
       <h1 className="card-header transform-upper">{narocilo.model}</h1>
       <div className="card-body">
         <Galerija slike={narocilo.slike} loaded={loaded} />
-        <div className="d-flex">
-          <p className="card-text opis">{narocilo.opis}</p>
-          <div className="vsecki opis" onClick={onClick} id={cardIndex}>
+        <div className="d-flex justify-content-between">
+          <p className="card-text opis border">{narocilo.opis}</p>
+          <div className="vsecki border" onClick={onClick} id={cardIndex}>
             {likedPosts.includes(narocilo.narociloBlogId) ? (
               <p>{narocilo.vsecki}💔</p>
             ) : (

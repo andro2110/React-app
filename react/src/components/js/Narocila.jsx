@@ -23,7 +23,7 @@ class Narocila extends Component {
     dodatki: {
       nacinPlacila: "Ob prejemu",
       status: "prejeto",
-      vzorec: "4",
+      vzorec: "1",
     },
 
     vzorci: [], //not se shranjo vzorci iz pb

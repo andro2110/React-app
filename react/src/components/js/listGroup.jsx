@@ -5,12 +5,16 @@ const ListGroup = (props) => {
   const { items, onPatternSelect, selectedPattern } = props;
 
   return (
-    <ul className="ul-lists" role="tablist">
+    <ul className="list-group" role="tablist">
       {items.map((item, i) => (
         <li
           onClick={() => onPatternSelect(item)}
           key={i}
-          className={item === selectedPattern ? "ul-list-item" : "ul-list-item"}
+          className={
+            item.IDVzorca === selectedPattern.IDVzorca
+              ? "list-group-item active"
+              : "list-group-item"
+          }
         >
           {item.ime}
         </li>

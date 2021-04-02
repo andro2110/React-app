@@ -7,7 +7,6 @@ function posljiNarocilo(app, con) {
 
     const { nacinPlacila, status, vzorec } = req.body.dodatki;
 
-    const date = new Date();
     const userId = req.session.user[0].IDUporabnika;
 
     con.query(
@@ -17,56 +16,59 @@ function posljiNarocilo(app, con) {
       (err) => {
         if (err)
           res.json({ errMessage: "Napaka pri pošiljanju. Poskusi ponovno" });
-      }
-    );
+        else {
+          con.query(
+            //dobi idartikla poslanega narocila
+            "SELECT IDArtikla FROM artikel ORDER BY IDArtikla DESC",
+            (err, podatki) => {
+              if (err)
+                res.json({
+                  errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+                });
 
-    con.query(
-      //dobi idartikla poslanega narocila
-      "SELECT IDArtikla FROM artikel ORDER BY IDArtikla DESC LIMIT 1",
-      (err, podatki) => {
-        if (err)
-          res.json({ errMessage: "Napaka pri pošiljanju. Poskusi ponovno" });
+              const artikelId = podatki[0].IDArtikla;
+              con.query(
+                //vstavi podatke v narocila
+                "INSERT INTO narocilo (IDUporabnika, IDArtikla, datum, nacinPlacila, opis, status) VALUES (?, ?, current_date(), ?, ?, ?)",
+                [userId, artikelId, nacinPlacila, opis, status],
+                (err) => {
+                  if (err)
+                    res.json({
+                      errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+                    });
+                }
+              );
 
-        const artikelId = podatki[0].IDArtikla;
-        con.query(
-          //vstavi podatke v narocila
-          "INSERT INTO narocilo (IDUporabnika, IDArtikla, datum, nacinPlacila, opis, status) VALUES (?, ?, current_date(), ?, ?, ?)",
-          [userId, artikelId, nacinPlacila, opis, status],
-          (err) => {
-            if (err)
-              res.json({
-                errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
-              });
-          }
-        );
+              con.query(
+                //vstavi podatke v dodatki
+                "INSERT INTO dodatki (IDArtikla, IDVzorca, barva) VALUES (?, ?, ?)",
+                [artikelId, vzorec, barva],
+                (err) => {
+                  if (err)
+                    res.json({
+                      errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+                    });
+                }
+              );
 
-        con.query(
-          //vstavi podatke v dodatki
-          "INSERT INTO dodatki (IDArtikla, Idvzorca, barva) VALUES (?, ?, ?)",
-          [artikelId, vzorec, barva],
-          (err) => {
-            if (err)
-              res.json({
-                errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
-              });
-          }
-        );
-
-        con.query(
-          //dobi iddodatka, da lahko poslje sliko v PB (POPRAVI...vec slik more it not)
-          "SELECT IDDodatka FROM dodatki ORDER BY IDDodatka DESC LIMIT 1",
-          (err, podatki) => {
-            if (err) {
-              res.json({
-                errMessage: "Napaka pri pošiljanju, poskusi ponovno",
-                success: false,
-              });
-            } else {
-              const dodatekId = podatki[0].IDDodatka;
-              res.json({ dodatekId, success: true });
+              con.query(
+                //dobi iddodatka, da lahko poslje sliko v PB (POPRAVI...vec slik more it not)
+                "SELECT IDDodatka FROM dodatki ORDER BY IDDodatka DESC LIMIT 1",
+                (err, podatki) => {
+                  if (err) {
+                    res.json({
+                      errMessage: "Napaka pri pošiljanju, poskusi ponovno",
+                      success: false,
+                    });
+                  } else {
+                    const dodatekId = podatki[0].IDDodatka;
+                    res.json({ dodatekId, success: true });
+                  }
+                }
+              );
             }
-          }
-        );
+          );
+        }
       }
     );
   });

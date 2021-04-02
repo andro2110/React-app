@@ -42,7 +42,7 @@ class Blog extends Component {
       .get(`${process.env.REACT_APP_SERVER_ADDRESS}/vzorci`)
       .then((response) => {
         const vz = response.data.data;
-        vz.push({ IDVzorca: 5, ime: "Vsa naročila" });
+        vz.unshift({ IDVzorca: 5, ime: "Vsa naročila" });
 
         this.setState({ vzorci: vz });
       });
@@ -142,6 +142,7 @@ class Blog extends Component {
             card["slike"] = tmp;
           }
 
+          this.setState({ selectedPattern: pattern });
           this.setState({ cards });
           this.setState({ iskanModel: "" });
           this.setState({ iskanOpis: "" });
