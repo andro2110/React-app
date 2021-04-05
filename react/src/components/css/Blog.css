@@ -1,14 +1,17 @@
 :root {
-  --greyLight: #e7e6e1;
+  --greyLight: #f1f1f1;
   --blueBackg: #f5faff;
+  --blueDark: #6e8afa;
+  --purpleLight: #eeceff;
+  --blueLight: #c8e4ff;
+  --blueShaded: #e8f3ff;
+  --blueShadedLighter: #f1f6ff;
 }
 
-.uls {
-  display: block;
-}
-
-.Active {
-  background-color: violet;
+.active {
+  background-color: var(--purpleLight) !important;
+  color: var(--blueDark) !important;
+  border: 1px solid var(--blueDark) !important;
 }
 
 .Kriteriji {
@@ -21,36 +24,60 @@
   left: 0;
 }
 
-.active-btn {
-  background-color: red;
+.list-group-item {
+  margin: 0.5rem;
+  border: 1px solid rgba(248, 184, 184, 0.15);
+  transition: ease 0.2s;
 }
 
-.ul-lists {
-  display: flex;
-  flex-direction: column;
-  padding-left: 0;
-  margin-bottom: 0;
-  border-radius: 0.25rem;
+.list-group-item:hover {
+  background-color: var(--blueShadedLighter);
 }
 
-.ul-list-item {
-  position: relative;
-  display: block;
+.date_wrapper {
+  float: right;
+  margin-right: 1rem;
+}
+
+.button_date {
+  border: none;
+  outline: none;
+  background-color: var(--blueShaded);
+  margin: 5px;
+  width: 100%s;
   padding: 5px;
-  background-color: #fff;
-  border: 2px solid rgba(248, 184, 184, 0.15);
+  border-radius: 8px;
+}
+
+.button_date:hover {
+  background-color: var(--blueLight);
+}
+
+.active-button {
+  background-color: var(--purpleLight);
+  color: var(--blueDark);
+  border: 1px solid var(--blueDark);
+}
+
+.search_button {
+  border: none;
+  outline: none;
+  background-color: var(--blueLight);
+  padding: 5px;
+  border-radius: 8px;
+  float: right;
+  margin-right: 1rem;
+  transition: ease 0.12s;
+}
+
+.search_button:hover {
+  background-color: var(--purpleLight);
+  color: var(--blueDark);
+  transform: scale(1.2);
 }
 
 .list-group-item:hover {
   cursor: pointer;
-}
-
-.vzorec {
-  position: relative;
-  display: block;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 body {

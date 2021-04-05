@@ -21,7 +21,7 @@ class Blog extends Component {
     vzorci: [],
     iskanModel: "",
     iskanOpis: "",
-    isciDatumNacin: "",
+    isciDatumNacin: "asc",
     selectedPattern: { IDVzorca: 5, ime: "vsa narocila" },
 
     loaded: false,
@@ -299,20 +299,30 @@ class Blog extends Component {
             onPatternSelect={this.selectPattern}
           />
 
-          <button
-            onClick={this.urediPoDatumu}
-            name="desc"
-            className={isciDatumNacin === "desc" ? "active-btn" : ""}
-          >
-            Najnovejši
-          </button>
-          <button
-            onClick={this.urediPoDatumu}
-            name="asc"
-            className={isciDatumNacin === "asc" ? "active-btn" : ""}
-          >
-            Najstarejši
-          </button>
+          <div className="date_wrapper">
+            <button
+              onClick={this.urediPoDatumu}
+              name="desc"
+              className={
+                isciDatumNacin === "desc"
+                  ? "active-button button_date button"
+                  : "button_date button"
+              }
+            >
+              Najnovejši
+            </button>
+            <button
+              onClick={this.urediPoDatumu}
+              name="asc"
+              className={
+                isciDatumNacin === "asc"
+                  ? "active-button button_date button"
+                  : "button_date button"
+              }
+            >
+              Najstarejši
+            </button>
+          </div>
 
           <form onSubmit={this.handleSubmit}>
             <Input
@@ -329,7 +339,9 @@ class Blog extends Component {
               onChange={this.handleSearchOpis}
             />
 
-            <button onClick={this.sendQuery}>Išči</button>
+            <button onClick={this.sendQuery} className="search_button">
+              Išči
+            </button>
           </form>
         </div>
 
