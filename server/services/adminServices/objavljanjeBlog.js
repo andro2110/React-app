@@ -18,17 +18,8 @@ function objaviNarocilo(app, con) {
       (err) => {
         if (err)
           res.json({ success: false, errMessage: "Napaka pri pošiljanju." });
-      }
-    );
-
-    con.query(
-      "SELECT ID FROM narocilonablogu ORDER BY ID DESC LIMIT 1",
-      (err, podatki) => {
-        if (err) {
-          res.json({ success: false, errMessage: "Napaka pri pošiljanju." });
-        } else {
-          const narociloBlogId = podatki[0].ID;
-          res.json({ narociloBlogId, success: true });
+        else {
+          res.json({ success: true });
         }
       }
     );
@@ -53,8 +44,6 @@ function vrniNarocilaPoDatumu(app, con) {
 
 function redirectToObjave(app) {
   app.post("/redirect", (req, res) => {
-    const narocilo = req.body.narocilo;
-    req.session.narocilo = narocilo;
     res.redirect("/adminBlog");
   });
 }

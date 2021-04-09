@@ -2,7 +2,7 @@
   --greyLight: #f1f1f1;
   --blueBackg: #f5faff;
   --blueDark: #6e8afa;
-  --purpleLight: #eeceff;
+  --purpleLight: #9ab3f5;
   --blueLight: #c8e4ff;
   --blueShaded: #e8f3ff;
   --blueShadedLighter: #f1f6ff;
@@ -10,7 +10,7 @@
 
 .active {
   background-color: var(--purpleLight) !important;
-  color: var(--blueDark) !important;
+  color: black !important;
   border: 1px solid var(--blueDark) !important;
 }
 
@@ -28,6 +28,7 @@
   margin: 0.5rem;
   border: 1px solid rgba(248, 184, 184, 0.15);
   transition: ease 0.2s;
+  color: black;
 }
 
 .list-group-item:hover {
@@ -55,7 +56,7 @@
 
 .active-button {
   background-color: var(--purpleLight);
-  color: var(--blueDark);
+  color: black;
   border: 1px solid var(--blueDark);
 }
 

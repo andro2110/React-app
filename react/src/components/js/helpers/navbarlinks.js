@@ -12,7 +12,7 @@ const loggedOutLinks = [
     linkName: "Naročila",
   },
   {
-    link: "#kdoSem",
+    link: "/#kdoSem",
     linkName: "Kdo sem?",
   },
   {
@@ -39,7 +39,7 @@ const loggedInLinks = [
     linkName: "Naročila",
   },
   {
-    link: "#kdoSem",
+    link: "/#kdoSem",
     linkName: "Kdo sem?",
   },
   {
@@ -62,7 +62,7 @@ const adminLinks = [
     linkName: "Naročila",
   },
   {
-    link: "#kdoSem",
+    link: "/#kdoSem",
     linkName: "Kdo sem?",
   },
   {

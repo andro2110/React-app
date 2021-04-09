@@ -20,7 +20,7 @@ class AdminNarocila extends Component {
     statusi: ["Vsa naročila", "prejeto", "vdelu", "koncano"],
     narocilaStatusi: ["prejeto", "vdelu", "koncano"],
     tmpStatus: "",
-    isciDatumNacin: "",
+    isciDatumNacin: "desc",
     selectedStatus: "",
 
     feedback: {
@@ -196,20 +196,30 @@ class AdminNarocila extends Component {
         </div>
 
         <div className="Kriteriji">
-          <button
-            onClick={this.urediPoDatumu}
-            name="desc"
-            className={isciDatumNacin === "desc" ? "active-btn" : ""}
-          >
-            Najnovejši
-          </button>
-          <button
-            onClick={this.urediPoDatumu}
-            name="asc"
-            className={isciDatumNacin === "asc" ? "active-btn" : ""}
-          >
-            Najstarejši
-          </button>
+          <div className="date_wrapper">
+            <button
+              onClick={this.urediPoDatumu}
+              name="desc"
+              className={
+                isciDatumNacin === "desc"
+                  ? "active-button button_date button"
+                  : "button_date button"
+              }
+            >
+              Najnovejši
+            </button>
+            <button
+              onClick={this.urediPoDatumu}
+              name="asc"
+              className={
+                isciDatumNacin === "asc"
+                  ? "active-button button_date button"
+                  : "button_date button"
+              }
+            >
+              Najstarejši
+            </button>
+          </div>
 
           <Dropdown
             options={this.state.statusi}

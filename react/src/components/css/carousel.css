@@ -1,16 +1,17 @@
 :root {
-  --purpleDark: #a2a5ff;
+  --purpleDarkBut: #5d62ff;
   --purpleLight: #9ab3f5;
-  --blueDarker: #ccedff;
+  --blueDarkerBut: #aee3ff;
   --blueLight: #b9fffc;
 }
 
 .rec-arrow {
-  background-color: var(--blueDarker) !important;
-  color: var(--purpleDark) !important;
+  background-color: var(--blueDarkerBut) !important;
+  color: var(--purpleDarkBut) !important;
+  box-shadow: 0 0 2px 0px rgb(3, 3, 3);
 }
 
 .rec-arrow:hover {
-  background-color: var(--purpleDark) !important;
-  color: var(--blueDarker) !important;
+  background-color: var(--purpleDarkBut) !important;
+  color: var(--blueDarkerBut) !important;
 }

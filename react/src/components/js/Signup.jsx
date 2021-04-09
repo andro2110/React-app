@@ -5,6 +5,7 @@ import NavBar from "./NavBar";
 import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
+import "../css/forms.css";
 
 class SignUp extends Component {
   state = {

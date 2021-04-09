@@ -1,3 +1,14 @@
+:root {
+  --greyLight: #f1f1f1;
+  --greyDark: #929292;
+  --blueBackg: #f5faff;
+  --blueDarkLighter: #6b88ff;
+  --blueLight: #c8e4ff;
+  --blueShaded: #e8f3ff;
+  --blueShadedLighter: #f1f6ff;
+  --purpleLight: #eeceff;
+}
+
 .form-box {
   position: relative;
   width: 45vw;
@@ -17,7 +28,7 @@
   padding: 5px;
   border-radius: 10px;
   border: none;
-  background-color: var(--purpleLight);
+  background-color: var(--blueDarkLighter);
   color: var(--greyLight);
   transition: ease-in 125ms;
   font-size: 1em;
@@ -26,9 +37,10 @@
 }
 
 #submit:hover {
-  background-color: var(--blueLight);
+  background-color: var(--purpleLight);
+  color: var(--blueDarkLighter);
   cursor: pointer;
-  transform: scale(1.2);
+  transform: scale(1.15);
 }
 
 .m-135 {

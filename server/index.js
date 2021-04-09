@@ -119,30 +119,42 @@ patternHandler.addPattern(app, con);
 
 app.post("/vSlikeObjav", (req, res) => {
   //sklepam da ne bo delal
-  const nId = req.body.narociloId;
   const stSlik = req.body.stSlik;
   const files = req.files;
 
-  for (let i = 0; i < stSlik; i++) {
-    const file = `file${i}`;
-    const path = `${process.env.SERVER_ADDRESS}/blogImg/${files[file].name}`;
-    const imeSlike = files[file].name;
-
-    files[file].mv(`${__dirname}/public/blogImg/${files[file].name}`, (err) => {
+  con.query(
+    "SELECT ID FROM narocilonablogu ORDER BY ID DESC LIMIT 1",
+    (err, podatki) => {
       if (err) {
         res.json({ errMessage: "Napaka pri pošiljanju slik." });
-      }
-    });
+      } else {
+        const narociloBlogId = podatki[0].ID;
+        for (let i = 0; i < stSlik; i++) {
+          const file = `file${i}`;
+          const path = `${process.env.SERVER_ADDRESS}/blogImg/${files[file].name}`;
+          const imeSlike = files[file].name;
 
-    con.query(
-      "INSERT INTO blogSlike (narociloBlogID, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
-      [nId, imeSlike, path],
-      (err) => {
-        if (err) res.json({ errMessage: "Napaka pri pošiljanju slik." });
+          files[file].mv(
+            `${__dirname}/public/blogImg/${files[file].name}`,
+            (err) => {
+              if (err) {
+                res.json({ errMessage: "Napaka pri pošiljanju slik." });
+              }
+            }
+          );
+
+          con.query(
+            "INSERT INTO blogSlike (narociloBlogID, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
+            [narociloBlogId, imeSlike, path],
+            (err) => {
+              if (err) res.json({ errMessage: "Napaka pri pošiljanju slik." });
+            }
+          );
+        }
+        res.json({ success: true });
       }
-    );
-  }
-  res.json({ success: true });
+    }
+  );
 });
 
 //konec admin stuff

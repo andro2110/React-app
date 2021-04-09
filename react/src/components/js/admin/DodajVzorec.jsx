@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Input from "./../common/formComponents/Input";
+import "../../css/forms.css";
 
 const Vzorci = ({}) => {
   const [vzorec, setVzorec] = useState("");
@@ -15,7 +16,7 @@ const Vzorci = ({}) => {
         onChange={(v) => setVzorec(v.target.value)}
       />
       <button
-        onClick={(e) =>
+        onClick={() =>
           vzorec.length > 0
             ? axios
                 .post(`${process.env.REACT_APP_SERVER_ADDRESS}/addPattern`, {
@@ -39,6 +40,7 @@ const Vzorci = ({}) => {
                 autoClose: 3000,
               })
         }
+        className="search_button"
       >
         Dodaj
       </button>

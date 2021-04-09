@@ -7,8 +7,9 @@
 }
 
 :root {
-  --blueDark: #9dccff;
+  --blueDark: #023469;
   --blueLight: #d3bff6;
+  --blueDarkerish: #040ea3;
   --blueLighter: #f2f7fdec;
   --purpleLight: #c0a3fa;
   --purpleLighter: #e5d6ff;
@@ -24,36 +25,34 @@ p {
   text-align: justify;
 }
 
-nav {
+.navbar {
   width: 100%;
   display: flex;
   justify-content: space-between;
   background-color: var(--greyLight);
   top: 0;
   transition: top 0.3s;
-  position: fixed;
+  position: fixed !important;
   z-index: 1;
+  padding: 0 !important;
 }
 
 .logo {
   display: inline-flex;
-  margin: 2.1rem;
-}
-
-.svg {
-  height: 3rem;
+  margin: 2rem;
+  height: 2.5rem;
 }
 
 ul {
   list-style: none;
   display: flex;
   justify-content: space-around;
-  margin-top: 17px;
+  margin-top: 2rem !important;
   margin-right: 20px;
 }
 
 .pIcon {
-  margin-top: 1.3rem;
+  margin-top: 1vh;
 }
 
 .pIcon:hover {
@@ -65,14 +64,13 @@ ul {
 
 nav {
   background-color: var(--blueLighter) !important;
-  height: 7rem;
 }
 
 .nav-link {
   margin: 10px;
-  margin-top: 3.1rem;
+  /* margin-top: 2.5rem; */
   transition: ease 125ms;
-  color: var(--blueDark);
+  color: #004c9e;
 }
 
 .nav-link:hover {
@@ -80,10 +78,10 @@ nav {
   color: #c0a3fa;
 }
 
-.naslov {
-  color: black;
+.container-fluid > h1 {
+  color: var(--blueDarkerish);
   text-transform: uppercase;
   /* margin-top: 20px; */
-  margin-top: 2.3rem;
-  font-size: 2.1em;
+  margin-top: 3vh;
+  font-size: 2em;
 }

@@ -1,7 +1,19 @@
-.opis {
+:root {
+  --modra: #dff3ff;
+}
+
+.opis_wrapper {
   width: 90vw;
-  height: auto;
+  height: 80vh;
   margin: 0 auto;
+}
+
+#root {
+  background-color: var(--modra);
+}
+
+.opis_wrapper2 {
+  padding-top: 10rem !important;
 }
 
 .box {
@@ -10,10 +22,10 @@
 }
 
 .box > p {
+  margin-top: 10vh;
   width: 50%;
 }
 
-.box > img {
-  margin-top: -4%;
-  margin-right: 10%;
+.img {
+  margin: 0 7vw;
 }

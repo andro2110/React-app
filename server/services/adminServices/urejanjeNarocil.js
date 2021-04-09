@@ -26,7 +26,7 @@ function loadNarocila(app, con) {
     con.query(
       `SELECT u.priimek, u.hisnaSTUlica, u.PostnaStevilka, n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
           FROM narocilo n, artikel a, dodatki d, uporabnik u
-          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND u.IDUporabnika = n.IDUporabnika`,
+          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND u.IDUporabnika = n.IDUporabnika ORDER BY n.IDNarocila DESC`,
       (err, narocila) => {
         if (err) {
           res.json({
