@@ -4,6 +4,7 @@ import Password from "./common/formComponents/PasswordField";
 import NavBar from "./NavBar";
 import axios from "axios";
 import Joi from "joi-browser";
+import Footer from "./Footer";
 import { toast } from "react-toastify";
 import "../css/forms.css";
 
@@ -189,6 +190,7 @@ class SignUp extends Component {
             </form>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }

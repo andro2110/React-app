@@ -4,6 +4,7 @@ import Password from "./common/formComponents/PasswordField";
 import axios from "axios";
 import Joi from "joi-browser";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import "../css/bgPics.css";
 
 axios.defaults.withCredentials = true; //to rabi bit tuki drgac nebo delal
@@ -192,6 +193,7 @@ class Login extends Component {
             )}
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }

@@ -3,8 +3,8 @@
   --blueBackg: #f5faff;
   --blueDark: #6e8afa;
   --purpleLight: #9ab3f5;
-  --blueLight: #c8e4ff;
-  --blueShaded: #e8f3ff;
+  --blueLight: #70baff;
+  --blueShaded: #85c0ff;
   --blueShadedLighter: #f1f6ff;
 }
 
@@ -43,7 +43,7 @@
 .button_date {
   border: none;
   outline: none;
-  background-color: var(--blueShaded);
+  background-color: #cee6ff;
   margin: 5px;
   width: 100%s;
   padding: 5px;
@@ -51,7 +51,7 @@
 }
 
 .button_date:hover {
-  background-color: var(--blueLight);
+  background-color: #b3d7ff;
 }
 
 .active-button {
@@ -63,7 +63,7 @@
 .search_button {
   border: none;
   outline: none;
-  background-color: var(--blueLight);
+  background-color: #cee6ff;
   padding: 5px;
   border-radius: 8px;
   float: right;
@@ -73,7 +73,7 @@
 
 .search_button:hover {
   background-color: var(--purpleLight);
-  color: var(--blueDark);
+  color: black;
   transform: scale(1.2);
 }
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import Bar from "./common/formComponents/ProgressBar";
 // import { regularLinks } from "./common/navbarlinks";
 import "../css/forms.css";
@@ -330,6 +331,7 @@ class Narocila extends Component {
             </form>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }
