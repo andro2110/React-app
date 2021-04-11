@@ -1,7 +1,7 @@
 .login-bgPic {
   background-image: url(http://localhost:4000/publicImg/bgpic3.jpg);
   width: 75%;
-  margin: 135px auto;
+  margin: 7rem auto;
   background-size: cover;
   border-radius: 20px;
   padding: 20px 0;
@@ -14,7 +14,7 @@
 .signup-bgPic {
   background-image: url(http://localhost:4000/publicImg/bgpic1.jpg);
   width: 75%;
-  margin: 135px auto;
+  margin: 7rem auto;
   background-size: cover;
   border-radius: 20px;
   padding: 20px 0;
@@ -26,7 +26,7 @@
 .narocilo-bgPic {
   background-image: url(http://localhost:4000/publicImg/bgpic3.jpg);
   width: 75%;
-  margin: 135px auto;
+  margin: 7rem auto;
   background-size: cover;
   border-radius: 20px;
   padding: 20px 0;

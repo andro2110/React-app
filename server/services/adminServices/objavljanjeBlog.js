@@ -44,6 +44,8 @@ function vrniNarocilaPoDatumu(app, con) {
 
 function redirectToObjave(app) {
   app.post("/redirect", (req, res) => {
+    const narocilo = req.body.narocilo;
+    req.session.narocilo = narocilo;
     res.redirect("/adminBlog");
   });
 }

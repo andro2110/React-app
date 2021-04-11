@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import ProgressBar from "../common/formComponents/ProgressBar";
 import NavBar from "./../NavBar";
 import Input from "../common/formComponents/Input";
+import "../../css/forms.css";
 
 class AdminBlog extends Component {
   state = {

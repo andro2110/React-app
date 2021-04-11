@@ -14,7 +14,7 @@ class AdminNarocila extends Component {
     slike: [],
 
     styles: {
-      margin: "135px",
+      margin: "7rem",
     },
 
     statusi: ["Vsa naročila", "prejeto", "vdelu", "koncano"],
@@ -40,14 +40,6 @@ class AdminNarocila extends Component {
   //       if (!response.data.admin) window.location = "/";
   //     });
   // }
-
-  makePointer = (t) => {
-    // t.target.style.cursor = "pointer";
-    console.log(t.target.style.cursor);
-  };
-  removePointer = ({ currentTarget: t }) => {
-    // t.target.style.cursor = "";
-  };
 
   odpriUpload = ({ currentTarget: input }) => {
     const { narocila } = this.state;
@@ -195,7 +187,7 @@ class AdminNarocila extends Component {
           <AddPattern />
         </div>
 
-        <div className="Kriteriji">
+        <div className="kriteriji_wrapper">
           <div className="date_wrapper">
             <button
               onClick={this.urediPoDatumu}
@@ -220,15 +212,16 @@ class AdminNarocila extends Component {
               Najstarejši
             </button>
           </div>
-
-          <Dropdown
-            options={this.state.statusi}
-            onChange={this.handleSelectedStatusChange}
-            // value={status}
-          />
+          <div className="status_box">
+            <Dropdown
+              options={this.state.statusi}
+              onChange={this.handleSelectedStatusChange}
+              // value={status}
+            />
+          </div>
         </div>
 
-        <div style={styles}>
+        <div style={styles} className="min_h">
           {/* {feedback.success ? (
             <p className="alert alert-success">{feedback.sporocilo}</p>
           ) : !feedback.success && feedback.success !== null ? (

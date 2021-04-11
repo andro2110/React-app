@@ -346,7 +346,7 @@ class Blog extends Component {
           </form>
         </div>
 
-        <div style={this.state.styles}>
+        <div className="main_wrapper">
           {cards.length === 0 ? <h1>Ni zadetkov</h1> : null}
 
           {loaded &&
