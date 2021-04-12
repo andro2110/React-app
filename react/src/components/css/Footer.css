@@ -55,12 +55,23 @@
   display: flex;
 }
 
-.icons > img {
+/* .icons > a {
   height: 25px;
   margin: 20px;
-}
+} */
 
 .kontakti1 > div {
   display: flex;
   justify-content: center;
+}
+
+.imgLinks {
+  display: inline-flex;
+  margin: 20px;
+  height: 1.5rem;
+  transition: 0.125s ease-in;
+}
+
+.imgLinks:hover {
+  transform: scale(1.2);
 }

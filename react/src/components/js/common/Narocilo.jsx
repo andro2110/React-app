@@ -13,12 +13,8 @@ const Narocilo = ({
 }) => {
   const datum = narocilo.datum.slice(0, 10);
   return (
-    <div
-      className="card text-dark bg-light mb-3 mw"
-      onMouseOver={narocilo.status === "koncano" ? addPointer : null}
-      onMouseLeave={removePointer}
-    >
-      <div className="d-block" onClick={onClick} id={narociloIndex}>
+    <div className="card text-dark bg-light mb-3 mw">
+      <div className="d-block clickable" onClick={onClick} id={narociloIndex}>
         <div className="card-header d-flex justify-content-between">
           <h5 className="m-2">
             Model:{" "}
@@ -34,6 +30,7 @@ const Narocilo = ({
           <p>Barva: {narocilo.barva}</p>
           <p>Nacin placila: {narocilo.nacinPlacila}</p>
           <p>Opis: {narocilo.opis}</p>
+          <p>Izbran vzorec: {narocilo.vzorec}</p>
         </div>
       </div>
       <Dropdown

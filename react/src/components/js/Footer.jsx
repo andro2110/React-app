@@ -3,7 +3,7 @@ import clock from "../img/Ura.svg";
 import slusalka from "../img/Telefon.svg";
 import ig from "../img/Instagram.svg";
 import fb from "../img/Facebook.svg";
-import mail from "../img/Mail.svg";
+import mail from "../img/gmail.svg";
 import "../css/Footer.css";
 
 class Footer extends Component {
@@ -18,13 +18,13 @@ class Footer extends Component {
                 <img src={clock} alt="ura" />
               </div>
               <div className="delovniCas">
-                <p>Pomoč preko telefona od x - y na:</p>
+                <p>Pomoč preko telefona od 14:00 do 21:00 na:</p>
               </div>
             </div>
 
             <div className="telefon">
               <img src={slusalka} alt="slusalka" />
-              <p className="telStev">16551154</p>
+              <p className="telStev">+434 34 44 32 324 </p>
             </div>
           </div>
 
@@ -33,9 +33,17 @@ class Footer extends Component {
               <h1>Kontaktni podatki</h1>
 
               <div className="icons">
-                <img src={ig} alt="instagram" />
-                <img src={fb} alt="facebook" />
-                <img src={mail} alt="gmail" />
+                <a href="http://www.google.com">
+                  <img src={ig} className="imgLinks" alt="Instagram" />
+                </a>
+
+                <a href="http://www.google.com">
+                  <img src={fb} className="imgLinks" alt="Facebook" />
+                </a>
+
+                <a href="http://www.google.com">
+                  <img src={mail} className="imgLinks" alt="Gmail" />
+                </a>
               </div>
             </div>
 

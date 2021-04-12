@@ -24,9 +24,9 @@ function updateStatus(app, con) {
 function loadNarocila(app, con) {
   app.get("/adminNarocila", (req, res) => {
     con.query(
-      `SELECT u.priimek, u.hisnaSTUlica, u.PostnaStevilka, n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka
-          FROM narocilo n, artikel a, dodatki d, uporabnik u
-          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND u.IDUporabnika = n.IDUporabnika ORDER BY n.IDNarocila DESC`,
+      `SELECT u.priimek, u.hisnaSTUlica, u.PostnaStevilka, n.IDNarocila, n.nacinPlacila, n.opis, n.datum, n.status, a.model, a.stevilka, d.barva, d.IDDodatka, v.ime AS vzorec
+          FROM narocilo n, artikel a, dodatki d, uporabnik u, vzorci v
+          WHERE n.IDArtikla = a.IDArtikla AND d.IDArtikla = a.IDArtikla AND u.IDUporabnika = n.IDUporabnika AND v.IDVzorca = d.IDVzorca ORDER BY n.IDNarocila DESC`,
       (err, narocila) => {
         if (err) {
           res.json({

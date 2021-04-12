@@ -12,7 +12,7 @@ const Galerija = ({ slike, loaded }) => {
       </Carousel>
     );
   } else {
-    return <h1>Uporabnik ni poslal slike</h1>;
+    return <h2>Uporabnik ni poslal slike</h2>;
   }
 };
 
