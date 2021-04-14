@@ -18,7 +18,8 @@ class Opis extends Component {
               suscipit alias odit nam soluta commodi similique, natus error
               repudiandae mollitia. Vitae voluptas beatae doloribus ex? Ratione
               dignissimos consectetur officiis facilis maxime ea quos
-              laboriosam. Porro quas aliquam eum?
+              laboriosam. Porro quas aliquam eum? Za naročanje kliknite{" "}
+              <a href="/narocila">tukaj</a>
             </p>
             <div className="img">
               <img src={drawingGirl} alt="drawingGirl" />

@@ -13,7 +13,7 @@ function getLikedPosts(app, con) {
               success: false,
               errMessage: "Napaka pri pri všečkanju",
             });
-          else res.json({ success: true, idNarocila });
+          res.json({ success: true, idNarocila });
         }
       );
     }

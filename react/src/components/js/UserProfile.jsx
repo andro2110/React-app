@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
 import Post from "./common/Post";
+import "../css/other.css";
 
 class UserProfile extends Component {
   state = {
@@ -11,7 +12,7 @@ class UserProfile extends Component {
     likedPosts: [],
 
     styles: {
-      margin: "135px",
+      marginTop: "7rem",
     },
   };
 
@@ -67,16 +68,18 @@ class UserProfile extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Profil" loggedIn={this.state.t} />
-        <h1 style={this.state.styles}>Živjo {this.state.uporabnik.Ime}!</h1>
-        <h2 className="text-center">Tvoja všečkana naročila: </h2>
-        <div>
-          {likedPosts.length === 0 ? (
-            <h4>Nisi všečkal nobenih sporočil</h4>
-          ) : null}
-          {loaded &&
-            likedPosts.map((post, i) => {
-              return <Post key={i} narocilo={post} loaded={loaded} />;
-            })}
+        <div style={this.state.styles}>
+          <h1 className="text-center p-3">Živjo {this.state.uporabnik.Ime}!</h1>
+          <h2 className="text-center pb-3">Tvoja všečkana naročila: </h2>
+          <div>
+            {likedPosts.length === 0 ? (
+              <h4>Nisi všečkal nobenih sporočil</h4>
+            ) : null}
+            {loaded &&
+              likedPosts.map((post, i) => {
+                return <Post key={i} narocilo={post} loaded={loaded} />;
+              })}
+          </div>
         </div>
       </React.Fragment>
     );

@@ -122,47 +122,49 @@ class AdminBlog extends Component {
     return (
       <React.Fragment>
         <NavBar heading="Objavi na blog" loggedIn={true} />
-        <div className="m-135 form-box card">
-          <ProgressBar percentage={uploadProgress} />
-          <div className="opis">
-            <div className="card-header">
-              <h5>Izbrano naročilo</h5>
+        <div className="main_wrapper">
+          <div className="m-135 form-box card">
+            <ProgressBar percentage={uploadProgress} />
+            <div className="opis">
+              <div className="card-header">
+                <h5>Izbrano naročilo</h5>
+              </div>
+              <p>Model: {narocilo.model}</p>
+              <p>Opis: {narocilo.opis}</p>
             </div>
-            <p>Model: {narocilo.model}</p>
-            <p>Opis: {narocilo.opis}</p>
+
+            <form onSubmit={this.handleSubmit}>
+              <div className="d-block">
+                <Input
+                  name="opis"
+                  label="Opis: "
+                  value={this.state.opis}
+                  onChange={this.handleOpisChange}
+                />
+
+                <div className="m-3">
+                  <input
+                    type="file"
+                    name="files[]"
+                    id="slika"
+                    onChange={this.fileChange}
+                    multiple
+                    accept="image/x-png,image/gif,image/jpeg"
+                  />
+                </div>
+
+                <button onClick={this.objavi} id="submit">
+                  Objavi
+                </button>
+              </div>
+            </form>
           </div>
 
-          <form onSubmit={this.handleSubmit}>
-            <div className="d-block">
-              <Input
-                name="opis"
-                label="Opis: "
-                value={this.state.opis}
-                onChange={this.handleOpisChange}
-              />
-
-              <div className="m-3">
-                <input
-                  type="file"
-                  name="files[]"
-                  id="slika"
-                  onChange={this.fileChange}
-                  multiple
-                  accept="image/x-png,image/gif,image/jpeg"
-                />
-              </div>
-
-              <button onClick={this.objavi} id="submit">
-                Objavi
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div className="m-135 form-box card">
-          <p>Priimek: {narocilo.priimek}</p>
-          <p>Hisna stevilka in ulica: {narocilo.hisnaSTUlica}</p>
-          <p>Postna stevilka: {narocilo.PostnaStevilka}</p>
+          <div className="m-135 form-box card">
+            <p>Priimek: {narocilo.priimek}</p>
+            <p>Hisna stevilka in ulica: {narocilo.hisnaSTUlica}</p>
+            <p>Postna stevilka: {narocilo.PostnaStevilka}</p>
+          </div>
         </div>
       </React.Fragment>
     );

@@ -228,7 +228,9 @@ class AdminNarocila extends Component {
             <p className="alert alert-danger">{feedback.sporocilo}</p>
           ) : null} */}
 
-          {filtered.length === 0 ? <h1>Ni zadetkov</h1> : null}
+          {filtered.length === 0 ? (
+            <h1 className="text-center">Ni zadetkov</h1>
+          ) : null}
           {filtered.map((n, i) => {
             return (
               <div key={i}>

@@ -18,6 +18,7 @@ class Blog extends Component {
     slike: [],
 
     likedPosts: [],
+    gotLiked: false,
 
     vzorci: [],
     iskanModel: "",
@@ -92,6 +93,7 @@ class Blog extends Component {
           // const ids = Object.values(tmp[0]);
           // console.log(ids);
           this.setState({ likedPosts });
+          this.setState({ gotLiked: true });
         }
       });
   };
@@ -112,6 +114,7 @@ class Blog extends Component {
 
   componentDidMount() {
     const t = localStorage.getItem("token");
+
     if (t) {
       this.setState({ t: true });
     }
@@ -119,7 +122,10 @@ class Blog extends Component {
     this.loadPatterns();
     this.loadSlike();
     this.loadAllNarocila();
-    this.getLikedPosts();
+
+    if (t) {
+      this.getLikedPosts();
+    }
   }
 
   handleSubmit = (ev) => {
@@ -347,7 +353,9 @@ class Blog extends Component {
         </div>
 
         <div className="main_wrapper">
-          {cards.length === 0 ? <h1>Ni zadetkov</h1> : null}
+          {cards.length === 0 ? (
+            <h1 className="text-center">Ni zadetkov</h1>
+          ) : null}
 
           {loaded &&
             filtered.map((c, i) => {

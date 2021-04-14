@@ -5,7 +5,9 @@ import "../../css/card.css";
 const Card = ({ narocilo, loaded, onClick, cardIndex, likedPosts }) => {
   return (
     <div className="card text-dark bg-light mb-3 mw">
-      <h1 className="card-header transform-upper">{narocilo.model}</h1>
+      <h1 className="card-header transform-upper text-center">
+        {narocilo.model}
+      </h1>
       <div className="card-body">
         <Galerija slike={narocilo.slike} loaded={loaded} />
         <div className="d-flex justify-content-between">

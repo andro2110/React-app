@@ -34,9 +34,8 @@ function checkIfAdmin(app, con) {
         [uid],
         (err, pod) => {
           if (err) console.log(err);
-          else {
-            res.json({ status: pod[0] });
-          }
+
+          res.json({ status: pod[0] });
         }
       );
     }

@@ -14,16 +14,19 @@ import "../css/NavBar.css";
 const NavBar = ({ heading }) => {
   const [status, setStatus] = useState("");
   const [navLinks, setNavLinks] = useState([loggedOutLinks]);
+  const [isSent, setIsSent] = useState("false");
 
   useEffect(() => {
+    // if (!isSent) {
     axios
       .get(`${process.env.REACT_APP_SERVER_ADDRESS}/checkAdmin`)
       .then((res) => {
         if (res.data.status) {
           setStatus(res.data.status.status);
+          setIsSent(true);
         }
       });
-
+    // }
     switch (status) {
       case "admin":
         setNavLinks(adminLinks);
