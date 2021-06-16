@@ -138,7 +138,7 @@ class Narocila extends Component {
           dodatki,
         }) //poslje podatke na server
         .then((res) => {
-          if (res.data.dodatekId) {
+          if (res.data.success) {
             const { slike } = this.state;
             const did = res.data.dodatekId;
 

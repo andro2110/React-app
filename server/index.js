@@ -61,37 +61,52 @@ narociloServices.posljiNarocilo(app, con);
 
 app.post("/upload", (req, res) => {
   //v narocila.js ne dela
-  const did = req.body.dodatekId;
-  const stSlik = req.body.stSlik;
+  // const did = req.body.dodatekId;
 
-  if (stSlik > 0) {
-    const files = req.files;
-    for (let i = 0; i < stSlik; i++) {
-      const file = `file${i}`;
-      const path = `${process.env.SERVER_ADDRESS}/img/${files[file].name}`;
-      const imeSlike = files[file].name;
+  con.query(
+    //dobi iddodatka, da lahko poslje sliko v PB (POPRAVI...vec slik more it not)
+    "SELECT IDDodatka FROM dodatki ORDER BY IDDodatka DESC LIMIT 1",
+    (err, podatki) => {
+      if (err) {
+        res.json({
+          errMessage: "Napaka pri pošiljanju, poskusi ponovno",
+          success: false,
+        });
+      } else {
+        const stSlik = req.body.stSlik;
 
-      files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
-        if (err) {
-          return res.json({
-            errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
-          });
-        }
-      });
-
-      con.query(
-        "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
-        [did, imeSlike, path],
-        (err) => {
-          if (err)
-            res.json({
-              success: false,
-              errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+        if (stSlik > 0) {
+          const files = req.files;
+          for (let i = 0; i < stSlik; i++) {
+            const file = `file${i}`;
+            const path = `${process.env.SERVER_ADDRESS}/img/${files[file].name}`;
+            const imeSlike = files[file].name;
+      
+            files[file].mv(`${__dirname}/public/img/${files[file].name}`, (err) => {
+              if (err) {
+                return res.json({
+                  errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+                });
+              }
             });
+      
+            con.query(
+              "INSERT INTO slike (IDDodatka, imeSlike, lokacijaSlike) VALUES (?, ?, ?)",
+              [(podatki[0].IDDodatka), imeSlike, path],
+              (err) => {
+                if (err)
+                  res.json({
+                    success: false,
+                    errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
+                  });
+              }
+            );
+          }
         }
-      );
+      }
     }
-  }
+  );
+
 
   res.json({ success: true });
 });

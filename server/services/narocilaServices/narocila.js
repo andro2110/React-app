@@ -48,21 +48,9 @@ function posljiNarocilo(app, con) {
                     res.json({
                       errMessage: "Napaka pri pošiljanju. Poskusi ponovno",
                     });
-                }
-              );
 
-              con.query(
-                //dobi iddodatka, da lahko poslje sliko v PB (POPRAVI...vec slik more it not)
-                "SELECT IDDodatka FROM dodatki ORDER BY IDDodatka DESC LIMIT 1",
-                (err, podatki) => {
-                  if (err) {
-                    res.json({
-                      errMessage: "Napaka pri pošiljanju, poskusi ponovno",
-                      success: false,
-                    });
-                  } else {
-                    const dodatekId = podatki[0].IDDodatka;
-                    res.json({ dodatekId, success: true });
+                  else {
+                    res.json({success:true});
                   }
                 }
               );
@@ -84,7 +72,6 @@ function posljiSlike(app, con) {
 
     if (stSlik > 0) {
       const files = req.files;
-      console.log(files);
       for (let i = 0; i < stSlik; i++) {
         const file = `file${i}`;
         const path = `${process.env.SERVER_ADDRESS}/img/${files[file].name}`;
